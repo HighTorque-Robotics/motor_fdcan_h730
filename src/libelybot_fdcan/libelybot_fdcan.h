@@ -8,8 +8,8 @@
 #define  POS_FLAG  0
 // #define  POS_REZERO
 // #define  MOTOR_STOP
-#define  MOTOR_BRAKE
-#define  READ_MOTOR_FLAG   3
+// #define  MOTOR_BRAKE
+#define  READ_MOTOR_FLAG   1
 
 
 

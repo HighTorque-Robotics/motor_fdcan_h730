@@ -138,12 +138,13 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float tor
                             //			kp                	    kd
                             0xcc, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             //			最大力矩                占位（fdcan）
-                            0x00, 0x00, 0x00, 0x00, 0xc0, 0x7f, 0x50, 0x50};
+                            0x00, 0x00, 0x00, 0x00, 0xc0, 0x7f, 0x50, 0x50
+                           };
 
     *(int32_t *)&cmd[14] = *(int32_t *)&torque;
     // memcpy(&cmd[14], &torque, sizeof(float));
-    
-	fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
+
+    fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -162,12 +163,13 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t t
                             //          kp  					kd
                             0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             //          最大力矩   		 	    占位（fdcan）
-                            0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x50, 0x50};
+                            0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x50, 0x50
+                           };
 
     *(int32_t *)&cmd[14] = *(int32_t *)&torque;
     // memcpy(&cmd[14], &torque, sizeof(int32_t));
-    
-	fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
+
+    fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -182,12 +184,13 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t t
     //                     		位置模式     int16   6个        位置
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x04, 0x06, 0x20, 0x00, 0x80,
                             //速度      力矩        kp          kd          最大力矩    占位（fdcan）
-                            0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x50, 0x50};
+                            0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x50, 0x50
+                           };
 
     *(int16_t *)&cmd[10] = *(int16_t *)&torque;
     // memcpy(&cmd[10], &torque, sizeof(int16_t));
-    
-	fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
+
+    fdcan_send(fdcanHandle, 0x8000 | motor, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -251,7 +254,7 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int3
  */
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t val, int16_t torque)
 {
-	//                           位置模式   2个int16      位置        速度		 2个int16	  力矩		  占位（fdcan）
+    //                           位置模式   2个int16      位置        速度		 2个int16	  力矩		  占位（fdcan）
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x06, 0x25, 0x00, 0x00, 0x50, 0x50};
 
     // *(int16_t *)&cmd[7] =  val;
@@ -274,7 +277,7 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int1
  */
 void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos)
 {
-	//                           位置模式   1个float      位置                    占位（fdcan）
+    //                           位置模式   1个float      位置                    占位（fdcan）
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[5], &pos, sizeof(float));
@@ -291,7 +294,7 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos)
  */
 void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos)
 {
-	//                           位置模式   1个int32      位置                    占位（fdcan）
+    //                           位置模式   1个int32      位置                    占位（fdcan）
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[5], &pos, sizeof(int32_t));
@@ -308,7 +311,7 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos)
  */
 void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos)
 {
-	//                          位置模式     1个int16     位置
+    //                          位置模式     1个int16     位置
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x00};
 
     memcpy(&cmd[5], &pos, sizeof(int16_t));
@@ -359,7 +362,7 @@ void set_val_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t val)
  */
 void set_val_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val)
 {
-	//							位置模式     2个int16 	  位置		  速度		  占位（fdcan）
+    //							位置模式     2个int16 	  位置		  速度		  占位（fdcan）
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[7], &val, sizeof(int16_t));
@@ -385,7 +388,8 @@ void set_pos_val_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, f
                             //速度                  float  4个
                             0xcd, 0xcc, 0xcc, 0x3d, 0x0c, 0x04, 0x23,
                             //rKp                   rKd                     最大力矩                停止位置
-                            0xcd, 0xcc, 0x4c, 0x3d, 0xcd, 0xcc, 0x4c, 0x3d, 0x00, 0x00, 0x80, 0x3f, 0x9a, 0x99, 0x99, 0x3e};
+                            0xcd, 0xcc, 0x4c, 0x3d, 0xcd, 0xcc, 0x4c, 0x3d, 0x00, 0x00, 0x80, 0x3f, 0x9a, 0x99, 0x99, 0x3e
+                           };
 
     memcpy(&cmd[9], &val, sizeof(float));
     memcpy(&cmd[16], &rkp, sizeof(float));
@@ -418,7 +422,8 @@ void set_pos_val_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, i
                               //最大力矩              停止位置
                               0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80,
                               //占位（fdcan）
-                              0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50};
+                              0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50
+                             };
 
     memcpy(&cmd[9], &val, sizeof(int32_t));
     memcpy(&cmd[15], &rkp, sizeof(float));
@@ -449,7 +454,8 @@ void set_pos_val_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, i
                               //rKp       			  rKd
                               0x00, 0x00, 0xc0, 0x7f, 0x00, 0x00, 0xc0, 0x7f, 0x06, 0x25,
                               //最大力矩  停止位置
-                              0x00, 0x80, 0x00, 0x80};
+                              0x00, 0x80, 0x00, 0x80
+                             };
 
     memcpy(&cmd[7], &val, sizeof(int16_t));
     memcpy(&cmd[11], &rkp, sizeof(float));
@@ -470,7 +476,7 @@ void set_pos_val_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, i
  */
 void set_val_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val, int16_t val_max)
 {
-	//							位置模式				  位置        速度		  			  速度限制
+    //							位置模式				  位置        速度		  			  速度限制
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x28, 0x00, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[11], &val_max, sizeof(int16_t));
@@ -489,7 +495,7 @@ void set_val_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16
  */
 void set_pos_valmax_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float vel_max)
 {
-	// 							位置模式				  位置		  						  速度限制
+    // 							位置模式				  位置		  						  速度限制
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0D, 0x29, 0x00, 0x00, 0x00, 0x00};
 
     memcpy(&cmd[5], &pos, sizeof(float));
@@ -508,7 +514,7 @@ void set_pos_valmax_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float
  */
 void set_pos_valmax_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t vel_max)
 {
-	// 							位置模式				  位置		  						  速度限制
+    // 							位置模式				  位置		  						  速度限制
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x80, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00};
 
     memcpy(&cmd[5], &pos, sizeof(int32_t));
@@ -527,7 +533,7 @@ void set_pos_valmax_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32
  */
 void set_pos_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t vel_max)
 {
-	// 							位置模式				  位置		  速度限制
+    // 							位置模式				  位置		  速度限制
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x05, 0x29, 0x50, 0x50};
 
     memcpy(&cmd[5], &pos, sizeof(int16_t));
@@ -546,7 +552,7 @@ void set_pos_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16
  */
 void set_val_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float val, float acc)
 {
-	//							位置模式				  位置					  速度								  加速度
+    //							位置模式				  位置					  速度								  加速度
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0E, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x0D, 0x29, 0x00, 0x00, 0x00, 0x00, 0x50, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[9], &val, sizeof(float));
@@ -565,7 +571,7 @@ void set_val_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float va
  */
 void set_val_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t val, int32_t acc)
 {
-	//							位置模式				  位置					  速度								  加速度
+    //							位置模式				  位置					  速度								  加速度
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0A, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[9], &val, sizeof(int32_t));
@@ -584,7 +590,7 @@ void set_val_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t 
  */
 void set_val_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val, int16_t acc)
 {
-	//							位置模式				  位置		  速度					  加速度
+    //							位置模式				  位置		  速度					  加速度
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00, 0x50, 0x50, 0x50};
 
     memcpy(&cmd[7], &val, sizeof(int16_t));
@@ -640,12 +646,12 @@ void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 /**
  * @brief 电机刹车
  * @param fdcanHandle &hfdcanx
- * @param motor id 电机ID 
+ * @param motor id 电机ID
  */
 void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 {
-	static uint8_t cmd[] = {0x01, 0x00, 0x0f};
-	
+    static uint8_t cmd[] = {0x01, 0x00, 0x0f};
+
     fdcan_send(fdcanHandle, 0x8000 | motor, cmd, sizeof(cmd));
 }
 

@@ -66,7 +66,8 @@ void SystemClock_Config(void);
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-    uint32_t tick_1000ms = 0;
+    uint32_t tick_100ms = 0;
+    uint32_t num = 0;
 #if  POS_FLAG == 1 // float
     uint32_t tick_1ms = 0;
     float pos = 0;
@@ -102,6 +103,13 @@ int main(void)
     uint32_t motor_brake_num = 0;
 #endif
 
+#if READ_MOTOR_FLAG == 1
+    float tqe = 0;
+#elif READ_MOTOR_FLAG == 2
+    uint32_t tqe = 0;
+#elif READ_MOTOR_FLAG == 3
+    uint16_t tqe = 0;
+#endif
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -124,6 +132,7 @@ int main(void)
     MX_GPIO_Init();
     MX_FDCAN1_Init();
     MX_USART1_UART_Init();
+    MX_USART2_UART_Init();
     /* USER CODE BEGIN 2 */
     fdcan_filter_init(&hfdcan1);
     /* USER CODE END 2 */
@@ -150,9 +159,9 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        if (HAL_GetTick() - tick_1000ms >= 1000)
+        if (HAL_GetTick() - tick_100ms >= 100)
         {
-            tick_1000ms = HAL_GetTick();
+            tick_100ms = HAL_GetTick();
             HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 
             /* 读取电机状态 */
@@ -179,6 +188,16 @@ int main(void)
 
 
             /* 力矩控制 */
+#if READ_MOTOR_FLAG == 1
+            set_torque_float(&hfdcan1, MOTOR1, 0.7);
+            // set_pos_vel_tqe_float(&hfdcan1, MOTOR1, NAN_FLOAT, 0.1, 1);
+#elif READ_MOTOR_FLAG == 2
+            set_torque_int32(&hfdcan1, MOTOR1, 700);
+            // set_pos_vel_tqe_int32(&hfdcan1, MOTOR1, NAN_INT32, 10000, 100000);
+#elif READ_MOTOR_FLAG == 3
+            set_torque_int16(&hfdcan1, MOTOR1, 70);
+            // set_pos_vel_tqe_int16(&hfdcan1, MOTOR1, NAN_INT16, 400, 10000);
+#endif
             // set_torque_float(&hfdcan1, MOTOR1, 0.7);
             // set_torque_int32(&hfdcan1, MOTOR1, 700);
             // set_torque_int16(&hfdcan1, MOTOR1, 70);
@@ -191,7 +210,7 @@ int main(void)
 
 
             /* 速度 */
-            set_val_float(&hfdcan1, MOTOR1, 0.1);
+            // set_val_float(&hfdcan1, MOTOR1, 0.1);
             // set_val_int32(&hfdcan1, MOTOR1, 10000);
             // set_val_int16(&hfdcan1, MOTOR1, 400);
 
@@ -249,11 +268,18 @@ int main(void)
         if (motor_read_flag == 1)
         {
             motor_read_flag = 0;
+            tqe += motor_state.motor.torque;
+            if (num++ > 10)
+            {
+                num = 0;
 #if READ_MOTOR_FLAG == 1
-            printf("motor: %lf, %lf, %lf\r\n", motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+                printf("力矩：%lf\r\n", tqe);
+                tqe = 0;
 #elif READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-            printf("motor: %d, %d, %d\r\n", motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+                printf("力矩：%d\r\n", tqe);
+                tqe = 0;
 #endif
+            }
         }
     }
     /* USER CODE END 3 */
