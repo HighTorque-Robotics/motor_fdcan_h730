@@ -192,7 +192,7 @@ int main(void)
 
 
             /* ËÙ¶È */
-            set_val_float(&hfdcan1, MOTOR1, 0.1);
+            // set_val_float(&hfdcan1, MOTOR1, 0.1);
             // set_val_int32(&hfdcan1, MOTOR1, 10000);
             // set_val_int16(&hfdcan1, MOTOR1, 400);
 
