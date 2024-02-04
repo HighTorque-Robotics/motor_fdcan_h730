@@ -4,7 +4,7 @@
 
 
 FDCAN_RxHeaderTypeDef fdcan_rx_header1;
-uint8_t fdcan1_rdata[40] = {0};
+uint8_t fdcan1_rdata[64] = {0};
 
 motor_state_t motor_state;
 uint8_t motor_read_flag = 0;
@@ -631,7 +631,7 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 
 
 /**
- * @brief 电机停止
+ * @brief 电机停止，注意：需让电机停止后再重置零位，否则无效
  * @param fdcanHandle &hfdcanx
  * @param motor id 电机ID
  */
@@ -657,7 +657,7 @@ void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 
 
 /**
- * @brief 获取电机状态 float，位置、速度、转矩
+ * @brief 获取电机状态 float，状态、位置、速度、转矩
  * @param fdcanHandle &hfdcanx
  * @param motor id 电机ID
  */
@@ -670,7 +670,7 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 
 
 /**
- * @brief 获取电机状态 int32，位置、速度、转矩
+ * @brief 获取电机状态 int32，状态、位置、速度、转矩
  * @param fdcanHandle &hfdcanx
  * @param motor id 电机ID
  */
@@ -683,7 +683,7 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor)
 
 
 /**
- * @brief 获取电机状态 int16，位置、速度、转矩
+ * @brief 获取电机状态 int16，状态、位置、速度、转矩
  * @param fdcanHandle &hfdcanx
  * @param motor id 电机ID
  */
@@ -706,10 +706,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 
             len = get_fdcan_data_size(fdcan_rx_header1.DataLength);
             motor_state.motor.id = fdcan_rx_header1.Identifier;  // 获取电机 id
-#if READ_MOTOR_FLAG == 1 || READ_MOTOR_FLAG == 2
-            memcpy(&motor_state.data[4], &fdcan1_rdata[7], len - 7);  // 获取电机状态数据
-#elif READ_MOTOR_FLAG == 3
-            memcpy(&motor_state.data[4], &fdcan1_rdata[5], len - 5);  // 获取电机状态数据
+#if READ_MOTOR_FLAG == 1 || READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
+            memcpy(&motor_state.data[0], &fdcan1_rdata[3], len - 3);  // 获取电机状态数据
 #endif
             motor_read_flag = 1;
         }

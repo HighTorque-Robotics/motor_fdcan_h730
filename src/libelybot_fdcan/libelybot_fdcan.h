@@ -5,11 +5,50 @@
 #include "main.h"
 
 
+/*
+*   POS_FLAG 用于测试位置模式，共三种模式，三种模式只是数据类型不同，效果都是 -0.5转~0.5转 来回旋转。
+*   POS_FLAG = 1  float
+*   POS_FLAG = 2  int32
+*   POS_FLAG = 3  int8
+*/
 #define  POS_FLAG  0
-// #define  POS_REZERO
-// #define  MOTOR_STOP
-// #define  MOTOR_BRAKE
+
+
+/*
+*   READ_MOTOR_FLAG 用于改变读取电机状态的数据类型
+*   READ_MOTOR_FLAG = 1  float
+*   READ_MOTOR_FLAG = 2  int32
+*   READ_MOTOR_FLAG = 3  int8
+*/
 #define  READ_MOTOR_FLAG   1
+
+
+/*
+*   POS_REZERO 用于测试电机的重置零点功能。
+*   需测试此功能将 POS_REZERO 解注释即可。
+*   效果是电机上电 3 秒后将当前位置设为零点
+*   注意：需让电机停止后再重置零位，否则无效
+*/
+// #define  POS_REZERO
+
+
+/*
+*   MOTOR_STOP 用于测试电机停止功能。
+*   需测试此功能将 MOTOR_STOP 解注释即可。
+*   效果是电机上电 3 秒后将停止。
+*   注意：需配合电机控制函数使用，启用 MOTOR_STOP 宏不会改变任何电机控制函数。
+*/
+// #define  MOTOR_STOP
+
+
+/*
+*   MOTOR_BRAKE 用于测试电机刹车功能功能。
+*   需测试此功能将 MOTOR_BRAKE 解注释即可。
+*   效果是电机上电 3 秒后将刹车。
+*   注意：需配合电机控制函数使用，启用 MOTOR_BRAKE 宏不会改变任何电机控制函数。
+*/
+// #define  MOTOR_BRAKE
+
 
 
 
@@ -17,6 +56,7 @@
 #define  NAN_INT32  0x80000000
 #define  NAN_INT16  0x8000
 #define  NAN_INT8   0x80
+
 
 // 此处根据电机的个数和ID号，自定义电机的名字
 typedef enum
@@ -41,23 +81,24 @@ typedef enum
 
 
 #if READ_MOTOR_FLAG == 1
-#define MOTOR_SIZE 24
+#define MOTOR_SIZE 18
 typedef float motor_state_type;
 #elif READ_MOTOR_FLAG == 2
-#define MOTOR_SIZE 24
+#define MOTOR_SIZE 18
 typedef int32_t motor_state_type;
 #elif READ_MOTOR_FLAG == 3
-#define MOTOR_SIZE 24
+#define MOTOR_SIZE 10
 typedef int16_t motor_state_type;
 #endif
 
 
 typedef struct
 {
-    uint32_t id;
+    motor_state_type mode;
     motor_state_type position;
     motor_state_type velocity;
     motor_state_type torque;
+    uint16_t id;
 } motor_state_s;
 
 typedef struct

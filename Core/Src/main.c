@@ -102,14 +102,6 @@ int main(void)
 #ifdef MOTOR_BRAKE
     uint32_t motor_brake_num = 0;
 #endif
-
-#if READ_MOTOR_FLAG == 1
-    float tqe = 0;
-#elif READ_MOTOR_FLAG == 2
-    uint32_t tqe = 0;
-#elif READ_MOTOR_FLAG == 3
-    uint16_t tqe = 0;
-#endif
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -188,16 +180,6 @@ int main(void)
 
 
             /* 力矩控制 */
-#if READ_MOTOR_FLAG == 1
-            set_torque_float(&hfdcan1, MOTOR1, 0.7);
-            // set_pos_vel_tqe_float(&hfdcan1, MOTOR1, NAN_FLOAT, 0.1, 1);
-#elif READ_MOTOR_FLAG == 2
-            set_torque_int32(&hfdcan1, MOTOR1, 700);
-            // set_pos_vel_tqe_int32(&hfdcan1, MOTOR1, NAN_INT32, 10000, 100000);
-#elif READ_MOTOR_FLAG == 3
-            set_torque_int16(&hfdcan1, MOTOR1, 70);
-            // set_pos_vel_tqe_int16(&hfdcan1, MOTOR1, NAN_INT16, 400, 10000);
-#endif
             // set_torque_float(&hfdcan1, MOTOR1, 0.7);
             // set_torque_int32(&hfdcan1, MOTOR1, 700);
             // set_torque_int16(&hfdcan1, MOTOR1, 70);
@@ -210,7 +192,7 @@ int main(void)
 
 
             /* 速度 */
-            // set_val_float(&hfdcan1, MOTOR1, 0.1);
+            set_val_float(&hfdcan1, MOTOR1, 0.1);
             // set_val_int32(&hfdcan1, MOTOR1, 10000);
             // set_val_int16(&hfdcan1, MOTOR1, 400);
 
@@ -241,6 +223,8 @@ int main(void)
 #ifdef POS_REZERO
             if (motor_pos_rezero_num++ > 30)
             {
+				set_motor_brake(&hfdcan1, MOTOR1);  // 这里是防止电机控制函数没有完全注释掉，实际使用时无需加上这句，保存电机不动即可
+				HAL_Delay(100);
                 set_pos_rezero(&hfdcan1, MOTOR1);
                 while(1);
             }
@@ -268,16 +252,13 @@ int main(void)
         if (motor_read_flag == 1)
         {
             motor_read_flag = 0;
-            tqe += motor_state.motor.torque;
             if (num++ > 10)
             {
                 num = 0;
 #if READ_MOTOR_FLAG == 1
-                printf("力矩：%lf\r\n", tqe);
-                tqe = 0;
+                printf("mode:%lf, pos:%lf, val:%lf, tqe:%lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #elif READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-                printf("力矩：%d\r\n", tqe);
-                tqe = 0;
+                printf("mode:%d, pos:%d, val:%d, tqe:%d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #endif
             }
         }

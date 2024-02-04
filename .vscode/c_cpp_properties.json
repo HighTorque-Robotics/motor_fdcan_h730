@@ -3,18 +3,18 @@
         {
             "name": "fdcan_h730",
             "includePath": [
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Core\\Inc",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Inc",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Inc\\Legacy",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Drivers\\CMSIS\\Device\\ST\\STM32H7xx\\Include",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Drivers\\CMSIS\\Include",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\App\\my_fdcan",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\src\\libelybot_fdcan",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Core\\Inc",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Inc",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Inc\\Legacy",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Drivers\\CMSIS\\Device\\ST\\STM32H7xx\\Include",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Drivers\\CMSIS\\Include",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\App\\my_fdcan",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\src\\libelybot_fdcan",
                 "D:\\kei15\\ARM\\ARMCC\\include",
                 "D:\\kei15\\ARM\\ARMCC\\include\\rw",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\MDK-ARM",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Core\\Src",
-                "c:\\Users\\sunteng\\Desktop\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Src"
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\MDK-ARM",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Core\\Src",
+                "c:\\Users\\sunteng\\Desktop\\001\\fdcan_h730\\Drivers\\STM32H7xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",
