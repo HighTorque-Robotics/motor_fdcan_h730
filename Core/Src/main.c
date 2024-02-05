@@ -239,6 +239,7 @@ int main(void)
             }
 #endif
 
+
 #ifdef MOTOR_BRAKE
             if (motor_brake_num++ > 30)
             {

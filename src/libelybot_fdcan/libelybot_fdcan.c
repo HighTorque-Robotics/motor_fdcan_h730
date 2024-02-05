@@ -134,11 +134,11 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float tor
 #if MOTOR_MODEL == 5046
     torque *= (double)MOTOR_5046_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 4538
-    torque *= MOTOR_4538_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_4538_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50471
-    torque *= MOTOR_5047_1_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_5047_1_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50472
-    torque *= MOTOR_5047_2_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_5047_2_TQE_CORRECT_FLOAT;
 #endif
     //                     		  位置模式    float  6个        位置
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0c, 0x06, 0x20, 0x00, 0x00,
@@ -234,11 +234,11 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, floa
 #if MOTOR_MODEL == 5046
     torque *= (double)MOTOR_5046_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 4538
-    torque *= MOTOR_4538_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_4538_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50471
-    torque *= MOTOR_5047_1_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_5047_1_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50472
-    torque *= MOTOR_5047_2_TQE_CORRECT_FLOAT;
+    torque *= (double)MOTOR_5047_2_TQE_CORRECT_FLOAT;
 #endif
     //                           位置模式     int32       位置                    速度                    			  力矩                    停止位置                占位（fdcan）
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0e, 0x20, 0x00, 0x00, 0xc0, 0x7f, 0xcd, 0xcc, 0xcc, 0x3d, 0x0e, 0x25, 0x00, 0x00, 0x80, 0x3f, 0x9a, 0x99, 0x00, 0x00, 0x50};
@@ -440,11 +440,11 @@ void set_pos_val_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, f
 #if MOTOR_MODEL == 5046
     tqe *= (double)MOTOR_5046_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 4538
-    tqe *= MOTOR_4538_TQE_CORRECT_FLOAT;
+    tqe *= (double)MOTOR_4538_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50471
-    tqe *= MOTOR_5047_1_TQE_CORRECT_FLOAT;
+    tqe *= (double)MOTOR_5047_1_TQE_CORRECT_FLOAT;
 #elif MOTOR_MODEL == 50472
-    tqe *= MOTOR_5047_2_TQE_CORRECT_FLOAT;
+    tqe *= (double)MOTOR_5047_2_TQE_CORRECT_FLOAT;
 #endif
     //                           位置模式    2个float     位置（NAN）
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0e, 0x20, 0x00, 0x00, 0xc0, 0x7f,
