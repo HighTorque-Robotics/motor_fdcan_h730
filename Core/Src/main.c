@@ -151,7 +151,7 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        if (HAL_GetTick() - tick_100ms >= 10)
+        if (HAL_GetTick() - tick_100ms >= 100)
         {
             tick_100ms = HAL_GetTick();
             HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
