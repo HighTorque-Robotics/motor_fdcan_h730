@@ -568,57 +568,63 @@ void set_val_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16
 
 
 /**
- * @brief 电机位置、速度限幅控制 float
+ * @brief 位置、速度、加速度限制（梯形控制） float
  * @param fdcanHandle &hfdcanx
  * @param motor 电机ID
  * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
  * @param vel_max 速度限制，单位 1 转/秒，如 val = 0.5 表示 0.5 转/秒
+ * @param acc 加速度，单位：1 转/秒^2
  */
-void set_pos_valmax_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float vel_max)
+void set_pos_valmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float vel_max, float acc)
 {
     // 							位置模式				  位置		  						  速度限制
-    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0D, 0x29, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0E, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50};
 
     memcpy(&cmd[5], &pos, sizeof(float));
     memcpy(&cmd[11], &vel_max, sizeof(float));
+    memcpy(&cmd[15], &acc, sizeof(float));
 
     fdcan_send(fdcanHandle, 0x8000 | motor, cmd, sizeof(cmd));
 }
 
 
 /**
- * @brief 电机位置、速度限幅控制 int32
+ * @brief 位置、速度、加速度限制（梯形控制） int32
  * @param fdcanHandle &hfdcanx
  * @param motor 电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置
  * @param val_max 速度限制：单位 0.00001 转/秒，如 val = 50000 表示 0.5 转/秒
+ * @param acc 加速度：单位 0.00001 转/秒^2，如 acc = 50000 表示 0.5 转/秒^2
  */
-void set_pos_valmax_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t vel_max)
+void set_pos_valmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t vel_max, int32_t acc)
 {
     // 							位置模式				  位置		  						  速度限制
-    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x80, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0A, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x50};
 
     memcpy(&cmd[5], &pos, sizeof(int32_t));
     memcpy(&cmd[11], &vel_max, sizeof(int32_t));
+    memcpy(&cmd[15], &acc, sizeof(int32_t));
 
     fdcan_send(fdcanHandle, 0x8000 | motor, cmd, sizeof(cmd));
 }
 
 
 /**
- * @brief 电机位置、速度限幅控制 int16
+ * @brief 位置、速度、加速度限制（梯形控制） int16
  * @param fdcanHandle &hfdcanx
  * @param motor 电机ID
  * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
  * @param vel_max 速度：单位 0.00025 转/秒，如 val = 400 表示 0.1 转/秒
+ * @param acc 加速度：单位 0.00025 转/秒^2，如 acc = 400 表示 0.1 转/秒^2
  */
-void set_pos_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t vel_max)
+void set_pos_valmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t vel_max, int16_t acc)
 {
     // 							位置模式				  位置		  速度限制
-    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x05, 0x29, 0x50, 0x50};
+    static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x06, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     memcpy(&cmd[5], &pos, sizeof(int16_t));
     memcpy(&cmd[9], &vel_max, sizeof(int16_t));
+    memcpy(&cmd[11], &acc, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, 0x8000 | motor, cmd, sizeof(cmd));
 }

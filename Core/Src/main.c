@@ -151,7 +151,7 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        if (HAL_GetTick() - tick_100ms >= 100)
+        if (HAL_GetTick() - tick_100ms >= 10)
         {
             tick_100ms = HAL_GetTick();
             HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
@@ -207,10 +207,10 @@ int main(void)
             // set_val_valmax_int16(&hfdcan1, MOTOR1, 4000, 2000);
 
 
-            /* 位置、速度限制 */
-            // set_pos_valmax_float(&hfdcan1, MOTOR1, 3, 1);
-            // set_pos_valmax_int32(&hfdcan1, MOTOR1, 300000, 1000);
-            // set_pos_valmax_int16(&hfdcan1, MOTOR1, 30000, 100);
+            /* 位置、速度、加速度限制（梯形控制） */
+            // set_pos_valmax_acc_float(&hfdcan1, MOTOR1, 30, 1, 0.1);
+            // set_pos_valmax_acc_int32(&hfdcan1, MOTOR1, -3000000, 100000, 100000);
+            // set_pos_valmax_acc_int16(&hfdcan1, MOTOR1, 30000, 1000, 100);
 
 
             /* 速度、加速度控制 */
@@ -256,9 +256,11 @@ int main(void)
             {
                 num = 0;
 #if READ_MOTOR_FLAG == 1
-                printf("mode:%lf, pos:%lf, val:%lf, tqe:%lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+                // printf("mode:%lf, pos:%lf, val:%lf, tqe:%lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+				printf("%lf, %lf, %lf, %lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #elif READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-                printf("mode:%d, pos:%d, val:%d, tqe:%d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+                // printf("mode:%d, pos:%d, val:%d, tqe:%d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+				printf("%d, %d, %d, %d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #endif
             }
         }
