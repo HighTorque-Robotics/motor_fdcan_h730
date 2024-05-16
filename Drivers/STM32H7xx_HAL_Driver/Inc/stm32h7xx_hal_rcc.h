@@ -45,35 +45,35 @@ extern "C" {
   */
 typedef struct
 {
-    uint32_t PLLState;   /*!< The new state of the PLL.
+  uint32_t PLLState;   /*!< The new state of the PLL.
                             This parameter can be a value of @ref RCC_PLL_Config                      */
 
-    uint32_t PLLSource;  /*!< RCC_PLLSource: PLL entry clock source.
+  uint32_t PLLSource;  /*!< RCC_PLLSource: PLL entry clock source.
                             This parameter must be a value of @ref RCC_PLL_Clock_Source               */
 
-    uint32_t PLLM;       /*!< PLLM: Division factor for PLL VCO input clock.
+  uint32_t PLLM;       /*!< PLLM: Division factor for PLL VCO input clock.
                             This parameter must be a number between Min_Data = 1 and Max_Data = 63    */
 
-    uint32_t PLLN;       /*!< PLLN: Multiplication factor for PLL VCO output clock.
+  uint32_t PLLN;       /*!< PLLN: Multiplication factor for PLL VCO output clock.
                             This parameter must be a number between Min_Data = 4 and Max_Data = 512
                             or between Min_Data = 8 and Max_Data = 420(*)
                             (*) : For stm32h7a3xx and stm32h7b3xx family lines.                       */
 
-    uint32_t PLLP;       /*!< PLLP: Division factor for system clock.
+  uint32_t PLLP;       /*!< PLLP: Division factor for system clock.
                             This parameter must be a number between Min_Data = 2 and Max_Data = 128
                           odd division factors are not allowed                                        */
 
-    uint32_t PLLQ;       /*!< PLLQ: Division factor for peripheral clocks.
+  uint32_t PLLQ;       /*!< PLLQ: Division factor for peripheral clocks.
                             This parameter must be a number between Min_Data = 1 and Max_Data = 128   */
 
-    uint32_t PLLR;       /*!< PLLR: Division factor for peripheral clocks.
+  uint32_t PLLR;       /*!< PLLR: Division factor for peripheral clocks.
                             This parameter must be a number between Min_Data = 1 and Max_Data = 128   */
-    uint32_t PLLRGE;     /*!<PLLRGE: PLL1 clock Input range
+  uint32_t PLLRGE;     /*!<PLLRGE: PLL1 clock Input range
                          This parameter must be a value of @ref RCC_PLL1_VCI_Range                    */
-    uint32_t PLLVCOSEL;  /*!<PLLVCOSEL: PLL1 clock Output range
+  uint32_t PLLVCOSEL;  /*!<PLLVCOSEL: PLL1 clock Output range
                          This parameter must be a value of @ref RCC_PLL1_VCO_Range                    */
 
-    uint32_t PLLFRACN;   /*!<PLLFRACN: Specifies Fractional Part Of The Multiplication Factor for
+  uint32_t PLLFRACN;   /*!<PLLFRACN: Specifies Fractional Part Of The Multiplication Factor for
                         PLL1 VCO It should be a value between 0 and 8191                              */
 
 } RCC_PLLInitTypeDef;
@@ -83,36 +83,36 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t OscillatorType;       /*!< The oscillators to be configured.
+  uint32_t OscillatorType;       /*!< The oscillators to be configured.
                                       This parameter can be a value of @ref RCC_Oscillator_Type                   */
 
-    uint32_t HSEState;             /*!< The new state of the HSE.
+  uint32_t HSEState;             /*!< The new state of the HSE.
                                       This parameter can be a value of @ref RCC_HSE_Config                        */
 
-    uint32_t LSEState;             /*!< The new state of the LSE.
+  uint32_t LSEState;             /*!< The new state of the LSE.
                                       This parameter can be a value of @ref RCC_LSE_Config                        */
 
-    uint32_t HSIState;             /*!< The new state of the HSI.
+  uint32_t HSIState;             /*!< The new state of the HSI.
                                       This parameter can be a value of @ref RCC_HSI_Config                        */
 
-    uint32_t HSICalibrationValue;  /*!< The calibration trimming value.
+  uint32_t HSICalibrationValue;  /*!< The calibration trimming value.
                                       This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x3F for STM32H7 rev.Y
                                       This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x7F for STM32H7 rev.B and above */
 
-    uint32_t LSIState;             /*!< The new state of the LSI.
+  uint32_t LSIState;             /*!< The new state of the LSI.
                                       This parameter can be a value of @ref RCC_LSI_Config                        */
 
-    uint32_t HSI48State;            /*!< The new state of the HSI48.
+  uint32_t HSI48State;            /*!< The new state of the HSI48.
                                       This parameter can be a value of @ref RCC_HSI48_Config                      */
 
-    uint32_t CSIState;             /*!< The new state of the CSI.
+  uint32_t CSIState;             /*!< The new state of the CSI.
                                       This parameter can be a value of @ref RCC_CSI_Config */
 
-    uint32_t CSICalibrationValue;  /*!< The calibration trimming value.
+  uint32_t CSICalibrationValue;  /*!< The calibration trimming value.
                                       This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x1F for STM32H7 rev.Y
                                       This parameter must be a number between Min_Data = 0x00 and Max_Data = 0x3F for STM32H7 rev.B and above */
 
-    RCC_PLLInitTypeDef PLL;        /*!< PLL structure parameters                                                    */
+  RCC_PLLInitTypeDef PLL;        /*!< PLL structure parameters                                                    */
 
 } RCC_OscInitTypeDef;
 
@@ -121,26 +121,26 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t ClockType;             /*!< The clock to be configured.
+  uint32_t ClockType;             /*!< The clock to be configured.
                                        This parameter can be a value of @ref RCC_System_Clock_Type                          */
 
-    uint32_t SYSCLKSource;          /*!< The clock source (SYSCLKS) used as system clock.
+  uint32_t SYSCLKSource;          /*!< The clock source (SYSCLKS) used as system clock.
                                        This parameter can be a value of @ref RCC_System_Clock_Source                        */
 
-    uint32_t SYSCLKDivider;         /*!< The system clock  divider. This parameter can be
+  uint32_t SYSCLKDivider;         /*!< The system clock  divider. This parameter can be
                                        a value of @ref RCC_SYS_Clock_Source                                                 */
 
-    uint32_t AHBCLKDivider;         /*!< The AHB clock (HCLK) divider. This clock is derived from the system clock (SYSCLK).
+  uint32_t AHBCLKDivider;         /*!< The AHB clock (HCLK) divider. This clock is derived from the system clock (SYSCLK).
                                        This parameter can be a value of @ref RCC_HCLK_Clock_Source                          */
 
-    uint32_t APB3CLKDivider;        /*!< The APB3 clock (D1PCLK1) divider. This clock is derived from the AHB clock (HCLK).
+  uint32_t APB3CLKDivider;        /*!< The APB3 clock (D1PCLK1) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_APB3_Clock_Source                        */
 
-    uint32_t APB1CLKDivider;        /*!< The APB1 clock (PCLK1) divider. This clock is derived from the AHB clock (HCLK).
+  uint32_t APB1CLKDivider;        /*!< The APB1 clock (PCLK1) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_APB1_Clock_Source                        */
-    uint32_t APB2CLKDivider;        /*!< The APB2 clock (PCLK2) divider. This clock is derived from the AHB clock (HCLK).
+  uint32_t APB2CLKDivider;        /*!< The APB2 clock (PCLK2) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_APB2_Clock_Source                        */
-    uint32_t APB4CLKDivider;      /*!< The APB4 clock (D3PCLK1) divider. This clock is derived from the AHB clock (HCLK).
+  uint32_t APB4CLKDivider;      /*!< The APB4 clock (D3PCLK1) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_APB4_Clock_Source                        */
 } RCC_ClkInitTypeDef;
 

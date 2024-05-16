@@ -43,7 +43,7 @@ extern "C" {
   */
 typedef enum
 {
-    HAL_EXTI_COMMON_CB_ID          = 0x00U,
+  HAL_EXTI_COMMON_CB_ID          = 0x00U,
 } EXTI_CallbackIDTypeDef;
 
 
@@ -52,8 +52,8 @@ typedef enum
   */
 typedef struct
 {
-    uint32_t Line;                    /*!<  Exti line number */
-    void (* PendingCallback)(void);   /*!<  Exti pending callback */
+  uint32_t Line;                    /*!<  Exti line number */
+  void (* PendingCallback)(void);   /*!<  Exti pending callback */
 } EXTI_HandleTypeDef;
 
 /**
@@ -61,17 +61,17 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t Line;           /*!< The Exti line to be configured. This parameter
+  uint32_t Line;           /*!< The Exti line to be configured. This parameter
                                 can be a value of @ref EXTI_Line */
-    uint32_t Mode;           /*!< The Exit Mode to be configured for a core.
+  uint32_t Mode;           /*!< The Exit Mode to be configured for a core.
                                 This parameter can be a combination of @ref EXTI_Mode */
-    uint32_t Trigger;        /*!< The Exti Trigger to be configured. This parameter
+  uint32_t Trigger;        /*!< The Exti Trigger to be configured. This parameter
                                 can be a value of @ref EXTI_Trigger */
-    uint32_t GPIOSel;        /*!< The Exti GPIO multiplexer selection to be configured.
+  uint32_t GPIOSel;        /*!< The Exti GPIO multiplexer selection to be configured.
                                 This parameter is only possible for line 0 to 15. It
                                 can be a value of @ref EXTI_GPIOSel */
 
-    uint32_t PendClearSource; /*!< Specifies the event pending clear source for D3/SRD
+  uint32_t PendClearSource; /*!< Specifies the event pending clear source for D3/SRD
                                  domain. This parameter can be a value of @ref
                                  EXTI_PendClear_Source */
 

@@ -165,7 +165,7 @@ extern "C" {
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsSemaphoreLocked(HSEM_TypeDef *HSEMx, uint32_t Semaphore)
 {
-    return ((READ_BIT(HSEMx->R[Semaphore], HSEM_R_LOCK) == (HSEM_R_LOCK_Msk)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->R[Semaphore], HSEM_R_LOCK) == (HSEM_R_LOCK_Msk)) ? 1UL : 0UL);
 }
 
 /**
@@ -180,7 +180,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsSemaphoreLocked(HSEM_TypeDef *HSEMx, uint32_t
   */
 __STATIC_INLINE uint32_t LL_HSEM_GetCoreId(HSEM_TypeDef *HSEMx, uint32_t Semaphore)
 {
-    return (uint32_t)(READ_BIT(HSEMx->R[Semaphore], HSEM_R_COREID_Msk));
+  return (uint32_t)(READ_BIT(HSEMx->R[Semaphore], HSEM_R_COREID_Msk));
 }
 
 /**
@@ -192,7 +192,7 @@ __STATIC_INLINE uint32_t LL_HSEM_GetCoreId(HSEM_TypeDef *HSEMx, uint32_t Semapho
   */
 __STATIC_INLINE uint32_t LL_HSEM_GetProcessId(HSEM_TypeDef *HSEMx, uint32_t Semaphore)
 {
-    return (uint32_t)(READ_BIT(HSEMx->R[Semaphore], HSEM_R_PROCID_Msk));
+  return (uint32_t)(READ_BIT(HSEMx->R[Semaphore], HSEM_R_PROCID_Msk));
 }
 
 /**
@@ -208,7 +208,7 @@ __STATIC_INLINE uint32_t LL_HSEM_GetProcessId(HSEM_TypeDef *HSEMx, uint32_t Sema
   */
 __STATIC_INLINE void LL_HSEM_SetLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore, uint32_t process)
 {
-    WRITE_REG(HSEMx->R[Semaphore], (HSEM_R_LOCK | LL_HSEM_COREID | process));
+  WRITE_REG(HSEMx->R[Semaphore], (HSEM_R_LOCK | LL_HSEM_COREID | process));
 }
 
 /**
@@ -223,8 +223,8 @@ __STATIC_INLINE void LL_HSEM_SetLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore, ui
   */
 __STATIC_INLINE uint32_t LL_HSEM_2StepLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore, uint32_t process)
 {
-    WRITE_REG(HSEMx->R[Semaphore], (HSEM_R_LOCK | LL_HSEM_COREID | process));
-    return ((HSEMx->R[Semaphore] != (HSEM_R_LOCK | LL_HSEM_COREID | process)) ? 1UL : 0UL);
+  WRITE_REG(HSEMx->R[Semaphore], (HSEM_R_LOCK | LL_HSEM_COREID | process));
+  return ((HSEMx->R[Semaphore] != (HSEM_R_LOCK | LL_HSEM_COREID | process)) ? 1UL : 0UL);
 }
 
 /**
@@ -238,7 +238,7 @@ __STATIC_INLINE uint32_t LL_HSEM_2StepLock(HSEM_TypeDef *HSEMx, uint32_t Semapho
   */
 __STATIC_INLINE uint32_t LL_HSEM_1StepLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore)
 {
-    return ((HSEMx->RLR[Semaphore] != (HSEM_RLR_LOCK | LL_HSEM_COREID)) ? 1UL : 0UL);
+  return ((HSEMx->RLR[Semaphore] != (HSEM_RLR_LOCK | LL_HSEM_COREID)) ? 1UL : 0UL);
 }
 
 /**
@@ -252,7 +252,7 @@ __STATIC_INLINE uint32_t LL_HSEM_1StepLock(HSEM_TypeDef *HSEMx, uint32_t Semapho
   */
 __STATIC_INLINE void LL_HSEM_ReleaseLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore, uint32_t process)
 {
-    WRITE_REG(HSEMx->R[Semaphore], (LL_HSEM_COREID | process));
+  WRITE_REG(HSEMx->R[Semaphore], (LL_HSEM_COREID | process));
 }
 
 /**
@@ -263,7 +263,7 @@ __STATIC_INLINE void LL_HSEM_ReleaseLock(HSEM_TypeDef *HSEMx, uint32_t Semaphore
   * @retval 0 semaphore is free, 1 semaphore is locked  */
 __STATIC_INLINE uint32_t LL_HSEM_GetStatus(HSEM_TypeDef *HSEMx, uint32_t Semaphore)
 {
-    return ((HSEMx->R[Semaphore] != 0U) ? 1UL : 0UL);
+  return ((HSEMx->R[Semaphore] != 0U) ? 1UL : 0UL);
 }
 
 /**
@@ -275,7 +275,7 @@ __STATIC_INLINE uint32_t LL_HSEM_GetStatus(HSEM_TypeDef *HSEMx, uint32_t Semapho
   */
 __STATIC_INLINE void LL_HSEM_SetKey(HSEM_TypeDef *HSEMx, uint32_t key)
 {
-    WRITE_REG(HSEMx->KEYR, key << HSEM_KEYR_KEY_Pos);
+  WRITE_REG(HSEMx->KEYR, key << HSEM_KEYR_KEY_Pos);
 }
 
 /**
@@ -286,7 +286,7 @@ __STATIC_INLINE void LL_HSEM_SetKey(HSEM_TypeDef *HSEMx, uint32_t key)
   */
 __STATIC_INLINE uint32_t LL_HSEM_GetKey(HSEM_TypeDef *HSEMx)
 {
-    return (uint32_t)(READ_BIT(HSEMx->KEYR, HSEM_KEYR_KEY) >> HSEM_KEYR_KEY_Pos);
+  return (uint32_t)(READ_BIT(HSEMx->KEYR, HSEM_KEYR_KEY) >> HSEM_KEYR_KEY_Pos);
 }
 
 /**
@@ -303,7 +303,7 @@ __STATIC_INLINE uint32_t LL_HSEM_GetKey(HSEM_TypeDef *HSEMx)
   */
 __STATIC_INLINE void LL_HSEM_ResetAllLock(HSEM_TypeDef *HSEMx, uint32_t key, uint32_t core)
 {
-    WRITE_REG(HSEMx->CR, (key << HSEM_CR_KEY_Pos) | core);
+  WRITE_REG(HSEMx->CR, (key << HSEM_CR_KEY_Pos) | core);
 }
 
 /**
@@ -358,7 +358,7 @@ __STATIC_INLINE void LL_HSEM_ResetAllLock(HSEM_TypeDef *HSEMx, uint32_t key, uin
   */
 __STATIC_INLINE void LL_HSEM_EnableIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    SET_BIT(HSEMx->C1IER, SemaphoreMask);
+  SET_BIT(HSEMx->C1IER, SemaphoreMask);
 }
 
 /**
@@ -405,7 +405,7 @@ __STATIC_INLINE void LL_HSEM_EnableIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t Semaph
   */
 __STATIC_INLINE void LL_HSEM_DisableIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    CLEAR_BIT(HSEMx->C1IER, SemaphoreMask);
+  CLEAR_BIT(HSEMx->C1IER, SemaphoreMask);
 }
 
 /**
@@ -452,7 +452,7 @@ __STATIC_INLINE void LL_HSEM_DisableIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t Semap
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsEnabledIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C1IER, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C1IER, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 
 #if defined(DUAL_CORE)
@@ -498,7 +498,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsEnabledIT_C1IER(HSEM_TypeDef *HSEMx, uint32_t
   */
 __STATIC_INLINE void LL_HSEM_EnableIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    SET_BIT(HSEMx->C2IER, SemaphoreMask);
+  SET_BIT(HSEMx->C2IER, SemaphoreMask);
 }
 
 /**
@@ -543,7 +543,7 @@ __STATIC_INLINE void LL_HSEM_EnableIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t Semaph
   */
 __STATIC_INLINE void LL_HSEM_DisableIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    CLEAR_BIT(HSEMx->C2IER, SemaphoreMask);
+  CLEAR_BIT(HSEMx->C2IER, SemaphoreMask);
 }
 
 /**
@@ -588,7 +588,7 @@ __STATIC_INLINE void LL_HSEM_DisableIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t Semap
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsEnabledIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C2IER, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C2IER, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 #endif /* DUAL_CORE */
 
@@ -644,7 +644,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsEnabledIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t
   */
 __STATIC_INLINE void LL_HSEM_ClearFlag_C1ICR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    WRITE_REG(HSEMx->C1ICR, SemaphoreMask);
+  WRITE_REG(HSEMx->C1ICR, SemaphoreMask);
 }
 
 /**
@@ -691,7 +691,7 @@ __STATIC_INLINE void LL_HSEM_ClearFlag_C1ICR(HSEM_TypeDef *HSEMx, uint32_t Semap
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C1ISR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C1ISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C1ISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 
 /**
@@ -738,7 +738,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C1ISR(HSEM_TypeDef *HSEMx, uint32_
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C1MISR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C1MISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C1MISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 
 #if defined(DUAL_CORE)
@@ -784,7 +784,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C1MISR(HSEM_TypeDef *HSEMx, uint32
   */
 __STATIC_INLINE void LL_HSEM_ClearFlag_C2ICR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    WRITE_REG(HSEMx->C2ICR, SemaphoreMask);
+  WRITE_REG(HSEMx->C2ICR, SemaphoreMask);
 }
 
 /**
@@ -829,7 +829,7 @@ __STATIC_INLINE void LL_HSEM_ClearFlag_C2ICR(HSEM_TypeDef *HSEMx, uint32_t Semap
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C2ISR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C2ISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C2ISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 
 /**
@@ -874,7 +874,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C2ISR(HSEM_TypeDef *HSEMx, uint32_
   */
 __STATIC_INLINE uint32_t LL_HSEM_IsActiveFlag_C2MISR(HSEM_TypeDef *HSEMx, uint32_t SemaphoreMask)
 {
-    return ((READ_BIT(HSEMx->C2MISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
+  return ((READ_BIT(HSEMx->C2MISR, SemaphoreMask) == (SemaphoreMask)) ? 1UL : 0UL);
 }
 #endif /* DUAL_CORE */
 /**

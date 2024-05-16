@@ -24,5 +24,5 @@ del *.iex /s
 del *.htm /s
 del *.sct /s
 del *.map /s
-del fdcan_h730.uvguix.* /s
+del Template.uvguix.* /s
 exit

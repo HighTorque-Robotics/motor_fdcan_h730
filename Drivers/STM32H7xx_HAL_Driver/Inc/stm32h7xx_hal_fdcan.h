@@ -47,10 +47,10 @@ extern "C" {
   */
 typedef enum
 {
-    HAL_FDCAN_STATE_RESET      = 0x00U, /*!< FDCAN not yet initialized or disabled */
-    HAL_FDCAN_STATE_READY      = 0x01U, /*!< FDCAN initialized and ready for use   */
-    HAL_FDCAN_STATE_BUSY       = 0x02U, /*!< FDCAN process is ongoing              */
-    HAL_FDCAN_STATE_ERROR      = 0x03U  /*!< FDCAN error state                     */
+  HAL_FDCAN_STATE_RESET      = 0x00U, /*!< FDCAN not yet initialized or disabled */
+  HAL_FDCAN_STATE_READY      = 0x01U, /*!< FDCAN initialized and ready for use   */
+  HAL_FDCAN_STATE_BUSY       = 0x02U, /*!< FDCAN process is ongoing              */
+  HAL_FDCAN_STATE_ERROR      = 0x03U  /*!< FDCAN error state                     */
 } HAL_FDCAN_StateTypeDef;
 
 /**
@@ -58,91 +58,91 @@ typedef enum
   */
 typedef struct
 {
-    uint32_t FrameFormat;                  /*!< Specifies the FDCAN frame format.
+  uint32_t FrameFormat;                  /*!< Specifies the FDCAN frame format.
                                               This parameter can be a value of @ref FDCAN_frame_format     */
 
-    uint32_t Mode;                         /*!< Specifies the FDCAN mode.
+  uint32_t Mode;                         /*!< Specifies the FDCAN mode.
                                               This parameter can be a value of @ref FDCAN_operating_mode   */
 
-    FunctionalState AutoRetransmission;    /*!< Enable or disable the automatic retransmission mode.
+  FunctionalState AutoRetransmission;    /*!< Enable or disable the automatic retransmission mode.
                                               This parameter can be set to ENABLE or DISABLE               */
 
-    FunctionalState TransmitPause;         /*!< Enable or disable the Transmit Pause feature.
+  FunctionalState TransmitPause;         /*!< Enable or disable the Transmit Pause feature.
                                               This parameter can be set to ENABLE or DISABLE               */
 
-    FunctionalState ProtocolException;      /*!< Enable or disable the Protocol Exception Handling.
+  FunctionalState ProtocolException;      /*!< Enable or disable the Protocol Exception Handling.
                                               This parameter can be set to ENABLE or DISABLE               */
 
-    uint32_t NominalPrescaler;             /*!< Specifies the value by which the oscillator frequency is
+  uint32_t NominalPrescaler;             /*!< Specifies the value by which the oscillator frequency is
                                               divided for generating the nominal bit time quanta.
                                               This parameter must be a number between 1 and 512            */
 
-    uint32_t NominalSyncJumpWidth;         /*!< Specifies the maximum number of time quanta the FDCAN
+  uint32_t NominalSyncJumpWidth;         /*!< Specifies the maximum number of time quanta the FDCAN
                                               hardware is allowed to lengthen or shorten a bit to perform
                                               resynchronization.
                                               This parameter must be a number between 1 and 128            */
 
-    uint32_t NominalTimeSeg1;              /*!< Specifies the number of time quanta in Bit Segment 1.
+  uint32_t NominalTimeSeg1;              /*!< Specifies the number of time quanta in Bit Segment 1.
                                               This parameter must be a number between 2 and 256            */
 
-    uint32_t NominalTimeSeg2;              /*!< Specifies the number of time quanta in Bit Segment 2.
+  uint32_t NominalTimeSeg2;              /*!< Specifies the number of time quanta in Bit Segment 2.
                                               This parameter must be a number between 2 and 128            */
 
-    uint32_t DataPrescaler;                /*!< Specifies the value by which the oscillator frequency is
+  uint32_t DataPrescaler;                /*!< Specifies the value by which the oscillator frequency is
                                               divided for generating the data bit time quanta.
                                               This parameter must be a number between 1 and 32             */
 
-    uint32_t DataSyncJumpWidth;            /*!< Specifies the maximum number of time quanta the FDCAN
+  uint32_t DataSyncJumpWidth;            /*!< Specifies the maximum number of time quanta the FDCAN
                                               hardware is allowed to lengthen or shorten a data bit to
                                               perform resynchronization.
                                               This parameter must be a number between 1 and 16             */
 
-    uint32_t DataTimeSeg1;                 /*!< Specifies the number of time quanta in Data Bit Segment 1.
+  uint32_t DataTimeSeg1;                 /*!< Specifies the number of time quanta in Data Bit Segment 1.
                                               This parameter must be a number between 1 and 32             */
 
-    uint32_t DataTimeSeg2;                 /*!< Specifies the number of time quanta in Data Bit Segment 2.
+  uint32_t DataTimeSeg2;                 /*!< Specifies the number of time quanta in Data Bit Segment 2.
                                               This parameter must be a number between 1 and 16             */
 
-    uint32_t MessageRAMOffset;             /*!< Specifies the message RAM start address.
+  uint32_t MessageRAMOffset;             /*!< Specifies the message RAM start address.
                                               This parameter must be a number between 0 and 2560           */
 
-    uint32_t StdFiltersNbr;                /*!< Specifies the number of standard Message ID filters.
+  uint32_t StdFiltersNbr;                /*!< Specifies the number of standard Message ID filters.
                                               This parameter must be a number between 0 and 128            */
 
-    uint32_t ExtFiltersNbr;                /*!< Specifies the number of extended Message ID filters.
+  uint32_t ExtFiltersNbr;                /*!< Specifies the number of extended Message ID filters.
                                               This parameter must be a number between 0 and 64             */
 
-    uint32_t RxFifo0ElmtsNbr;              /*!< Specifies the number of Rx FIFO0 Elements.
+  uint32_t RxFifo0ElmtsNbr;              /*!< Specifies the number of Rx FIFO0 Elements.
                                               This parameter must be a number between 0 and 64             */
 
-    uint32_t RxFifo0ElmtSize;              /*!< Specifies the Data Field Size in an Rx FIFO 0 element.
+  uint32_t RxFifo0ElmtSize;              /*!< Specifies the Data Field Size in an Rx FIFO 0 element.
                                               This parameter can be a value of @ref FDCAN_data_field_size  */
 
-    uint32_t RxFifo1ElmtsNbr;              /*!< Specifies the number of Rx FIFO 1 Elements.
+  uint32_t RxFifo1ElmtsNbr;              /*!< Specifies the number of Rx FIFO 1 Elements.
                                               This parameter must be a number between 0 and 64             */
 
-    uint32_t RxFifo1ElmtSize;              /*!< Specifies the Data Field Size in an Rx FIFO 1 element.
+  uint32_t RxFifo1ElmtSize;              /*!< Specifies the Data Field Size in an Rx FIFO 1 element.
                                               This parameter can be a value of @ref FDCAN_data_field_size  */
 
-    uint32_t RxBuffersNbr;                 /*!< Specifies the number of Dedicated Rx Buffer elements.
+  uint32_t RxBuffersNbr;                 /*!< Specifies the number of Dedicated Rx Buffer elements.
                                               This parameter must be a number between 0 and 64             */
 
-    uint32_t RxBufferSize;                 /*!< Specifies the Data Field Size in an Rx Buffer element.
+  uint32_t RxBufferSize;                 /*!< Specifies the Data Field Size in an Rx Buffer element.
                                               This parameter can be a value of @ref FDCAN_data_field_size  */
 
-    uint32_t TxEventsNbr;                  /*!< Specifies the number of Tx Event FIFO elements.
+  uint32_t TxEventsNbr;                  /*!< Specifies the number of Tx Event FIFO elements.
                                               This parameter must be a number between 0 and 32             */
 
-    uint32_t TxBuffersNbr;                 /*!< Specifies the number of Dedicated Tx Buffers.
+  uint32_t TxBuffersNbr;                 /*!< Specifies the number of Dedicated Tx Buffers.
                                               This parameter must be a number between 0 and 32             */
 
-    uint32_t TxFifoQueueElmtsNbr;          /*!< Specifies the number of Tx Buffers used for Tx FIFO/Queue.
+  uint32_t TxFifoQueueElmtsNbr;          /*!< Specifies the number of Tx Buffers used for Tx FIFO/Queue.
                                               This parameter must be a number between 0 and 32             */
 
-    uint32_t TxFifoQueueMode;              /*!< Tx FIFO/Queue Mode selection.
+  uint32_t TxFifoQueueMode;              /*!< Tx FIFO/Queue Mode selection.
                                               This parameter can be a value of @ref FDCAN_txFifoQueue_Mode */
 
-    uint32_t TxElmtSize;                   /*!< Specifies the Data Field Size in a Tx Element.
+  uint32_t TxElmtSize;                   /*!< Specifies the Data Field Size in a Tx Element.
                                               This parameter can be a value of @ref FDCAN_data_field_size  */
 
 } FDCAN_InitTypeDef;
@@ -152,24 +152,24 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t ClockCalibration;     /*!< Enable or disable the clock calibration.
+  uint32_t ClockCalibration;     /*!< Enable or disable the clock calibration.
                                       This parameter can be a value of @ref FDCAN_clock_calibration.       */
 
-    uint32_t ClockDivider;         /*!< Specifies the FDCAN kernel clock divider when the clock calibration
+  uint32_t ClockDivider;         /*!< Specifies the FDCAN kernel clock divider when the clock calibration
                                       is bypassed.
                                       This parameter can be a value of @ref FDCAN_clock_divider            */
 
-    uint32_t MinOscClkPeriods;     /*!< Configures the minimum number of periods in two CAN bit times. The
+  uint32_t MinOscClkPeriods;     /*!< Configures the minimum number of periods in two CAN bit times. The
                                       actual configured number of periods is MinOscClkPeriods x 32.
                                       This parameter must be a number between 0x00 and 0xFF                */
 
-    uint32_t CalFieldLength;       /*!< Specifies the calibration field length.
+  uint32_t CalFieldLength;       /*!< Specifies the calibration field length.
                                       This parameter can be a value of @ref FDCAN_calibration_field_length */
 
-    uint32_t TimeQuantaPerBitTime; /*!< Configures the number of time quanta per bit time.
+  uint32_t TimeQuantaPerBitTime; /*!< Configures the number of time quanta per bit time.
                                       This parameter must be a number between 4 and 25                     */
 
-    uint32_t WatchdogStartValue;   /*!< Start value of the Calibration Watchdog Counter.
+  uint32_t WatchdogStartValue;   /*!< Start value of the Calibration Watchdog Counter.
                                       If set to zero the counter is disabled.
                                       This parameter must be a number between 0x0000 and 0xFFFF            */
 
@@ -180,43 +180,43 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t IdType;           /*!< Specifies the identifier type.
+  uint32_t IdType;           /*!< Specifies the identifier type.
                                   This parameter can be a value of @ref FDCAN_id_type       */
 
-    uint32_t FilterIndex;      /*!< Specifies the filter which will be initialized.
+  uint32_t FilterIndex;      /*!< Specifies the filter which will be initialized.
                                   This parameter must be a number between:
                                    - 0 and 127, if IdType is FDCAN_STANDARD_ID
                                    - 0 and 63, if IdType is FDCAN_EXTENDED_ID               */
 
-    uint32_t FilterType;       /*!< Specifies the filter type.
+  uint32_t FilterType;       /*!< Specifies the filter type.
                                   This parameter can be a value of @ref FDCAN_filter_type.
                                   The value FDCAN_EXT_FILTER_RANGE_NO_EIDM is permitted
                                   only when IdType is FDCAN_EXTENDED_ID.
                                   This parameter is ignored if FilterConfig is set to
                                   FDCAN_FILTER_TO_RXBUFFER                                  */
 
-    uint32_t FilterConfig;     /*!< Specifies the filter configuration.
+  uint32_t FilterConfig;     /*!< Specifies the filter configuration.
                                   This parameter can be a value of @ref FDCAN_filter_config */
 
-    uint32_t FilterID1;        /*!< Specifies the filter identification 1.
+  uint32_t FilterID1;        /*!< Specifies the filter identification 1.
                                   This parameter must be a number between:
                                    - 0 and 0x7FF, if IdType is FDCAN_STANDARD_ID
                                    - 0 and 0x1FFFFFFF, if IdType is FDCAN_EXTENDED_ID       */
 
-    uint32_t FilterID2;        /*!< Specifies the filter identification 2.
+  uint32_t FilterID2;        /*!< Specifies the filter identification 2.
                                   This parameter is ignored if FilterConfig is set to
                                   FDCAN_FILTER_TO_RXBUFFER.
                                   This parameter must be a number between:
                                    - 0 and 0x7FF, if IdType is FDCAN_STANDARD_ID
                                    - 0 and 0x1FFFFFFF, if IdType is FDCAN_EXTENDED_ID       */
 
-    uint32_t RxBufferIndex;    /*!< Contains the index of the Rx buffer in which the
+  uint32_t RxBufferIndex;    /*!< Contains the index of the Rx buffer in which the
                                   matching message will be stored.
                                   This parameter must be a number between 0 and 63.
                                   This parameter is ignored if FilterConfig is different
                                   from FDCAN_FILTER_TO_RXBUFFER                             */
 
-    uint32_t IsCalibrationMsg; /*!< Specifies whether the filter is configured for
+  uint32_t IsCalibrationMsg; /*!< Specifies whether the filter is configured for
                                   calibration messages.
                                   This parameter is ignored if FilterConfig is different
                                   from FDCAN_FILTER_TO_RXBUFFER.
@@ -231,36 +231,36 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t Identifier;          /*!< Specifies the identifier.
+  uint32_t Identifier;          /*!< Specifies the identifier.
                                      This parameter must be a number between:
                                       - 0 and 0x7FF, if IdType is FDCAN_STANDARD_ID
                                       - 0 and 0x1FFFFFFF, if IdType is FDCAN_EXTENDED_ID               */
 
-    uint32_t IdType;              /*!< Specifies the identifier type for the message that will be
+  uint32_t IdType;              /*!< Specifies the identifier type for the message that will be
                                      transmitted.
                                      This parameter can be a value of @ref FDCAN_id_type               */
 
-    uint32_t TxFrameType;         /*!< Specifies the frame type of the message that will be transmitted.
+  uint32_t TxFrameType;         /*!< Specifies the frame type of the message that will be transmitted.
                                      This parameter can be a value of @ref FDCAN_frame_type            */
 
-    uint32_t DataLength;          /*!< Specifies the length of the frame that will be transmitted.
+  uint32_t DataLength;          /*!< Specifies the length of the frame that will be transmitted.
                                       This parameter can be a value of @ref FDCAN_data_length_code     */
 
-    uint32_t ErrorStateIndicator; /*!< Specifies the error state indicator.
+  uint32_t ErrorStateIndicator; /*!< Specifies the error state indicator.
                                      This parameter can be a value of @ref FDCAN_error_state_indicator */
 
-    uint32_t BitRateSwitch;       /*!< Specifies whether the Tx frame will be transmitted with or without
+  uint32_t BitRateSwitch;       /*!< Specifies whether the Tx frame will be transmitted with or without
                                      bit rate switching.
                                      This parameter can be a value of @ref FDCAN_bit_rate_switching    */
 
-    uint32_t FDFormat;            /*!< Specifies whether the Tx frame will be transmitted in classic or
+  uint32_t FDFormat;            /*!< Specifies whether the Tx frame will be transmitted in classic or
                                      FD format.
                                      This parameter can be a value of @ref FDCAN_format                */
 
-    uint32_t TxEventFifoControl;  /*!< Specifies the event FIFO control.
+  uint32_t TxEventFifoControl;  /*!< Specifies the event FIFO control.
                                      This parameter can be a value of @ref FDCAN_EFC                   */
 
-    uint32_t MessageMarker;       /*!< Specifies the message marker to be copied into Tx Event FIFO
+  uint32_t MessageMarker;       /*!< Specifies the message marker to be copied into Tx Event FIFO
                                      element for identification of Tx message status.
                                      This parameter must be a number between 0 and 0xFF                */
 
@@ -271,43 +271,43 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t Identifier;            /*!< Specifies the identifier.
+  uint32_t Identifier;            /*!< Specifies the identifier.
                                        This parameter must be a number between:
                                         - 0 and 0x7FF, if IdType is FDCAN_STANDARD_ID
                                         - 0 and 0x1FFFFFFF, if IdType is FDCAN_EXTENDED_ID               */
 
-    uint32_t IdType;                /*!< Specifies the identifier type of the received message.
+  uint32_t IdType;                /*!< Specifies the identifier type of the received message.
                                        This parameter can be a value of @ref FDCAN_id_type               */
 
-    uint32_t RxFrameType;           /*!< Specifies the the received message frame type.
+  uint32_t RxFrameType;           /*!< Specifies the the received message frame type.
                                        This parameter can be a value of @ref FDCAN_frame_type            */
 
-    uint32_t DataLength;            /*!< Specifies the received frame length.
+  uint32_t DataLength;            /*!< Specifies the received frame length.
                                         This parameter can be a value of @ref FDCAN_data_length_code     */
 
-    uint32_t ErrorStateIndicator;   /*!< Specifies the error state indicator.
+  uint32_t ErrorStateIndicator;   /*!< Specifies the error state indicator.
                                        This parameter can be a value of @ref FDCAN_error_state_indicator */
 
-    uint32_t BitRateSwitch;         /*!< Specifies whether the Rx frame is received with or without bit
+  uint32_t BitRateSwitch;         /*!< Specifies whether the Rx frame is received with or without bit
                                        rate switching.
                                        This parameter can be a value of @ref FDCAN_bit_rate_switching    */
 
-    uint32_t FDFormat;              /*!< Specifies whether the Rx frame is received in classic or FD
+  uint32_t FDFormat;              /*!< Specifies whether the Rx frame is received in classic or FD
                                        format.
                                        This parameter can be a value of @ref FDCAN_format                */
 
-    uint32_t RxTimestamp;           /*!< Specifies the timestamp counter value captured on start of frame
+  uint32_t RxTimestamp;           /*!< Specifies the timestamp counter value captured on start of frame
                                        reception.
                                        This parameter must be a number between 0 and 0xFFFF              */
 
-    uint32_t FilterIndex;           /*!< Specifies the index of matching Rx acceptance filter element.
+  uint32_t FilterIndex;           /*!< Specifies the index of matching Rx acceptance filter element.
                                        This parameter must be a number between:
                                         - 0 and 127, if IdType is FDCAN_STANDARD_ID
                                         - 0 and 63, if IdType is FDCAN_EXTENDED_ID
                                        When the frame is a Non-Filter matching frame, this parameter
                                        is unused.                                                        */
 
-    uint32_t IsFilterMatchingFrame; /*!< Specifies whether the accepted frame did not match any Rx filter.
+  uint32_t IsFilterMatchingFrame; /*!< Specifies whether the accepted frame did not match any Rx filter.
                                        Acceptance of non-matching frames may be enabled via
                                        HAL_FDCAN_ConfigGlobalFilter().
                                        This parameter takes 0 if the frame matched an Rx filter or
@@ -320,40 +320,40 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t Identifier;          /*!< Specifies the identifier.
+  uint32_t Identifier;          /*!< Specifies the identifier.
                                      This parameter must be a number between:
                                       - 0 and 0x7FF, if IdType is FDCAN_STANDARD_ID
                                       - 0 and 0x1FFFFFFF, if IdType is FDCAN_EXTENDED_ID               */
 
-    uint32_t IdType;              /*!< Specifies the identifier type for the transmitted message.
+  uint32_t IdType;              /*!< Specifies the identifier type for the transmitted message.
                                      This parameter can be a value of @ref FDCAN_id_type               */
 
-    uint32_t TxFrameType;         /*!< Specifies the frame type of the transmitted message.
+  uint32_t TxFrameType;         /*!< Specifies the frame type of the transmitted message.
                                      This parameter can be a value of @ref FDCAN_frame_type            */
 
-    uint32_t DataLength;          /*!< Specifies the length of the transmitted frame.
+  uint32_t DataLength;          /*!< Specifies the length of the transmitted frame.
                                      This parameter can be a value of @ref FDCAN_data_length_code      */
 
-    uint32_t ErrorStateIndicator; /*!< Specifies the error state indicator.
+  uint32_t ErrorStateIndicator; /*!< Specifies the error state indicator.
                                      This parameter can be a value of @ref FDCAN_error_state_indicator */
 
-    uint32_t BitRateSwitch;       /*!< Specifies whether the Tx frame is transmitted with or without bit
+  uint32_t BitRateSwitch;       /*!< Specifies whether the Tx frame is transmitted with or without bit
                                      rate switching.
                                      This parameter can be a value of @ref FDCAN_bit_rate_switching    */
 
-    uint32_t FDFormat;            /*!< Specifies whether the Tx frame is transmitted in classic or FD
+  uint32_t FDFormat;            /*!< Specifies whether the Tx frame is transmitted in classic or FD
                                      format.
                                      This parameter can be a value of @ref FDCAN_format                */
 
-    uint32_t TxTimestamp;         /*!< Specifies the timestamp counter value captured on start of frame
+  uint32_t TxTimestamp;         /*!< Specifies the timestamp counter value captured on start of frame
                                      transmission.
                                      This parameter must be a number between 0 and 0xFFFF              */
 
-    uint32_t MessageMarker;       /*!< Specifies the message marker copied into Tx Event FIFO element
+  uint32_t MessageMarker;       /*!< Specifies the message marker copied into Tx Event FIFO element
                                      for identification of Tx message status.
                                      This parameter must be a number between 0 and 0xFF                */
 
-    uint32_t EventType;           /*!< Specifies the event type.
+  uint32_t EventType;           /*!< Specifies the event type.
                                      This parameter can be a value of @ref FDCAN_event_type            */
 
 } FDCAN_TxEventFifoTypeDef;
@@ -363,20 +363,20 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t FilterList;     /*!< Specifies the filter list of the matching filter element.
+  uint32_t FilterList;     /*!< Specifies the filter list of the matching filter element.
                                 This parameter can be:
                                  - 0 : Standard Filter List
                                  - 1 : Extended Filter List                                */
 
-    uint32_t FilterIndex;    /*!< Specifies the index of matching filter element.
+  uint32_t FilterIndex;    /*!< Specifies the index of matching filter element.
                                 This parameter can be a number between:
                                 - 0 and 127, if FilterList is 0 (Standard)
                                 - 0 and 63, if FilterList is 1 (Extended)                  */
 
-    uint32_t MessageStorage; /*!< Specifies the HP Message Storage.
+  uint32_t MessageStorage; /*!< Specifies the HP Message Storage.
                                 This parameter can be a value of @ref FDCAN_hp_msg_storage */
 
-    uint32_t MessageIndex;   /*!< Specifies the Index of Rx FIFO element to which the
+  uint32_t MessageIndex;   /*!< Specifies the Index of Rx FIFO element to which the
                                 message was stored.
                                 This parameter is valid only when MessageStorage is:
                                   FDCAN_HP_STORAGE_RXFIFO0
@@ -390,52 +390,52 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t LastErrorCode;     /*!< Specifies the type of the last error that occurred on the FDCAN bus.
+  uint32_t LastErrorCode;     /*!< Specifies the type of the last error that occurred on the FDCAN bus.
                                    This parameter can be a value of @ref FDCAN_protocol_error_code                           */
 
-    uint32_t DataLastErrorCode; /*!< Specifies the type of the last error that occurred in the data phase of a CAN FD format
+  uint32_t DataLastErrorCode; /*!< Specifies the type of the last error that occurred in the data phase of a CAN FD format
                                    frame with its BRS flag set.
                                    This parameter can be a value of @ref FDCAN_protocol_error_code                           */
 
-    uint32_t Activity;          /*!< Specifies the FDCAN module communication state.
+  uint32_t Activity;          /*!< Specifies the FDCAN module communication state.
                                    This parameter can be a value of @ref FDCAN_communication_state                           */
 
-    uint32_t ErrorPassive;      /*!< Specifies the FDCAN module error status.
+  uint32_t ErrorPassive;      /*!< Specifies the FDCAN module error status.
                                    This parameter can be:
                                     - 0 : The FDCAN is in Error_Active state
                                     - 1 : The FDCAN is in Error_Passive state                                                */
 
-    uint32_t Warning;           /*!< Specifies the FDCAN module warning status.
+  uint32_t Warning;           /*!< Specifies the FDCAN module warning status.
                                    This parameter can be:
                                     - 0 : error counters (RxErrorCnt and TxErrorCnt) are below the Error_Warning limit of 96
                                     - 1 : at least one of error counters has reached the Error_Warning limit of 96           */
 
-    uint32_t BusOff;            /*!< Specifies the FDCAN module Bus_Off status.
+  uint32_t BusOff;            /*!< Specifies the FDCAN module Bus_Off status.
                                    This parameter can be:
                                     - 0 : The FDCAN is not in Bus_Off state
                                     - 1 : The FDCAN is in Bus_Off state                                                      */
 
-    uint32_t RxESIflag;         /*!< Specifies ESI flag of last received CAN FD message.
+  uint32_t RxESIflag;         /*!< Specifies ESI flag of last received CAN FD message.
                                    This parameter can be:
                                     - 0 : Last received CAN FD message did not have its ESI flag set
                                     - 1 : Last received CAN FD message had its ESI flag set                                  */
 
-    uint32_t RxBRSflag;         /*!< Specifies BRS flag of last received CAN FD message.
+  uint32_t RxBRSflag;         /*!< Specifies BRS flag of last received CAN FD message.
                                    This parameter can be:
                                     - 0 : Last received CAN FD message did not have its BRS flag set
                                     - 1 : Last received CAN FD message had its BRS flag set                                  */
 
-    uint32_t RxFDFflag;         /*!< Specifies if CAN FD message (FDF flag set) has been received since last protocol status.
+  uint32_t RxFDFflag;         /*!< Specifies if CAN FD message (FDF flag set) has been received since last protocol status.
                                    This parameter can be:
                                     - 0 : no CAN FD message received
                                     - 1 : CAN FD message received                                                            */
 
-    uint32_t ProtocolException; /*!< Specifies the FDCAN module Protocol Exception status.
+  uint32_t ProtocolException; /*!< Specifies the FDCAN module Protocol Exception status.
                                    This parameter can be:
                                     - 0 : No protocol exception event occurred since last read access
                                     - 1 : Protocol exception event occurred                                                  */
 
-    uint32_t TDCvalue;          /*!< Specifies the Transmitter Delay Compensation Value.
+  uint32_t TDCvalue;          /*!< Specifies the Transmitter Delay Compensation Value.
                                    This parameter can be a number between 0 and 127                                          */
 
 } FDCAN_ProtocolStatusTypeDef;
@@ -445,18 +445,18 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t TxErrorCnt;     /*!< Specifies the Transmit Error Counter Value.
+  uint32_t TxErrorCnt;     /*!< Specifies the Transmit Error Counter Value.
                                 This parameter can be a number between 0 and 255                                         */
 
-    uint32_t RxErrorCnt;     /*!< Specifies the Receive Error Counter Value.
+  uint32_t RxErrorCnt;     /*!< Specifies the Receive Error Counter Value.
                                 This parameter can be a number between 0 and 127                                         */
 
-    uint32_t RxErrorPassive; /*!< Specifies the Receive Error Passive status.
+  uint32_t RxErrorPassive; /*!< Specifies the Receive Error Passive status.
                                 This parameter can be:
                                  - 0 : The Receive Error Counter (RxErrorCnt) is below the error passive level of 128
                                  - 1 : The Receive Error Counter (RxErrorCnt) has reached the error passive level of 128 */
 
-    uint32_t ErrorLogging;   /*!< Specifies the Transmit/Receive error logging counter value.
+  uint32_t ErrorLogging;   /*!< Specifies the Transmit/Receive error logging counter value.
                                 This parameter can be a number between 0 and 255.
                                 This counter is incremented each time when a FDCAN protocol error causes the TxErrorCnt
                                 or the RxErrorCnt to be incremented. The counter stops at 255; the next increment of
@@ -469,31 +469,31 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t OperationMode;     /*!< Specifies the FDCAN Operation Mode.
+  uint32_t OperationMode;     /*!< Specifies the FDCAN Operation Mode.
                                    This parameter can be a value of @ref FDCAN_operation_mode               */
 
-    uint32_t GapEnable;         /*!< Specifies the FDCAN TT Operation.
+  uint32_t GapEnable;         /*!< Specifies the FDCAN TT Operation.
                                    This parameter can be a value of @ref FDCAN_TT_operation.
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL0                                            */
 
-    uint32_t TimeMaster;        /*!< Specifies whether the instance is a slave or a potential master.
+  uint32_t TimeMaster;        /*!< Specifies whether the instance is a slave or a potential master.
                                    This parameter can be a value of @ref FDCAN_TT_time_master               */
 
-    uint32_t SyncDevLimit;      /*!< Specifies the Synchronization Deviation Limit SDL of the TUR
+  uint32_t SyncDevLimit;      /*!< Specifies the Synchronization Deviation Limit SDL of the TUR
                                    numerator : TUR = (Numerator +/- SDL) / Denominator.
                                    With : SDL = 2^(SyncDevLimit+5).
                                    This parameter must be a number between 0 and 7                          */
 
-    uint32_t InitRefTrigOffset; /*!< Specifies the Initial Reference Trigger Offset.
+  uint32_t InitRefTrigOffset; /*!< Specifies the Initial Reference Trigger Offset.
                                    This parameter must be a number between 0 and 127                        */
 
-    uint32_t ExternalClkSync;   /*!< Enable or disable External Clock Synchronization.
+  uint32_t ExternalClkSync;   /*!< Enable or disable External Clock Synchronization.
                                    This parameter can be a value of @ref FDCAN_TT_external_clk_sync.
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL1                                            */
 
-    uint32_t AppWdgLimit;       /*!< Specifies the Application Watchdog Limit : maximum time after
+  uint32_t AppWdgLimit;       /*!< Specifies the Application Watchdog Limit : maximum time after
                                    which the application has to serve the application watchdog.
                                    The application watchdog is incremented once each 256 NTUs.
                                    The application watchdog can be disabled by setting AppWdgLimit to 0.
@@ -501,49 +501,49 @@ typedef struct
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL0                                            */
 
-    uint32_t GlobalTimeFilter;  /*!< Enable or disable Global Time Filtering.
+  uint32_t GlobalTimeFilter;  /*!< Enable or disable Global Time Filtering.
                                    This parameter can be a value of @ref FDCAN_TT_global_time_filtering.
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL1                                            */
 
-    uint32_t ClockCalibration;  /*!< Enable or disable Automatic Clock Calibration.
+  uint32_t ClockCalibration;  /*!< Enable or disable Automatic Clock Calibration.
                                    This parameter can be a value of @ref FDCAN_TT_auto_clk_calibration.
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL1                                            */
 
-    uint32_t EvtTrigPolarity;   /*!< Specifies the Event Trigger Polarity.
+  uint32_t EvtTrigPolarity;   /*!< Specifies the Event Trigger Polarity.
                                    This parameter can be a value of @ref FDCAN_TT_event_trig_polarity.
                                    This parameter is ignored if OperationMode is set to
                                    FDCAN_TT_COMMUNICATION_LEVEL0                                            */
 
-    uint32_t BasicCyclesNbr;    /*!< Specifies the number of basic cycles in the system matrix.
+  uint32_t BasicCyclesNbr;    /*!< Specifies the number of basic cycles in the system matrix.
                                    This parameter can be a value of @ref FDCAN_TT_basic_cycle_number        */
 
-    uint32_t CycleStartSync;    /*!< Enable or disable synchronization pulse output at pin fdcan1_soc.
+  uint32_t CycleStartSync;    /*!< Enable or disable synchronization pulse output at pin fdcan1_soc.
                                    This parameter can be a value of @ref FDCAN_TT_cycle_start_sync          */
 
-    uint32_t TxEnableWindow;    /*!< Specifies the length of Tx enable window in NTUs.
+  uint32_t TxEnableWindow;    /*!< Specifies the length of Tx enable window in NTUs.
                                    This parameter must be a number between 1 and 16                         */
 
-    uint32_t ExpTxTrigNbr;      /*!< Specifies the number of expected Tx_Triggers in the system matrix.
+  uint32_t ExpTxTrigNbr;      /*!< Specifies the number of expected Tx_Triggers in the system matrix.
                                    This is the sum of Tx_Triggers for exclusive, single arbitrating and
                                    merged arbitrating windows.
                                    This parameter must be a number between 0 and 4095                       */
 
-    uint32_t TURNumerator;      /*!< Specifies the TUR (Time Unit Ratio) numerator.
+  uint32_t TURNumerator;      /*!< Specifies the TUR (Time Unit Ratio) numerator.
                                    It is advised to set this parameter to the largest applicable value.
                                    This parameter must be a number between 0x10000 and 0x1FFFF              */
 
-    uint32_t TURDenominator;    /*!< Specifies the TUR (Time Unit Ratio) denominator.
+  uint32_t TURDenominator;    /*!< Specifies the TUR (Time Unit Ratio) denominator.
                                    This parameter must be a number between 0x0001 and 0x3FFF                */
 
-    uint32_t TriggerMemoryNbr;  /*!< Specifies the number of trigger memory elements.
+  uint32_t TriggerMemoryNbr;  /*!< Specifies the number of trigger memory elements.
                                    This parameter must be a number between 0 and 64                         */
 
-    uint32_t StopWatchTrigSel;  /*!< Specifies the input to be used as stop watch trigger.
+  uint32_t StopWatchTrigSel;  /*!< Specifies the input to be used as stop watch trigger.
                                    This parameter can be a value of @ref FDCAN_TT_stop_watch_trig_selection */
 
-    uint32_t EventTrigSel;      /*!< Specifies the input to be used as event trigger.
+  uint32_t EventTrigSel;      /*!< Specifies the input to be used as event trigger.
                                    This parameter can be a value of @ref FDCAN_TT_event_trig_selection      */
 
 } FDCAN_TT_ConfigTypeDef;
@@ -553,41 +553,41 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t TriggerIndex;  /*!< Specifies the trigger which will be configured.
+  uint32_t TriggerIndex;  /*!< Specifies the trigger which will be configured.
                                This parameter must be a number between 0 and 63                                 */
 
-    uint32_t TimeMark;      /*!< Specifies the cycle time for which the trigger becomes active.
+  uint32_t TimeMark;      /*!< Specifies the cycle time for which the trigger becomes active.
                                This parameter must be a number between 0 and 0xFFFF                             */
 
-    uint32_t RepeatFactor;  /*!< Specifies the trigger repeat factor.
+  uint32_t RepeatFactor;  /*!< Specifies the trigger repeat factor.
                                This parameter can be a value of @ref FDCAN_TT_Repeat_Factor                     */
 
-    uint32_t StartCycle;    /*!< Specifies the index of the first cycle in which the trigger becomes active.
+  uint32_t StartCycle;    /*!< Specifies the index of the first cycle in which the trigger becomes active.
                                This parameter is ignored if RepeatFactor is set to FDCAN_TT_REPEAT_EVERY_CYCLE.
                                This parameter must be a number between 0 and RepeatFactor                       */
 
-    uint32_t TmEventInt;    /*!< Enable or disable the internal time mark event.
+  uint32_t TmEventInt;    /*!< Enable or disable the internal time mark event.
                                If enabled, FDCAN_TT_FLAG_TRIG_TIME_MARK flag is set when trigger memory element
                                becomes active.
                                This parameter can be a value of @ref FDCAN_TT_Time_Mark_Event_Internal          */
 
-    uint32_t TmEventExt;    /*!< Enable or disable the external time mark event.
+  uint32_t TmEventExt;    /*!< Enable or disable the external time mark event.
                                If enabled, and if TTOCN.TTIE is set, a pulse is generated at fdcan1_tmp when
                                trigger memory element becomes active.
                                This parameter can be a value of @ref FDCAN_TT_Time_Mark_Event_External          */
 
-    uint32_t TriggerType;   /*!< Specifies the trigger type.
+  uint32_t TriggerType;   /*!< Specifies the trigger type.
                                This parameter can be a value of @ref FDCAN_TT_Trigger_Type                      */
 
-    uint32_t FilterType;    /*!< Specifies the filter identifier type.
+  uint32_t FilterType;    /*!< Specifies the filter identifier type.
                                This parameter can be a value of @ref FDCAN_id_type                              */
 
-    uint32_t TxBufferIndex; /*!< Specifies the index of the Tx buffer for which the trigger is valid.
+  uint32_t TxBufferIndex; /*!< Specifies the index of the Tx buffer for which the trigger is valid.
                                This parameter can be a value of @ref FDCAN_Tx_location.
                                This parameter is taken in consideration only if the trigger is configured for
                                transmission.                                                                    */
 
-    uint32_t FilterIndex;   /*!< Specifies the filter for which the trigger is valid.
+  uint32_t FilterIndex;   /*!< Specifies the filter for which the trigger is valid.
                                This parameter is taken in consideration only if the trigger is configured for
                                reception.
                                This parameter must be a number between:
@@ -601,64 +601,64 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t ErrorLevel;       /*!< Specifies the type of the TT operation error level.
+  uint32_t ErrorLevel;       /*!< Specifies the type of the TT operation error level.
                                   This parameter can be a value of @ref FDCAN_TT_error_level                    */
 
-    uint32_t MasterState;      /*!< Specifies the type of the TT master state.
+  uint32_t MasterState;      /*!< Specifies the type of the TT master state.
                                   This parameter can be a value of @ref FDCAN_TT_master_state                   */
 
-    uint32_t SyncState;        /*!< Specifies the type of the TT synchronization state.
+  uint32_t SyncState;        /*!< Specifies the type of the TT synchronization state.
                                   This parameter can be a value of @ref FDCAN_TT_sync_state                     */
 
-    uint32_t GTimeQuality;     /*!< Specifies the Quality of Global Time Phase.
+  uint32_t GTimeQuality;     /*!< Specifies the Quality of Global Time Phase.
                                   This parameter is only relevant in Level 0 and Level 2, otherwise fixed to 0.
                                   This parameter can be:
                                    - 0 : Global time not valid
                                    - 1 : Global time in phase with Time Master                                  */
 
-    uint32_t ClockQuality;     /*!< Specifies the Quality of Clock Speed.
+  uint32_t ClockQuality;     /*!< Specifies the Quality of Clock Speed.
                                   This parameter is only relevant in Level 0 and Level 2, otherwise fixed to 1.
                                   This parameter can be:
                                    - 0 : Local clock speed not synchronized to Time Master clock speed
                                    - 1 : Synchronization Deviation = SDL                                        */
 
-    uint32_t RefTrigOffset;    /*!< Specifies the Actual Reference Trigger Offset Value.
+  uint32_t RefTrigOffset;    /*!< Specifies the Actual Reference Trigger Offset Value.
                                   This parameter can be a number between 0 and 0xFF                             */
 
-    uint32_t GTimeDiscPending; /*!< Specifies the Global Time Discontinuity State.
+  uint32_t GTimeDiscPending; /*!< Specifies the Global Time Discontinuity State.
                                   This parameter can be:
                                    - 0 : No global time preset pending
                                    - 1 : Node waits for the global time preset to take effect                   */
 
-    uint32_t GapFinished;      /*!< Specifies whether a Gap is finished.
+  uint32_t GapFinished;      /*!< Specifies whether a Gap is finished.
                                   This parameter can be:
                                    - 0 : Reset at the end of each reference message
                                    - 1 : Gap finished                                                           */
 
-    uint32_t MasterPriority;   /*!< Specifies the Priority of actual Time Master.
+  uint32_t MasterPriority;   /*!< Specifies the Priority of actual Time Master.
                                   This parameter can be a number between 0 and 0x7                              */
 
-    uint32_t GapStarted;       /*!< Specifies whether a Gap is started.
+  uint32_t GapStarted;       /*!< Specifies whether a Gap is started.
                                   This parameter can be:
                                    - 0 : No Gap in schedule
                                    - 1 : Gap time after Basic Cycle has started                                 */
 
-    uint32_t WaitForEvt;       /*!< Specifies whether a Gap is announced.
+  uint32_t WaitForEvt;       /*!< Specifies whether a Gap is announced.
                                   This parameter can be:
                                    - 0 : No Gap announced, reset by a reference message with Next_is_Gap = 0
                                    - 1 : Reference message with Next_is_Gap = 1 received                        */
 
-    uint32_t AppWdgEvt;        /*!< Specifies the Application Watchdog State.
+  uint32_t AppWdgEvt;        /*!< Specifies the Application Watchdog State.
                                   This parameter can be:
                                    - 0 : Application Watchdog served in time
                                    - 1 : Failed to serve Application Watchdog in time                           */
 
-    uint32_t ECSPending;       /*!< Specifies the External Clock Synchronization State.
+  uint32_t ECSPending;       /*!< Specifies the External Clock Synchronization State.
                                   This parameter can be:
                                    - 0 : No external clock synchronization pending
                                    - 1 : Node waits for external clock synchronization to take effect           */
 
-    uint32_t PhaseLock;        /*!< Specifies the Phase Lock State.
+  uint32_t PhaseLock;        /*!< Specifies the Phase Lock State.
                                   This parameter can be:
                                    - 0 : Phase outside range
                                    - 1 : Phase inside range                                                     */
@@ -670,34 +670,34 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t StandardFilterSA; /*!< Specifies the Standard Filter List Start Address.
+  uint32_t StandardFilterSA; /*!< Specifies the Standard Filter List Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t ExtendedFilterSA; /*!< Specifies the Extended Filter List Start Address.
+  uint32_t ExtendedFilterSA; /*!< Specifies the Extended Filter List Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t RxFIFO0SA;        /*!< Specifies the Rx FIFO 0 Start Address.
+  uint32_t RxFIFO0SA;        /*!< Specifies the Rx FIFO 0 Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t RxFIFO1SA;        /*!< Specifies the Rx FIFO 1 Start Address.
+  uint32_t RxFIFO1SA;        /*!< Specifies the Rx FIFO 1 Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t RxBufferSA;       /*!< Specifies the Rx Buffer Start Address.
+  uint32_t RxBufferSA;       /*!< Specifies the Rx Buffer Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t TxEventFIFOSA;    /*!< Specifies the Tx Event FIFO Start Address.
+  uint32_t TxEventFIFOSA;    /*!< Specifies the Tx Event FIFO Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t TxBufferSA;       /*!< Specifies the Tx Buffers Start Address.
+  uint32_t TxBufferSA;       /*!< Specifies the Tx Buffers Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t TxFIFOQSA;        /*!< Specifies the Tx FIFO/Queue Start Address.
+  uint32_t TxFIFOQSA;        /*!< Specifies the Tx FIFO/Queue Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t TTMemorySA;       /*!< Specifies the Trigger Memory Start Address.
+  uint32_t TTMemorySA;       /*!< Specifies the Trigger Memory Start Address.
                                   This parameter must be a 32-bit word address      */
 
-    uint32_t EndAddress;       /*!< Specifies the End Address of the allocated RAM.
+  uint32_t EndAddress;       /*!< Specifies the End Address of the allocated RAM.
                                   This parameter must be a 32-bit word address      */
 
 } FDCAN_MsgRamAddressTypeDef;
@@ -711,44 +711,44 @@ typedef struct __FDCAN_HandleTypeDef
 typedef struct
 #endif /* USE_HAL_FDCAN_REGISTER_CALLBACKS */
 {
-    FDCAN_GlobalTypeDef         *Instance;        /*!< Register base address     */
+  FDCAN_GlobalTypeDef         *Instance;        /*!< Register base address     */
 
-    TTCAN_TypeDef               *ttcan;           /*!< TT register base address  */
+  TTCAN_TypeDef               *ttcan;           /*!< TT register base address  */
 
-    FDCAN_InitTypeDef           Init;             /*!< FDCAN required parameters */
+  FDCAN_InitTypeDef           Init;             /*!< FDCAN required parameters */
 
-    FDCAN_MsgRamAddressTypeDef  msgRam;           /*!< FDCAN Message RAM blocks  */
+  FDCAN_MsgRamAddressTypeDef  msgRam;           /*!< FDCAN Message RAM blocks  */
 
-    uint32_t                    LatestTxFifoQRequest; /*!< FDCAN Tx buffer index
+  uint32_t                    LatestTxFifoQRequest; /*!< FDCAN Tx buffer index
                                                of latest Tx FIFO/Queue request */
 
-    __IO HAL_FDCAN_StateTypeDef State;            /*!< FDCAN communication state */
+  __IO HAL_FDCAN_StateTypeDef State;            /*!< FDCAN communication state */
 
-    HAL_LockTypeDef             Lock;             /*!< FDCAN locking object      */
+  HAL_LockTypeDef             Lock;             /*!< FDCAN locking object      */
 
-    __IO uint32_t               ErrorCode;        /*!< FDCAN Error code          */
+  __IO uint32_t               ErrorCode;        /*!< FDCAN Error code          */
 
 #if USE_HAL_FDCAN_REGISTER_CALLBACKS == 1
-    void (* ClockCalibrationCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t ClkCalibrationITs);         /*!< FDCAN Clock Calibration callback          */
-    void (* TxEventFifoCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TxEventFifoITs);                 /*!< FDCAN Tx Event Fifo callback              */
-    void (* RxFifo0Callback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs);                         /*!< FDCAN Rx Fifo 0 callback                  */
-    void (* RxFifo1Callback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs);                         /*!< FDCAN Rx Fifo 1 callback                  */
-    void (* TxFifoEmptyCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                          /*!< FDCAN Tx Fifo Empty callback              */
-    void (* TxBufferCompleteCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t BufferIndexes);             /*!< FDCAN Tx Buffer complete callback         */
-    void (* TxBufferAbortCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t BufferIndexes);                /*!< FDCAN Tx Buffer abort callback            */
-    void (* RxBufferNewMessageCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                   /*!< FDCAN Rx Buffer New Message callback      */
-    void (* HighPriorityMessageCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                  /*!< FDCAN High priority message callback      */
-    void (* TimestampWraparoundCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                  /*!< FDCAN Timestamp wraparound callback       */
-    void (* TimeoutOccurredCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                      /*!< FDCAN Timeout occurred callback           */
-    void (* ErrorCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                                /*!< FDCAN Error callback                      */
-    void (* ErrorStatusCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t ErrorStatusITs);                 /*!< FDCAN Error status callback               */
-    void (* TT_ScheduleSyncCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTSchedSyncITs);             /*!< FDCAN T Schedule Synchronization callback */
-    void (* TT_TimeMarkCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTTimeMarkITs);                  /*!< FDCAN TT Time Mark callback               */
-    void (* TT_StopWatchCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t SWTime, uint32_t SWCycleCount); /*!< FDCAN TT Stop Watch callback              */
-    void (* TT_GlobalTimeCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTGlobTimeITs);                /*!< FDCAN TT Global Time callback             */
+  void (* ClockCalibrationCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t ClkCalibrationITs);         /*!< FDCAN Clock Calibration callback          */
+  void (* TxEventFifoCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TxEventFifoITs);                 /*!< FDCAN Tx Event Fifo callback              */
+  void (* RxFifo0Callback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs);                         /*!< FDCAN Rx Fifo 0 callback                  */
+  void (* RxFifo1Callback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs);                         /*!< FDCAN Rx Fifo 1 callback                  */
+  void (* TxFifoEmptyCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                          /*!< FDCAN Tx Fifo Empty callback              */
+  void (* TxBufferCompleteCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t BufferIndexes);             /*!< FDCAN Tx Buffer complete callback         */
+  void (* TxBufferAbortCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t BufferIndexes);                /*!< FDCAN Tx Buffer abort callback            */
+  void (* RxBufferNewMessageCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                   /*!< FDCAN Rx Buffer New Message callback      */
+  void (* HighPriorityMessageCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                  /*!< FDCAN High priority message callback      */
+  void (* TimestampWraparoundCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                  /*!< FDCAN Timestamp wraparound callback       */
+  void (* TimeoutOccurredCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                      /*!< FDCAN Timeout occurred callback           */
+  void (* ErrorCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                                /*!< FDCAN Error callback                      */
+  void (* ErrorStatusCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t ErrorStatusITs);                 /*!< FDCAN Error status callback               */
+  void (* TT_ScheduleSyncCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTSchedSyncITs);             /*!< FDCAN T Schedule Synchronization callback */
+  void (* TT_TimeMarkCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTTimeMarkITs);                  /*!< FDCAN TT Time Mark callback               */
+  void (* TT_StopWatchCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t SWTime, uint32_t SWCycleCount); /*!< FDCAN TT Stop Watch callback              */
+  void (* TT_GlobalTimeCallback)(struct __FDCAN_HandleTypeDef *hfdcan, uint32_t TTGlobTimeITs);                /*!< FDCAN TT Global Time callback             */
 
-    void (* MspInitCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                              /*!< FDCAN Msp Init callback                   */
-    void (* MspDeInitCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                            /*!< FDCAN Msp DeInit callback                 */
+  void (* MspInitCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                              /*!< FDCAN Msp Init callback                   */
+  void (* MspDeInitCallback)(struct __FDCAN_HandleTypeDef *hfdcan);                                            /*!< FDCAN Msp DeInit callback                 */
 #endif /* USE_HAL_FDCAN_REGISTER_CALLBACKS */
 
 } FDCAN_HandleTypeDef;
@@ -759,15 +759,15 @@ typedef struct
   */
 typedef enum
 {
-    HAL_FDCAN_TX_FIFO_EMPTY_CB_ID        = 0x00U, /*!< FDCAN Tx Fifo Empty callback ID         */
-    HAL_FDCAN_RX_BUFFER_NEW_MSG_CB_ID    = 0x01U, /*!< FDCAN Rx buffer new message callback ID */
-    HAL_FDCAN_HIGH_PRIO_MESSAGE_CB_ID    = 0x02U, /*!< FDCAN High priority message callback ID */
-    HAL_FDCAN_TIMESTAMP_WRAPAROUND_CB_ID = 0x03U, /*!< FDCAN Timestamp wraparound callback ID  */
-    HAL_FDCAN_TIMEOUT_OCCURRED_CB_ID     = 0x04U, /*!< FDCAN Timeout occurred callback ID      */
-    HAL_FDCAN_ERROR_CALLBACK_CB_ID       = 0x05U, /*!< FDCAN Error callback ID                 */
+  HAL_FDCAN_TX_FIFO_EMPTY_CB_ID        = 0x00U, /*!< FDCAN Tx Fifo Empty callback ID         */
+  HAL_FDCAN_RX_BUFFER_NEW_MSG_CB_ID    = 0x01U, /*!< FDCAN Rx buffer new message callback ID */
+  HAL_FDCAN_HIGH_PRIO_MESSAGE_CB_ID    = 0x02U, /*!< FDCAN High priority message callback ID */
+  HAL_FDCAN_TIMESTAMP_WRAPAROUND_CB_ID = 0x03U, /*!< FDCAN Timestamp wraparound callback ID  */
+  HAL_FDCAN_TIMEOUT_OCCURRED_CB_ID     = 0x04U, /*!< FDCAN Timeout occurred callback ID      */
+  HAL_FDCAN_ERROR_CALLBACK_CB_ID       = 0x05U, /*!< FDCAN Error callback ID                 */
 
-    HAL_FDCAN_MSPINIT_CB_ID              = 0x06U, /*!< FDCAN MspInit callback ID               */
-    HAL_FDCAN_MSPDEINIT_CB_ID            = 0x07U, /*!< FDCAN MspDeInit callback ID             */
+  HAL_FDCAN_MSPINIT_CB_ID              = 0x06U, /*!< FDCAN MspInit callback ID               */
+  HAL_FDCAN_MSPDEINIT_CB_ID            = 0x07U, /*!< FDCAN MspDeInit callback ID             */
 
 } HAL_FDCAN_CallbackIDTypeDef;
 

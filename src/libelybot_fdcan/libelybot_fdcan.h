@@ -8,29 +8,10 @@
 
 
 /*
-*   MOTOR_MODEL 用于选择电机型号，用于修正输入力矩。
-*   MOTOR_MODEL = 5046
-*   MOTOR_MODEL = 4538
-*   MOTOR_MODEL = 50471  5047单极
-*   MOTOR_MODEL = 50472  5047双极
+*   MOTOR_TORQUE_RATIO 电机力矩输入输出比例
 */
-#define  MOTOR_MODEL  5046
+#define  MOTOR_TORQUE_RATIO 0.8f
 
-#define  MOTOR_5046_TQE_CORRECT_FLOAT    1.2037
-#define  MOTOR_5046_TQE_CORRECT_INT32    1.2038
-#define  MOTOR_5046_TQE_CORRECT_INT16    1.2001
-
-#define  MOTOR_4538_TQE_CORRECT_FLOAT    1.1925
-#define  MOTOR_4538_TQE_CORRECT_INT32    1.2090
-#define  MOTOR_4538_TQE_CORRECT_INT16    1.2029
-
-#define  MOTOR_5047_1_TQE_CORRECT_FLOAT  1
-#define  MOTOR_5047_1_TQE_CORRECT_INT32  1
-#define  MOTOR_5047_1_TQE_CORRECT_INT16  1
-
-#define  MOTOR_5047_2_TQE_CORRECT_FLOAT  1
-#define  MOTOR_5047_2_TQE_CORRECT_INT32  1
-#define  MOTOR_5047_2_TQE_CORRECT_INT16  1
 
 
 /*
@@ -46,9 +27,9 @@
 *   READ_MOTOR_FLAG 用于改变读取电机状态的数据类型
 *   READ_MOTOR_FLAG = 1  float
 *   READ_MOTOR_FLAG = 2  int32
-*   READ_MOTOR_FLAG = 3  int8
+*   READ_MOTOR_FLAG = 3  int16
 */
-#define  READ_MOTOR_FLAG   1
+#define  READ_MOTOR_FLAG   3
 
 
 /*
@@ -189,6 +170,36 @@ void set_pos_valmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, i
 void set_val_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float val, float acc);
 void set_val_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t val, int32_t acc);
 void set_val_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val, int16_t acc);
+
+/* vfoc固定模式 */
+void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t vol);
+
+/* 一拖多 位置控制 */
+void set_many_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t pos2, int16_t pos3, int16_t pos4);
+
+/* 一拖多 速度控制 */
+void set_many_val_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t val1, int16_t val2, int16_t val3, int16_t val4);
+
+/* 一拖多 力矩控制 */
+void set_many_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t tqe1, int16_t tqe2, int16_t tqe3, int16_t tqe4);
+
+/* 一拖多 电压控制 */
+void set_many_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t volt1, int16_t volt2, int16_t volt3, int16_t volt4);
+
+/* 一拖多 电流控制 */
+void set_many_current_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t current1, int16_t current2, int16_t current3, int16_t current4);
+
+/* 一拖多 电机位置、速度、力矩控制 */
+void set_many_pos_val_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t tqe1, int16_t pos2, int16_t val2, int16_t tqe2);
+
+/* 一拖多 电机位置、速度、力矩、PD控制 */
+void set_many_pos_val_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t tqe1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t val2, int16_t tqe2, int16_t rkp2, int16_t rkd2);
+
+/* 一拖多 电机位置、速度、PD控制 */
+void set_many_pos_val_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t val2, int16_t rkp2, int16_t rkd2);
+
+/* 一拖多 电机位置、速度、加速度（梯形控制）控制 */
+void set_many_pos_val_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t acc1, int16_t pos2, int16_t val2, int16_t acc2);
 
 /* 重设零点 */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);

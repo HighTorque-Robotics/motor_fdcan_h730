@@ -20,7 +20,7 @@
 #define STM32H7xx_HAL_FLASH_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -44,14 +44,14 @@ extern "C" {
   */
 typedef enum
 {
-    FLASH_PROC_NONE = 0U,
-    FLASH_PROC_SECTERASE_BANK1,
-    FLASH_PROC_MASSERASE_BANK1,
-    FLASH_PROC_PROGRAM_BANK1,
-    FLASH_PROC_SECTERASE_BANK2,
-    FLASH_PROC_MASSERASE_BANK2,
-    FLASH_PROC_PROGRAM_BANK2,
-    FLASH_PROC_ALLBANK_MASSERASE
+  FLASH_PROC_NONE = 0U,
+  FLASH_PROC_SECTERASE_BANK1,
+  FLASH_PROC_MASSERASE_BANK1,
+  FLASH_PROC_PROGRAM_BANK1,
+  FLASH_PROC_SECTERASE_BANK2,
+  FLASH_PROC_MASSERASE_BANK2,
+  FLASH_PROC_PROGRAM_BANK2,
+  FLASH_PROC_ALLBANK_MASSERASE
 } FLASH_ProcedureTypeDef;
 
 
@@ -60,21 +60,21 @@ typedef enum
   */
 typedef struct
 {
-    __IO FLASH_ProcedureTypeDef ProcedureOnGoing;   /*!< Internal variable to indicate which procedure is ongoing or not in IT context */
+  __IO FLASH_ProcedureTypeDef ProcedureOnGoing;   /*!< Internal variable to indicate which procedure is ongoing or not in IT context */
 
-    __IO uint32_t               NbSectorsToErase;   /*!< Internal variable to save the remaining sectors to erase in IT context        */
+  __IO uint32_t               NbSectorsToErase;   /*!< Internal variable to save the remaining sectors to erase in IT context        */
 
-    __IO uint32_t               VoltageForErase;    /*!< Internal variable to provide voltage range selected by user in IT context     */
+  __IO uint32_t               VoltageForErase;    /*!< Internal variable to provide voltage range selected by user in IT context     */
 
-    __IO uint32_t               Sector;             /*!< Internal variable to define the current sector which is erasing               */
+  __IO uint32_t               Sector;             /*!< Internal variable to define the current sector which is erasing               */
 
-    __IO uint32_t               Address;            /*!< Internal variable to save address selected for program                        */
+  __IO uint32_t               Address;            /*!< Internal variable to save address selected for program                        */
 
-    HAL_LockTypeDef             Lock;               /*!< FLASH locking object                                                          */
+  HAL_LockTypeDef             Lock;               /*!< FLASH locking object                                                          */
 
-    __IO uint32_t               ErrorCode;          /*!< FLASH error code                                                              */
+  __IO uint32_t               ErrorCode;          /*!< FLASH error code                                                              */
 
-} FLASH_ProcessTypeDef;
+}FLASH_ProcessTypeDef;
 
 /**
   * @}
