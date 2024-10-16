@@ -372,12 +372,12 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 
 
 /**
- * @brief 电机位置、速度、力矩、Kp、Kd控制 float 类型 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + tqe) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+ * @brief 电机位置、速度、前馈力矩、Kp、Kd控制 float 类型 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
  * @param vel 速度：单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
- * @param tqe 最大力矩：（单位见文档）
+ * @param tqe 前馈力矩：（单位见文档）
  * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
  * @param kd Mkd = kp * 1 (Mkd 表示电机内部 kd)
  */
@@ -401,12 +401,12 @@ void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
 
 
 /**
- * @brief 电机位置、速度、最大力矩、Kp、Kd控制 int32 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + tqe) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+ * @brief 电机位置、速度、前馈力矩、Kp、Kd控制 int32 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
- * @param tqe 最大力矩（单位见文档）
+ * @param tqe 前馈力矩（单位见文档）
  * @param kp Mkp = kp * 0.001 (Mkp 表示电机内部 kp)
  * @param kd Mkd = kp * 0.001 (Mkd 表示电机内部 kd)
  */
@@ -430,12 +430,12 @@ void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 
 
 /**
- * @brief 电机位置、速度、最大力矩、Kp、Kd控制 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + tqe) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+ * @brief 电机位置、速度、前馈力矩、Kp、Kd控制 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
- * @param tqe 最大力矩（单位见文档）
+ * @param tqe 前馈力矩（单位见文档）
  * @param kp Mkp = kp * 0.1 (Mkp 表示电机内部 kp)
  * @param kd Mkd = kp * 0.1 (Mkd 表示电机内部 kd)
  */
