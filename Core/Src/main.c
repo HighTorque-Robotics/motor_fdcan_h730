@@ -61,7 +61,7 @@ void SystemClock_Config(void);
 
 /**
   * @brief  The application entry point.
-  * @retval int
+  * @retvel int
   */
 int main(void)
 {
@@ -136,7 +136,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	printf("此工程引脚配置适用于高擎主控板 1.4v\r\n");
+	printf("此工程引脚配置适用于高擎主控板 v1.4 及以上版本\r\n");
     while (1)
     {
 #if POS_FLAG == 1 || POS_FLAG == 2 || POS_FLAG == 3
@@ -145,7 +145,7 @@ int main(void)
             tick_1ms = HAL_GetTick();
 
             pos += dir;
-            SET_POS(&hfdcan1, MOTOR1, pos);
+            SET_POS(&hfdcan1, 1, pos);
 
             if (pos <= -POS_MAX || pos >= POS_MAX)
             {
@@ -164,71 +164,71 @@ int main(void)
 
             /* 读取电机状态 */
 #if READ_MOTOR_FLAG == 1
-            read_motor_state_float(&hfdcan1, MOTOR1);
+            read_motor_state_float(&hfdcan1, 1);
 #elif READ_MOTOR_FLAG == 2
-            read_motor_state_int32(&hfdcan1, MOTOR1);
+            read_motor_state_int32(&hfdcan1, 1);
 #elif READ_MOTOR_FLAG == 3
-            read_motor_state_int16(&hfdcan1, MOTOR1);
+            read_motor_state_int16(&hfdcan1, 1);
 #endif
 
             HAL_Delay(1);
 
             /* dq 电压模式，0.3v */
-            // set_dq_volt_float(&hfdcan1, MOTOR1, 0.3);
-            // set_dq_volt_int32(&hfdcan1, MOTOR1, 300);
-            // set_dq_volt_int16(&hfdcan1, MOTOR1, 3);
+            // set_dq_volt_float(&hfdcan1, 1, 0.3);
+            // set_dq_volt_int32(&hfdcan1, 1, 300);
+            // set_dq_volt_int16(&hfdcan1, 1, 3);
 
 
             /* dq 电流模式 */
-            // set_dq_current_float(&hfdcan1, MOTOR1, 0.4);
-            // set_dq_current_int32(&hfdcan1, MOTOR1, 400);
-            // set_dq_current_int16(&hfdcan1, MOTOR1, 4);
+            // set_dq_current_float(&hfdcan1, 1, 0.4);
+            // set_dq_current_int32(&hfdcan1, 1, 400);
+            // set_dq_current_int16(&hfdcan1, 1, 4);
 
 
             /* 力矩控制 */
-            // set_torque_float(&hfdcan1, MOTOR1, 0.7);
-            // set_torque_int32(&hfdcan1, MOTOR1, 700);
-            // set_torque_int16(&hfdcan1, MOTOR1, 70);
+            // set_torque_float(&hfdcan1, 1, 0.7);
+            // set_torque_int32(&hfdcan1, 1, 700);
+            // set_torque_int16(&hfdcan1, 1, 70);
 
 
             /* 位置、速度和力矩控制 */
-            // set_pos_vel_tqe_float(&hfdcan1, MOTOR1, NAN_FLOAT, 0.1, 1);
-            // set_pos_vel_tqe_int32(&hfdcan1, MOTOR1, NAN_INT32, 10000, 100000);
-            // set_pos_vel_tqe_int16(&hfdcan1, MOTOR1, NAN_INT16, 400, 10000);
+            // set_pos_vel_tqe_float(&hfdcan1, 1, NAN_FLOAT, 0.1, 1);
+            // set_pos_vel_tqe_int32(&hfdcan1, 1, NAN_INT32, 10000, 100000);
+            // set_pos_vel_tqe_int16(&hfdcan1, 1, NAN_INT16, 400, 10000);
 
 
             /* 速度 */
-            // set_val_float(&hfdcan1, MOTOR1, 0.1);
-            // set_val_int32(&hfdcan1, MOTOR1, 10000);
-            set_val_int16(&hfdcan1, MOTOR1, 400);
+            // set_vel_float(&hfdcan1, 1, 0.1);
+            // set_vel_int32(&hfdcan1, 1, 10000);
+            set_vel_int16(&hfdcan1, 1, 400);
 
 
             /* 位置、速度、力矩、PD控制 */
-            // set_pos_val_tqe_pd_float(&hfdcan1, MOTOR1, 0.3, 0.1, 1, 0.1, 0.1);
-            // set_pos_val_tqe_pd_int32(&hfdcan1, MOTOR1, 30000, 10000, 10000, 0.1, 0.1);
-            // set_pos_val_tqe_pd_int16(&hfdcan1, MOTOR1, 3000, 1000, 1000, 0.1, 0.1);
+            // set_pos_vel_tqe_pd_float(&hfdcan1, 1, 0.3, 0.1, 1, 0.1, 0.1);
+            // set_pos_vel_tqe_pd_int32(&hfdcan1, 1, 30000, 10000, 10000, 100, 100);
+            // set_pos_vel_tqe_pd_int16(&hfdcan1, 1, 3000, 1000, 1000, 1, 1);
 
 
             /* 速度、速度限制 */
-            // set_val_valmax_int16(&hfdcan1, MOTOR1, 4000, 2000);
+            // set_vel_velmax_int16(&hfdcan1, 1, 4000, 2000);
 
 
             /* 位置、速度、加速度限制（梯形控制） */
-            // set_pos_valmax_acc_float(&hfdcan1, MOTOR1, 30, 1, 0.1);
-            // set_pos_valmax_acc_int32(&hfdcan1, MOTOR1, -3000000, 100000, 100000);
-            // set_pos_valmax_acc_int16(&hfdcan1, MOTOR1, 30000, 1000, 100);
+            // set_pos_velmax_acc_float(&hfdcan1, 1, 30, 1, 0.1);
+            // set_pos_velmax_acc_int32(&hfdcan1, 1, -3000000, 100000, 100000);
+            // set_pos_velmax_acc_int16(&hfdcan1, 1, 30000, 1000, 100);
 
 
             /* 速度、加速度控制 */
-            // set_val_acc_float(&hfdcan1, MOTOR1, 10, 0.1);
-            // set_val_acc_int32(&hfdcan1, MOTOR1, 1000000, 10000);
-            // set_val_acc_int16(&hfdcan1, MOTOR1, 10000, 100);
+            // set_vel_acc_float(&hfdcan1, 1, 10, 0.1);
+            // set_vel_acc_int32(&hfdcan1, 1, 1000000, 10000);
+            // set_vel_acc_int16(&hfdcan1, 1, 10000, 100);
 
             /* 一拖多 位置控制 */
             // set_many_pos_int16(&hfdcan1, 3000, -3000, 5000, 5000);
 			
 			/* 一拖多 速度控制 */
-            // set_many_val_int16(&hfdcan1, -400, 400, 5000, 5000);
+            // set_many_vel_int16(&hfdcan1, -400, 400, 5000, 5000);
 
             /* 一拖多 力矩控制 */
             // set_many_tqe_int16(&hfdcan1, 400, 100, 100, 300);
@@ -240,23 +240,23 @@ int main(void)
             // set_many_current_int16(&hfdcan1, 30, 40, 1, 2);
 			
 			/* 一拖多 位置、速度、力矩控制 */
-            // set_many_pos_val_tqe_int16(&hfdcan1, -30000, 400, 1000, 10000, 400, 1000);
+            // set_many_pos_vel_tqe_int16(&hfdcan1, -30000, 400, 1000, 10000, 400, 1000);
 
             /* 一拖多 位置、速度、力矩、PD控制 */
-            // set_many_pos_val_tqe_pd_int16(&hfdcan1, -30000, 400, 1000, 32767, 32767, -10000, 400, 1000, 32767, 32767);
+            // set_many_pos_vel_tqe_pd_int16(&hfdcan1, -30000, 400, 1000, 32767, 32767, -10000, 400, 1000, 32767, 32767);
 
             /* 一拖多 位置、速度、PD控制 */
-            // set_many_pos_val_pd_int16(&hfdcan1, -10000, 400, 32767, 32767, 30000, 400, 32767, 32767);
+            // set_many_pos_vel_pd_int16(&hfdcan1, -10000, 400, 32767, 32767, 30000, 400, 32767, 32767);
 
 			/* 一拖多 位置、速度、加速度控制（一拖多 梯形控制） */
-            // set_many_pos_val_acc_int16(&hfdcan1, -30000, 1000, 100, -30000, 4000, 400);
+            // set_many_pos_vel_acc_int16(&hfdcan1, -30000, 1000, 100, -30000, 4000, 400);
 
 #ifdef POS_REZERO
             if (motor_pos_rezero_num++ > 30)
             {
-				set_motor_brake(&hfdcan1, MOTOR1);  // 这里是防止电机控制函数没有完全注释掉，实际使用时无需加上这句，保存电机不动即可
+				set_motor_brake(&hfdcan1, 1);  // 这里是防止电机控制函数没有完全注释掉，实际使用时无需加上这句，保存电机不动即可
 				HAL_Delay(100);
-                set_pos_rezero(&hfdcan1, MOTOR1);
+                set_pos_rezero(&hfdcan1, 1);
                 while(1);
             }
 #endif
@@ -265,7 +265,7 @@ int main(void)
 #ifdef MOTOR_STOP
             if (motor_stop_num++ > 30)
             {
-                set_motor_stop(&hfdcan1, MOTOR1);
+                set_motor_stop(&hfdcan1, 1);
                 while(1);
             }
 #endif
@@ -274,7 +274,7 @@ int main(void)
 #ifdef MOTOR_BRAKE
             if (motor_brake_num++ > 30)
             {
-                set_motor_brake(&hfdcan1, MOTOR1);
+                set_motor_brake(&hfdcan1, 1);
                 while(1);
             }
 #endif
@@ -288,9 +288,9 @@ int main(void)
             {
                 num = 0;
 #if READ_MOTOR_FLAG == 1
-				printf("mode:%lf, pos:%lf, val:%lf, tqe:%lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+				printf("mode:%lf, pos:%lf, vel:%lf, tqe:%lf\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #elif READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-				printf("mode:%d, pos:%d, val:%d, tqe:%d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
+				printf("mode:%d, pos:%d, vel:%d, tqe:%d\r\n", motor_state.motor.mode, motor_state.motor.position, motor_state.motor.velocity, motor_state.motor.torque);
 #endif
             }
         }
@@ -307,7 +307,7 @@ int main(void)
 
 /**
   * @brief System Clock Configuration
-  * @retval None
+  * @retvel None
   */
 void SystemClock_Config(void)
 {
@@ -369,7 +369,7 @@ void SystemClock_Config(void)
 
 /**
   * @brief  This function is executed in case of error occurrence.
-  * @retval None
+  * @retvel None
   */
 void Error_Handler(void)
 {
@@ -388,13 +388,13 @@ void Error_Handler(void)
   *         where the assert_param error has occurred.
   * @param  file: pointer to the source file name
   * @param  line: assert_param error line source number
-  * @retval None
+  * @retvel None
   */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
     /* User can add his own implementation to report the file name and line number,
-       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+       ex: printf("Wrong parameters velue: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

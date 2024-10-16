@@ -8,13 +8,6 @@
 
 
 /*
-*   MOTOR_TORQUE_RATIO 电机力矩输入输出比例
-*/
-#define  MOTOR_TORQUE_RATIO 0.8f
-
-
-
-/*
 *   POS_FLAG 用于测试位置模式，共三种模式，三种模式只是数据类型不同，效果都是 -0.5转~0.5转 来回旋转。
 *   POS_FLAG = 1  float
 *   POS_FLAG = 2  int32
@@ -66,26 +59,21 @@
 #define  NAN_INT8   0x80
 
 
-// 此处根据电机的个数和ID号，自定义电机的名字
-typedef enum
-{
-    MOTOR1 = 1,
-    MOTOR2,
-    MOTOR3,
-    MOTOR4,
-    MOTOR5,
-    MOTOR6,
-    MOTOR7,
-    MOTOR8,
-    MOTOR9,
-    MOTOR10,
-    MOTOR11,
-    MOTOR12,
-    MOTOR13,
-    MOTOR14,
-    MOTOR15,
-    MOTOR16
-} motor_e;
+
+#define  MODE_POSITION              0X80
+#define  MODE_VELOCITY              0X81
+#define  MODE_TORQUE                0X82
+#define  MODE_VOLTAGE               0X83
+#define  MODE_CURRENT               0X84
+
+#define  MODE_POS_VEL_TQE           0X90
+#define  MODE_POS_VEL_TQE_KP_KD     0X93
+#define  MODE_POS_VEL_TQE_KP_KI_KD  0X98
+#define  MODE_POS_VEL_KP_KD         0X9E
+#define  MODE_POS_VEL_TQE_RKP_RKD   0XA3
+#define  MODE_POS_VEL_RKP_RKD       0XA8
+#define  MODE_POS_VEL_ACC           0XAD
+
 
 
 #if READ_MOTOR_FLAG == 1
@@ -124,61 +112,61 @@ extern uint8_t motor_read_flag;
 
 
 /* dq 电压模式 */
-void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float volt);
-void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t volt);
-void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t volt);
+void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt);
+void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt);
+void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t volt);
 
 /* dq 电流模式 */
-void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float current);
-void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t current);
-void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t current);
+void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float current);
+void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t current);
+void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t current);
 
 /* 力矩控制 */
-void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float torque);
-void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t torque);
-void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t torque);
+void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque);
+void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque);
+void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque);
 
 /* 位置、速度和力矩控制 */
-void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float val, float torque);
-void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t val, int32_t torque);
-void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t val, int16_t torque);
+void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque);
+void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque);
+void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque);
 
 /* 位置 */
-void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos);
-void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos);
-void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos);
+void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos);
+void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos);
+void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos);
 
 /* 速度 */
-void set_val_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float val);
-void set_val_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t val);
-void set_val_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val);
+void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel);
+void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
+void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
 /* 位置、速度、力矩、PD控制 */
-void set_pos_val_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float val, float tqe, float kp, float kd);
-void set_pos_val_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t val, int32_t tqe, float rkp, float rkd);
-void set_pos_val_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t val, int16_t tqe, float rkp, float rkd);
+void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
+void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t rkp, int32_t rkd);
+void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t rkp, int16_t rkd);
 
 /* 速度、速度限制 */
-void set_val_valmax_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val, int16_t vel_max);
+void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max);
 
 /* 位置、速度、加速度限制（梯形控制） */
-void set_pos_valmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float pos, float vel_max, float acc);
-void set_pos_valmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t pos, int32_t vel_max, int32_t acc);
-void set_pos_valmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t pos, int16_t vel_max, int16_t acc);
+void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc);
+void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc);
+void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
 
 /* 速度、加速度控制 */
-void set_val_acc_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, float val, float acc);
-void set_val_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int32_t val, int32_t acc);
-void set_val_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t val, int16_t acc);
+void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc);
+void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc);
+void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc);
 
 /* vfoc固定模式 */
-void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor, int16_t vol);
+void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol);
 
 /* 一拖多 位置控制 */
 void set_many_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t pos2, int16_t pos3, int16_t pos4);
 
 /* 一拖多 速度控制 */
-void set_many_val_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t val1, int16_t val2, int16_t val3, int16_t val4);
+void set_many_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t vel1, int16_t vel2, int16_t vel3, int16_t vel4);
 
 /* 一拖多 力矩控制 */
 void set_many_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t tqe1, int16_t tqe2, int16_t tqe3, int16_t tqe4);
@@ -190,33 +178,33 @@ void set_many_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t volt1, int16_
 void set_many_current_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t current1, int16_t current2, int16_t current3, int16_t current4);
 
 /* 一拖多 电机位置、速度、力矩控制 */
-void set_many_pos_val_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t tqe1, int16_t pos2, int16_t val2, int16_t tqe2);
+void set_many_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t tqe1, int16_t pos2, int16_t vel2, int16_t tqe2);
 
 /* 一拖多 电机位置、速度、力矩、PD控制 */
-void set_many_pos_val_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t tqe1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t val2, int16_t tqe2, int16_t rkp2, int16_t rkd2);
+void set_many_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t tqe1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t vel2, int16_t tqe2, int16_t rkp2, int16_t rkd2);
 
 /* 一拖多 电机位置、速度、PD控制 */
-void set_many_pos_val_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t val2, int16_t rkp2, int16_t rkd2);
+void set_many_pos_vel_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t vel2, int16_t rkp2, int16_t rkd2);
 
-/* 一拖多 电机位置、速度、加速度（梯形控制）控制 */
-void set_many_pos_val_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t val1, int16_t acc1, int16_t pos2, int16_t val2, int16_t acc2);
+/* 一拖多 电机位置、速度、加速度控制 （梯形控制） */
+void set_many_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t acc1, int16_t pos2, int16_t vel2, int16_t acc2);
 
 /* 重设零点 */
-void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
+void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 保存设置 */
-void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
+void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 电机停止 */
-void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
+void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 电机刹车 */
-void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
+void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 读取电机状态 */
-void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
-void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
-void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, motor_e motor);
+void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 
 #endif
