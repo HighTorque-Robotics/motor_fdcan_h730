@@ -60,19 +60,19 @@
 
 
 
-#define  MODE_POSITION              0X80
-#define  MODE_VELOCITY              0X81
-#define  MODE_TORQUE                0X82
-#define  MODE_VOLTAGE               0X83
-#define  MODE_CURRENT               0X84
+#define  MODE_POSITION              0X8080
+#define  MODE_VELOCITY              0X8081
+#define  MODE_TORQUE                0X8082
+#define  MODE_VOLTAGE               0X8083
+#define  MODE_CURRENT               0X8084
 
-#define  MODE_POS_VEL_TQE           0X90
-#define  MODE_POS_VEL_TQE_KP_KD     0X93
-#define  MODE_POS_VEL_TQE_KP_KI_KD  0X98
-#define  MODE_POS_VEL_KP_KD         0X9E
-#define  MODE_POS_VEL_TQE_RKP_RKD   0XA3
-#define  MODE_POS_VEL_RKP_RKD       0XA8
-#define  MODE_POS_VEL_ACC           0XAD
+#define  MODE_POS_VEL_TQE           0X8090
+#define  MODE_POS_VEL_TQE_KP_KD     0X8093
+#define  MODE_POS_VEL_TQE_KP_KI_KD  0X8098
+#define  MODE_POS_VEL_KP_KD         0X809E
+#define  MODE_POS_VEL_TQE_RKP_RKD   0X80A3
+#define  MODE_POS_VEL_RKP_RKD       0X80A8
+#define  MODE_POS_VEL_ACC           0X80AD
 
 
 
@@ -143,8 +143,8 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
 /* 位置、速度、力矩、PD控制 */
 void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
-void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t rkp, int32_t rkd);
-void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t rkp, int16_t rkd);
+void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
+void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 
 /* 速度、速度限制 */
 void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max);
