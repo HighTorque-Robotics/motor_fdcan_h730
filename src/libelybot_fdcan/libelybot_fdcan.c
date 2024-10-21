@@ -598,7 +598,7 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
 
 
 /**
- * @brief 使用电压模式将电机固定（电机不会动，用于减少电机停止的声音）
+ * @brief 使用电压模式将电机固定（电机不会动，用于减少电机停止的声音，但是电流会增大）
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param vol d相电压
@@ -610,6 +610,26 @@ void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t v
     memcpy(&cmd[5], &vol, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 周期返回电机位置、速度、力矩数据(返回数据格式和使用 0x17，0x01 指令获取的格式一样)
+ *          1. 周期返回电机位置、速度、力矩数据。
+ *          2. 返回数据格式和使用  0x17，0x01  指令获取的格式一样
+ *          3. 周期单位为 ms。
+ *          4. 最小周期为 1ms，最大周期 32767ms。
+ *          5. 如需停止周期返回数据，将周期给 0 即可，或者给电机断电。
+ * @param id 电机ID
+ * @param t 返回周期（单位：ms）
+ */
+void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms)
+{
+    static uint8_t tdata[] = {0x05, 0xb4, 0x02, 0x00, 0x00};
+
+    *(int16_t *)&tdata[3] = t_ms;
+
+    fdcan_send(fdcanHandle, 0x8000 | id, tdata, sizeof(tdata));
 }
 
 
