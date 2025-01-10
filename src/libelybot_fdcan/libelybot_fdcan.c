@@ -648,7 +648,7 @@ void set_many_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t 
     memcpy(&cmd[0], &pos1, sizeof(int16_t));
     memcpy(&cmd[2], &pos2, sizeof(int16_t));
     memcpy(&cmd[4], &pos3, sizeof(int16_t));
-	memcpy(&cmd[5], &pos4, sizeof(int16_t));
+	memcpy(&cmd[6], &pos4, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, MODE_POSITION, cmd, sizeof(cmd));
 }
@@ -669,7 +669,7 @@ void set_many_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t vel1, int16_t 
     memcpy(&cmd[0], &vel1, sizeof(int16_t));
     memcpy(&cmd[2], &vel2, sizeof(int16_t));
     memcpy(&cmd[4], &vel3, sizeof(int16_t));
-	memcpy(&cmd[5], &vel4, sizeof(int16_t));
+	memcpy(&cmd[6], &vel4, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, MODE_VELOCITY, cmd, sizeof(cmd));
 }
@@ -690,7 +690,7 @@ void set_many_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t tqe1, int16_t 
     memcpy(&cmd[0], &tqe1, sizeof(int16_t));
     memcpy(&cmd[2], &tqe2, sizeof(int16_t));
     memcpy(&cmd[4], &tqe3, sizeof(int16_t));
-	memcpy(&cmd[5], &tqe4, sizeof(int16_t));
+	memcpy(&cmd[6], &tqe4, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, MODE_TORQUE, cmd, sizeof(cmd));
 }
@@ -711,7 +711,7 @@ void set_many_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t volt1, int16_
     memcpy(&cmd[0], &volt1, sizeof(int16_t));
     memcpy(&cmd[2], &volt2, sizeof(int16_t));
     memcpy(&cmd[4], &volt3, sizeof(int16_t));
-	memcpy(&cmd[5], &volt4, sizeof(int16_t));
+	memcpy(&cmd[6], &volt4, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, MODE_VOLTAGE, cmd, sizeof(cmd));
 }
@@ -732,7 +732,7 @@ void set_many_current_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t current1, 
     memcpy(&cmd[0], &current1, sizeof(int16_t));
     memcpy(&cmd[2], &current2, sizeof(int16_t));
     memcpy(&cmd[4], &current3, sizeof(int16_t));
-	memcpy(&cmd[5], &current4, sizeof(int16_t));
+	memcpy(&cmd[6], &current4, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, MODE_CURRENT, cmd, sizeof(cmd));
 }
