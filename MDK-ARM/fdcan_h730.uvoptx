@@ -271,8 +271,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\libelybot_fdcan\libelybot_fdcan.c</PathWithFileName>
-      <FilenameWithoutPath>libelybot_fdcan.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\livelybot_fdcan\livelybot_fdcan.c</PathWithFileName>
+      <FilenameWithoutPath>livelybot_fdcan.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H730xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;../src/libelybot_fdcan</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;..\src\livelybot_fdcan</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,9 +405,9 @@
           <GroupName>Src</GroupName>
           <Files>
             <File>
-              <FileName>libelybot_fdcan.c</FileName>
+              <FileName>livelybot_fdcan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\libelybot_fdcan\libelybot_fdcan.c</FilePath>
+              <FilePath>..\src\livelybot_fdcan\livelybot_fdcan.c</FilePath>
             </File>
           </Files>
         </Group>
