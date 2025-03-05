@@ -951,17 +951,15 @@ void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-    uint8_t len = 0;
     if(hfdcan->Instance == FDCAN1 || hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
     {
         HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header1, fdcan1_rdata);
         if (fdcan_rx_header1.DataLength != 0)
         {
-
-            len = get_fdcan_data_size(fdcan_rx_header1.DataLength);
+            const uint16_t len = get_fdcan_data_size(fdcan_rx_header1.DataLength);
             motor_state.motor.id = fdcan_rx_header1.Identifier;  // 获取电机 id
 #if READ_MOTOR_FLAG == 1 || READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-            memcpy(&motor_state.data[0], &fdcan1_rdata[3], len - 3);  // 获取电机状态数据
+            memcpy(&motor_state.data[0], &fdcan1_rdata[3], sizeof(motor_state_type) * 4);  // 获取电机状态数据
 #endif
             motor_read_flag = 1;
         }
