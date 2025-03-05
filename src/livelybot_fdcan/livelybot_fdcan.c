@@ -502,7 +502,7 @@ void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
  * @brief 位置、速度、加速度限制（梯形控制） int32
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
- * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置
+ * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
  * @param vel_max 速度限制：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  * @param acc 加速度：单位 0.00001 转/秒^2，如 acc = 50000 表示 0.5 转/秒^2
  */
@@ -523,9 +523,9 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
  * @brief 位置、速度、加速度限制（梯形控制） int16
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
- * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
+ * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置
  * @param vel_max 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
- * @param acc 加速度：单位 0.00025 转/秒^2，如 acc = 400 表示 0.1 转/秒^2
+ * @param acc 加速度：单位 0.001 转/秒^2，如 acc = 100 表示 0.1 转/秒^2
  */
 void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
