@@ -15,9 +15,42 @@ FDCAN_TxHeaderTypeDef TxHeader =
 uint32_t get_fdcan_dlc(uint16_t size)
 {
     uint32_t fdcan_dlc = 0;
-    if(size <= 8)
+
+    if(size == 0)
     {
-        fdcan_dlc = size << 16;
+        fdcan_dlc = FDCAN_DLC_BYTES_0;
+    }
+    else if(size <= 1)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_1;
+    }
+    else if(size <= 2)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_2;
+    }
+    else if(size <= 3)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_3;
+    }
+    else if(size <= 4)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_4;
+    }
+    else if(size <= 5)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_5;
+    }
+    else if(size <= 6)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_6;
+    }
+    else if(size <= 7)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_7;
+    }
+    else if(size <= 8)
+    {
+        fdcan_dlc = FDCAN_DLC_BYTES_8;
     }
     else if(size <= 12)
     {
@@ -54,37 +87,59 @@ uint32_t get_fdcan_dlc(uint16_t size)
 uint16_t get_fdcan_data_size(uint32_t dlc)
 {
     uint16_t size = 0;
-    if(dlc <= FDCAN_DLC_BYTES_8)
+
+    switch (dlc)
     {
-        size = dlc >> 16;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_12)
-    {
+    case FDCAN_DLC_BYTES_0:
+        size = 0;
+        break;
+    case FDCAN_DLC_BYTES_1:
+        size = 1;
+        break;
+    case FDCAN_DLC_BYTES_2:
+        size = 2;
+        break;
+    case FDCAN_DLC_BYTES_3:
+        size = 3;
+        break;    
+    case FDCAN_DLC_BYTES_4:
+        size = 4;
+        break;
+    case FDCAN_DLC_BYTES_5:
+        size = 5;
+        break;
+    case FDCAN_DLC_BYTES_6:
+        size = 6;
+        break;
+    case FDCAN_DLC_BYTES_7:
+        size = 7;
+        break;  
+    case FDCAN_DLC_BYTES_8:
+        size = 8;
+        break; 
+    case FDCAN_DLC_BYTES_12:
         size = 12;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_16)
-    {
+        break;
+    case FDCAN_DLC_BYTES_16:
         size = 16;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_20)
-    {
+        break;
+    case FDCAN_DLC_BYTES_20:
         size = 20;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_24)
-    {
+        break;    
+    case FDCAN_DLC_BYTES_24:
         size = 24;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_32)
-    {
+        break;
+    case FDCAN_DLC_BYTES_32:
         size = 32;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_48)
-    {
+        break;
+    case FDCAN_DLC_BYTES_48:
         size = 48;
-    }
-    else if(dlc == FDCAN_DLC_BYTES_64)
-    {
+        break;
+    case FDCAN_DLC_BYTES_64:
         size = 64;
+        break;
+    default:
+        break;
     }
 
     return size;

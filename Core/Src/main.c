@@ -209,6 +209,10 @@ int main(void)
             // set_pos_vel_tqe_pd_int16(&hfdcan1, 1, 3000, 1000, 1000, 1, 1);
 
 
+            /* 位置、速度、力矩、PD控制 */
+            // set_stoppos_vel_tqe_kp_kd_int16(&hfdcan1, 1, 3000, 1000, 0, 10, 10);
+
+
             /* 速度、速度限制 */
             // set_vel_velmax_int16(&hfdcan1, 1, 4000, 2000);
 

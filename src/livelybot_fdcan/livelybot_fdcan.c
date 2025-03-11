@@ -459,6 +459,36 @@ void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
 
 
 /**
+ * @brief 电机 停止位置、速度、前馈力矩、Kp、Kd控制 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机ID
+ * @param stop_pos 停止位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
+ * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
+ * @param tqe 前馈力矩（单位见文档）
+ * @param kp Mkp = kp * 0.1 (Mkp 表示电机内部 kp)
+ * @param kd Mkd = kp * 0.1 (Mkd 表示电机内部 kd)
+ */
+void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t stop_pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
+{
+    static uint8_t cmd[] = {
+        0x01, 0x00, 0x0A,
+        0x07, 0x20, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00,
+        0x06, 0x2b, 0x00, 0x00, 0x00, 0x00,
+        0x05, 0x26, 0x00, 0x00, 
+        0x50, 0x50, 0x50, 
+    };
+
+    memcpy(&cmd[19], &stop_pos, sizeof(int16_t));
+    memcpy(&cmd[7], &vel, sizeof(int16_t));
+    memcpy(&cmd[9], &tqe, sizeof(int16_t));
+    memcpy(&cmd[13], &kp, sizeof(int16_t));
+    memcpy(&cmd[15], &kd, sizeof(int16_t));
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
  * @brief 电机速度、速度限幅控制（如果 vel > vel_max，则用 vel_max） int16
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
