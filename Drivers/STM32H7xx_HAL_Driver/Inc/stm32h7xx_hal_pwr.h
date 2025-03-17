@@ -21,7 +21,7 @@
 #define STM32H7xx_HAL_PWR_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif /* __cplusplus */
 
 /* Includes ------------------------------------------------------------------*/
@@ -46,16 +46,16 @@
   */
 typedef struct
 {
-  uint32_t PVDLevel; /*!< PVDLevel: Specifies the PVD detection level. This
+    uint32_t PVDLevel; /*!< PVDLevel: Specifies the PVD detection level. This
                                     parameter can be a value of @ref
                                     PWR_PVD_detection_level.
                      */
 
-  uint32_t Mode;     /*!< Mode: Specifies the EXTI operating mode for the PVD
+    uint32_t Mode;     /*!< Mode: Specifies the EXTI operating mode for the PVD
                                 event. This parameter can be a value of @ref
                                 PWR_PVD_Mode.
                      */
-}PWR_PVDTypeDef;
+} PWR_PVDTypeDef;
 
 /**
   * @}

@@ -21,7 +21,7 @@
 #define STM32H7xx_HAL_PWR_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif /* __cplusplus */
 
 /* Includes ------------------------------------------------------------------*/
@@ -44,37 +44,37 @@
   */
 typedef struct
 {
-  uint32_t AVDLevel; /*!< AVDLevel : Specifies the AVD detection level. This
+    uint32_t AVDLevel; /*!< AVDLevel : Specifies the AVD detection level. This
                                      parameter can be a value of @ref
                                      PWREx_AVD_detection_level
                      */
 
-  uint32_t Mode;     /*!< Mode : Specifies the EXTI operating mode for the AVD
+    uint32_t Mode;     /*!< Mode : Specifies the EXTI operating mode for the AVD
                                  event. This parameter can be a value of @ref
                                  PWREx_AVD_Mode.
                      */
-}PWREx_AVDTypeDef;
+} PWREx_AVDTypeDef;
 
 /**
   * @brief  PWREx Wakeup pin configuration structure definition
   */
 typedef struct
 {
-  uint32_t WakeUpPin;   /*!< WakeUpPin: Specifies the Wake-Up pin to be enabled.
+    uint32_t WakeUpPin;   /*!< WakeUpPin: Specifies the Wake-Up pin to be enabled.
                                         This parameter can be a value of @ref
                                         PWREx_WakeUp_Pins
                         */
 
-  uint32_t PinPolarity; /*!< PinPolarity: Specifies the Wake-Up pin polarity.
+    uint32_t PinPolarity; /*!< PinPolarity: Specifies the Wake-Up pin polarity.
                                           This parameter can be a value of @ref
                                           PWREx_PIN_Polarity
                         */
 
-  uint32_t PinPull;     /*!< PinPull: Specifies the Wake-Up pin pull. This
+    uint32_t PinPull;     /*!< PinPull: Specifies the Wake-Up pin pull. This
                                       parameter can be a value of @ref
                                       PWREx_PIN_Pull
                         */
-}PWREx_WakeupPinTypeDef;
+} PWREx_WakeupPinTypeDef;
 
 #if defined (PWR_CSR1_MMCVDO)
 /**
@@ -82,8 +82,8 @@ typedef struct
   */
 typedef enum
 {
-  PWR_MMC_VOLTAGE_BELOW_1V2,      /*!< VDDMMC is below 1V2          */
-  PWR_MMC_VOLTAGE_EQUAL_ABOVE_1V2 /*!< VDDMMC is above or equal 1V2 */
+    PWR_MMC_VOLTAGE_BELOW_1V2,      /*!< VDDMMC is below 1V2          */
+    PWR_MMC_VOLTAGE_EQUAL_ABOVE_1V2 /*!< VDDMMC is above or equal 1V2 */
 } PWREx_MMC_VoltageLevel;
 #endif /* defined (PWR_CSR1_MMCVDO) */
 

@@ -312,70 +312,70 @@
   */
 HAL_StatusTypeDef HAL_PWREx_ConfigSupply (uint32_t SupplySource)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Check the parameters */
-  assert_param (IS_PWR_SUPPLY (SupplySource));
+    /* Check the parameters */
+    assert_param (IS_PWR_SUPPLY (SupplySource));
 
-  /* Check if supply source was configured */
+    /* Check if supply source was configured */
 #if defined (PWR_FLAG_SCUEN)
-  if (__HAL_PWR_GET_FLAG (PWR_FLAG_SCUEN) == 0U)
+    if (__HAL_PWR_GET_FLAG (PWR_FLAG_SCUEN) == 0U)
 #else
-  if ((PWR->CR3 & (PWR_CR3_SMPSEN | PWR_CR3_LDOEN | PWR_CR3_BYPASS)) != (PWR_CR3_SMPSEN | PWR_CR3_LDOEN))
+    if ((PWR->CR3 & (PWR_CR3_SMPSEN | PWR_CR3_LDOEN | PWR_CR3_BYPASS)) != (PWR_CR3_SMPSEN | PWR_CR3_LDOEN))
 #endif /* defined (PWR_FLAG_SCUEN) */
-  {
-    /* Check supply configuration */
-    if ((PWR->CR3 & PWR_SUPPLY_CONFIG_MASK) != SupplySource)
     {
-      /* Supply configuration update locked, can't apply a new supply config */
-      return HAL_ERROR;
+        /* Check supply configuration */
+        if ((PWR->CR3 & PWR_SUPPLY_CONFIG_MASK) != SupplySource)
+        {
+            /* Supply configuration update locked, can't apply a new supply config */
+            return HAL_ERROR;
+        }
+        else
+        {
+            /* Supply configuration update locked, but new supply configuration
+               matches with old supply configuration : nothing to do
+            */
+            return HAL_OK;
+        }
     }
-    else
-    {
-      /* Supply configuration update locked, but new supply configuration
-         matches with old supply configuration : nothing to do
-      */
-      return HAL_OK;
-    }
-  }
 
-  /* Set the power supply configuration */
-  MODIFY_REG (PWR->CR3, PWR_SUPPLY_CONFIG_MASK, SupplySource);
+    /* Set the power supply configuration */
+    MODIFY_REG (PWR->CR3, PWR_SUPPLY_CONFIG_MASK, SupplySource);
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
-
-  /* Wait till voltage level flag is set */
-  while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
-  {
-    if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
-    {
-      return HAL_ERROR;
-    }
-  }
-
-#if defined (SMPS)
-  /* When the SMPS supplies external circuits verify that SDEXTRDY flag is set */
-  if ((SupplySource == PWR_SMPS_1V8_SUPPLIES_EXT_AND_LDO) ||
-      (SupplySource == PWR_SMPS_2V5_SUPPLIES_EXT_AND_LDO) ||
-      (SupplySource == PWR_SMPS_1V8_SUPPLIES_EXT)         ||
-      (SupplySource == PWR_SMPS_2V5_SUPPLIES_EXT))
-  {
-    /* Get the current tick number */
+    /* Get tick */
     tickstart = HAL_GetTick ();
 
-    /* Wait till SMPS external supply ready flag is set */
-    while (__HAL_PWR_GET_FLAG (PWR_FLAG_SMPSEXTRDY) == 0U)
+    /* Wait till voltage level flag is set */
+    while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
     {
-      if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
-      {
-        return HAL_ERROR;
-      }
+        if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
+
+#if defined (SMPS)
+    /* When the SMPS supplies external circuits verify that SDEXTRDY flag is set */
+    if ((SupplySource == PWR_SMPS_1V8_SUPPLIES_EXT_AND_LDO) ||
+            (SupplySource == PWR_SMPS_2V5_SUPPLIES_EXT_AND_LDO) ||
+            (SupplySource == PWR_SMPS_1V8_SUPPLIES_EXT)         ||
+            (SupplySource == PWR_SMPS_2V5_SUPPLIES_EXT))
+    {
+        /* Get the current tick number */
+        tickstart = HAL_GetTick ();
+
+        /* Wait till SMPS external supply ready flag is set */
+        while (__HAL_PWR_GET_FLAG (PWR_FLAG_SMPSEXTRDY) == 0U)
+        {
+            if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
+            {
+                return HAL_ERROR;
+            }
+        }
+    }
 #endif /* defined (SMPS) */
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -384,7 +384,7 @@ HAL_StatusTypeDef HAL_PWREx_ConfigSupply (uint32_t SupplySource)
   */
 uint32_t HAL_PWREx_GetSupplyConfig (void)
 {
-  return (PWR->CR3 & PWR_SUPPLY_CONFIG_MASK);
+    return (PWR->CR3 & PWR_SUPPLY_CONFIG_MASK);
 }
 
 /**
@@ -412,96 +412,96 @@ uint32_t HAL_PWREx_GetSupplyConfig (void)
   */
 HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling (uint32_t VoltageScaling)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Check the parameters */
-  assert_param (IS_PWR_REGULATOR_VOLTAGE (VoltageScaling));
+    /* Check the parameters */
+    assert_param (IS_PWR_REGULATOR_VOLTAGE (VoltageScaling));
 
-  /* Get the voltage scaling  */
-  if ((PWR->CSR1 & PWR_CSR1_ACTVOS) == VoltageScaling)
-  {
-    /* Old and new voltage scaling configuration match : nothing to do */
-    return HAL_OK;
-  }
+    /* Get the voltage scaling  */
+    if ((PWR->CSR1 & PWR_CSR1_ACTVOS) == VoltageScaling)
+    {
+        /* Old and new voltage scaling configuration match : nothing to do */
+        return HAL_OK;
+    }
 
 #if defined (PWR_SRDCR_VOS)
-  /* Set the voltage range */
-  MODIFY_REG (PWR->SRDCR, PWR_SRDCR_VOS, VoltageScaling);
+    /* Set the voltage range */
+    MODIFY_REG (PWR->SRDCR, PWR_SRDCR_VOS, VoltageScaling);
 #else
 #if defined(SYSCFG_PWRCR_ODEN) /* STM32H74xxx and STM32H75xxx lines */
-  if (VoltageScaling == PWR_REGULATOR_VOLTAGE_SCALE0)
-  {
-    if ((PWR->CR3 & PWR_CR3_LDOEN) == PWR_CR3_LDOEN)
+    if (VoltageScaling == PWR_REGULATOR_VOLTAGE_SCALE0)
     {
-      /* Set the voltage range */
-      MODIFY_REG (PWR->D3CR, PWR_D3CR_VOS, PWR_REGULATOR_VOLTAGE_SCALE1);
-
-      /* Get tick */
-      tickstart = HAL_GetTick ();
-
-      /* Wait till voltage level flag is set */
-      while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
-      {
-        if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
+        if ((PWR->CR3 & PWR_CR3_LDOEN) == PWR_CR3_LDOEN)
         {
-          return HAL_ERROR;
-        }
-      }
+            /* Set the voltage range */
+            MODIFY_REG (PWR->D3CR, PWR_D3CR_VOS, PWR_REGULATOR_VOLTAGE_SCALE1);
 
-      /* Enable the PWR overdrive */
-      SET_BIT (SYSCFG->PWRCR, SYSCFG_PWRCR_ODEN);
+            /* Get tick */
+            tickstart = HAL_GetTick ();
+
+            /* Wait till voltage level flag is set */
+            while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
+            {
+                if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
+                {
+                    return HAL_ERROR;
+                }
+            }
+
+            /* Enable the PWR overdrive */
+            SET_BIT (SYSCFG->PWRCR, SYSCFG_PWRCR_ODEN);
+        }
+        else
+        {
+            /* The voltage scale 0 is only possible when LDO regulator is enabled */
+            return HAL_ERROR;
+        }
     }
     else
     {
-      /* The voltage scale 0 is only possible when LDO regulator is enabled */
-      return HAL_ERROR;
-    }
-  }
-  else
-  {
-    if ((PWR->CSR1 & PWR_CSR1_ACTVOS) == PWR_REGULATOR_VOLTAGE_SCALE1)
-    {
-      if ((SYSCFG->PWRCR & SYSCFG_PWRCR_ODEN) != 0U)
-      {
-        /* Disable the PWR overdrive */
-        CLEAR_BIT(SYSCFG->PWRCR, SYSCFG_PWRCR_ODEN);
-
-        /* Get tick */
-        tickstart = HAL_GetTick ();
-
-        /* Wait till voltage level flag is set */
-        while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
+        if ((PWR->CSR1 & PWR_CSR1_ACTVOS) == PWR_REGULATOR_VOLTAGE_SCALE1)
         {
-          if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
-          {
-            return HAL_ERROR;
-          }
-        }
-      }
-    }
+            if ((SYSCFG->PWRCR & SYSCFG_PWRCR_ODEN) != 0U)
+            {
+                /* Disable the PWR overdrive */
+                CLEAR_BIT(SYSCFG->PWRCR, SYSCFG_PWRCR_ODEN);
 
-    /* Set the voltage range */
-    MODIFY_REG (PWR->D3CR, PWR_D3CR_VOS, VoltageScaling);
-  }
+                /* Get tick */
+                tickstart = HAL_GetTick ();
+
+                /* Wait till voltage level flag is set */
+                while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
+                {
+                    if ((HAL_GetTick () - tickstart) > PWR_FLAG_SETTING_DELAY)
+                    {
+                        return HAL_ERROR;
+                    }
+                }
+            }
+        }
+
+        /* Set the voltage range */
+        MODIFY_REG (PWR->D3CR, PWR_D3CR_VOS, VoltageScaling);
+    }
 #else  /* STM32H72xxx and STM32H73xxx lines */
-  /* Set the voltage range */
-  MODIFY_REG(PWR->D3CR, PWR_D3CR_VOS, VoltageScaling);
+    /* Set the voltage range */
+    MODIFY_REG(PWR->D3CR, PWR_D3CR_VOS, VoltageScaling);
 #endif /* defined (SYSCFG_PWRCR_ODEN) */
 #endif /* defined (PWR_SRDCR_VOS) */
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
+    /* Get tick */
+    tickstart = HAL_GetTick ();
 
-  /* Wait till voltage level flag is set */
-  while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
-  {
-    if ((HAL_GetTick() - tickstart) > PWR_FLAG_SETTING_DELAY)
+    /* Wait till voltage level flag is set */
+    while (__HAL_PWR_GET_FLAG (PWR_FLAG_ACTVOSRDY) == 0U)
     {
-      return HAL_ERROR;
+        if ((HAL_GetTick() - tickstart) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -511,8 +511,8 @@ HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling (uint32_t VoltageScaling)
   */
 uint32_t HAL_PWREx_GetVoltageRange (void)
 {
-  /* Get the active voltage scaling */
-  return (PWR->CSR1 & PWR_CSR1_ACTVOS);
+    /* Get the active voltage scaling */
+    return (PWR->CSR1 & PWR_CSR1_ACTVOS);
 }
 
 /**
@@ -537,13 +537,13 @@ uint32_t HAL_PWREx_GetVoltageRange (void)
   */
 HAL_StatusTypeDef HAL_PWREx_ControlStopModeVoltageScaling (uint32_t VoltageScaling)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_STOP_MODE_REGULATOR_VOLTAGE (VoltageScaling));
+    /* Check the parameters */
+    assert_param (IS_PWR_STOP_MODE_REGULATOR_VOLTAGE (VoltageScaling));
 
-  /* Return the stop mode voltage range */
-  MODIFY_REG (PWR->CR1, PWR_CR1_SVOS, VoltageScaling);
+    /* Return the stop mode voltage range */
+    MODIFY_REG (PWR->CR1, PWR_CR1_SVOS, VoltageScaling);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -552,8 +552,8 @@ HAL_StatusTypeDef HAL_PWREx_ControlStopModeVoltageScaling (uint32_t VoltageScali
   */
 uint32_t HAL_PWREx_GetStopModeVoltageRange (void)
 {
-  /* Return the stop voltage scaling */
-  return (PWR->CR1 & PWR_CR1_SVOS);
+    /* Return the stop voltage scaling */
+    return (PWR->CR1 & PWR_CR1_SVOS);
 }
 /**
   * @}
@@ -738,40 +738,40 @@ uint32_t HAL_PWREx_GetStopModeVoltageRange (void)
   */
 void HAL_PWREx_EnterSTOP2Mode (uint32_t Regulator, uint8_t STOPEntry)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_REGULATOR (Regulator));
-  assert_param (IS_PWR_STOP_ENTRY (STOPEntry));
+    /* Check the parameters */
+    assert_param (IS_PWR_REGULATOR (Regulator));
+    assert_param (IS_PWR_STOP_ENTRY (STOPEntry));
 
-  /* Select the regulator state in Stop mode */
-  MODIFY_REG (PWR->CR1, PWR_CR1_LPDS, Regulator);
+    /* Select the regulator state in Stop mode */
+    MODIFY_REG (PWR->CR1, PWR_CR1_LPDS, Regulator);
 
-  /* Go to DStop2 mode (deep retention) when CPU domain enters Deepsleep */
-  SET_BIT (PWR->CPUCR, PWR_CPUCR_RETDS_CD);
+    /* Go to DStop2 mode (deep retention) when CPU domain enters Deepsleep */
+    SET_BIT (PWR->CPUCR, PWR_CPUCR_RETDS_CD);
 
-  /* Keep DSTOP mode when SmartRun domain enters Deepsleep */
-  CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_SRD);
+    /* Keep DSTOP mode when SmartRun domain enters Deepsleep */
+    CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_SRD);
 
-  /* Set SLEEPDEEP bit of Cortex System Control Register */
-  SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 
-  /* Ensure that all instructions are done before entering STOP mode */
-  __ISB ();
-  __DSB ();
+    /* Ensure that all instructions are done before entering STOP mode */
+    __ISB ();
+    __DSB ();
 
-  /* Select Stop mode entry */
-  if (STOPEntry == PWR_STOPENTRY_WFI)
-  {
-    /* Request Wait For Interrupt */
-    __WFI ();
-  }
-  else
-  {
-    /* Request Wait For Event */
-    __WFE ();
-  }
+    /* Select Stop mode entry */
+    if (STOPEntry == PWR_STOPENTRY_WFI)
+    {
+        /* Request Wait For Interrupt */
+        __WFI ();
+    }
+    else
+    {
+        /* Request Wait For Event */
+        __WFE ();
+    }
 
-  /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
-  CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+    /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
+    CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 }
 #endif /* defined (PWR_CPUCR_RETDS_CD) */
 
@@ -815,117 +815,117 @@ void HAL_PWREx_EnterSTOP2Mode (uint32_t Regulator, uint8_t STOPEntry)
   */
 void HAL_PWREx_EnterSTOPMode (uint32_t Regulator, uint8_t STOPEntry, uint32_t Domain)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_REGULATOR (Regulator));
-  assert_param (IS_PWR_STOP_ENTRY (STOPEntry));
-  assert_param (IS_PWR_DOMAIN (Domain));
+    /* Check the parameters */
+    assert_param (IS_PWR_REGULATOR (Regulator));
+    assert_param (IS_PWR_STOP_ENTRY (STOPEntry));
+    assert_param (IS_PWR_DOMAIN (Domain));
 
-  /* Select the regulator state in Stop mode */
-  MODIFY_REG (PWR->CR1, PWR_CR1_LPDS, Regulator);
+    /* Select the regulator state in Stop mode */
+    MODIFY_REG (PWR->CR1, PWR_CR1_LPDS, Regulator);
 
-  /* Select the domain Power Down DeepSleep */
-  if (Domain == PWR_D1_DOMAIN)
-  {
-#if defined (DUAL_CORE)
-    /* Check current core */
-    if (HAL_GetCurrentCPUID () != CM7_CPUID)
+    /* Select the domain Power Down DeepSleep */
+    if (Domain == PWR_D1_DOMAIN)
     {
-      /*
-         When the domain selected and the cortex-mx don't match, entering stop
-         mode will not be performed
-      */
-      return;
-    }
+#if defined (DUAL_CORE)
+        /* Check current core */
+        if (HAL_GetCurrentCPUID () != CM7_CPUID)
+        {
+            /*
+               When the domain selected and the cortex-mx don't match, entering stop
+               mode will not be performed
+            */
+            return;
+        }
 #endif /* defined (DUAL_CORE) */
 
-    /* Keep DSTOP mode when D1/CD domain enters Deepsleep */
-    CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D1);
+        /* Keep DSTOP mode when D1/CD domain enters Deepsleep */
+        CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D1);
 
-    /* Set SLEEPDEEP bit of Cortex System Control Register */
-    SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+        /* Set SLEEPDEEP bit of Cortex System Control Register */
+        SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 
-    /* Ensure that all instructions are done before entering STOP mode */
-    __DSB ();
-    __ISB ();
+        /* Ensure that all instructions are done before entering STOP mode */
+        __DSB ();
+        __ISB ();
 
-    /* Select Stop mode entry */
-    if (STOPEntry == PWR_STOPENTRY_WFI)
-    {
-      /* Request Wait For Interrupt */
-      __WFI ();
+        /* Select Stop mode entry */
+        if (STOPEntry == PWR_STOPENTRY_WFI)
+        {
+            /* Request Wait For Interrupt */
+            __WFI ();
+        }
+        else
+        {
+            /* Request Wait For Event */
+            __WFE ();
+        }
+
+        /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
+        CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
     }
-    else
-    {
-      /* Request Wait For Event */
-      __WFE ();
-    }
-
-    /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
-    CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
-  }
 #if defined (PWR_CPUCR_PDDS_D2)
-  else if (Domain == PWR_D2_DOMAIN)
-  {
+    else if (Domain == PWR_D2_DOMAIN)
+    {
 #if defined (DUAL_CORE)
-    /* Check current core */
-    if (HAL_GetCurrentCPUID () != CM4_CPUID)
-    {
-      /*
-         When the domain selected and the cortex-mx don't match, entering stop
-         mode will not be performed
-      */
-      return;
-    }
+        /* Check current core */
+        if (HAL_GetCurrentCPUID () != CM4_CPUID)
+        {
+            /*
+               When the domain selected and the cortex-mx don't match, entering stop
+               mode will not be performed
+            */
+            return;
+        }
 
-    /* Keep DSTOP mode when D2 domain enters Deepsleep */
-    CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D2);
+        /* Keep DSTOP mode when D2 domain enters Deepsleep */
+        CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D2);
 
-    /* Set SLEEPDEEP bit of Cortex System Control Register */
-    SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+        /* Set SLEEPDEEP bit of Cortex System Control Register */
+        SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 
-    /* Ensure that all instructions are done before entering STOP mode */
-    __DSB ();
-    __ISB ();
+        /* Ensure that all instructions are done before entering STOP mode */
+        __DSB ();
+        __ISB ();
 
-    /* Select Stop mode entry */
-    if (STOPEntry == PWR_STOPENTRY_WFI)
-    {
-      /* Request Wait For Interrupt */
-      __WFI ();
-    }
-    else
-    {
-      /* Request Wait For Event */
-      __WFE ();
-    }
+        /* Select Stop mode entry */
+        if (STOPEntry == PWR_STOPENTRY_WFI)
+        {
+            /* Request Wait For Interrupt */
+            __WFI ();
+        }
+        else
+        {
+            /* Request Wait For Event */
+            __WFE ();
+        }
 
-    /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
-    CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+        /* Clear SLEEPDEEP bit of Cortex-Mx in the System Control Register */
+        CLEAR_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 #else
-    /* Keep DSTOP mode when D2 domain enters Deepsleep */
-    CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D2);
+        /* Keep DSTOP mode when D2 domain enters Deepsleep */
+        CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D2);
 #endif  /* defined (DUAL_CORE) */
-  }
+    }
 #endif /* defined (PWR_CPUCR_PDDS_D2) */
-  else
-  {
-#if defined (DUAL_CORE)
-    /* Check current core */
-    if (HAL_GetCurrentCPUID () == CM7_CPUID)
-    {
-      /* Keep DSTOP mode when D3 domain enters Deepsleep */
-      CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
-    }
     else
     {
-      /* Keep DSTOP mode when D3 domain enters Deepsleep */
-      CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D3);
-    }
+#if defined (DUAL_CORE)
+        /* Check current core */
+        if (HAL_GetCurrentCPUID () == CM7_CPUID)
+        {
+            /* Keep DSTOP mode when D3 domain enters Deepsleep */
+            CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
+        }
+        else
+        {
+            /* Keep DSTOP mode when D3 domain enters Deepsleep */
+            CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D3);
+        }
 #else
-    /* Keep DSTOP mode when D3/SRD domain enters Deepsleep */
-    CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
+        /* Keep DSTOP mode when D3/SRD domain enters Deepsleep */
+        CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
 #endif  /* defined (DUAL_CORE) */
-  }
+    }
 }
 
 /**
@@ -939,18 +939,18 @@ void HAL_PWREx_EnterSTOPMode (uint32_t Regulator, uint8_t STOPEntry, uint32_t Do
 void HAL_PWREx_ClearPendingEvent (void)
 {
 #if defined (DUAL_CORE)
-  /* Check the current Core */
-  if (HAL_GetCurrentCPUID () == CM7_CPUID)
-  {
-    __WFE ();
-  }
-  else
-  {
-    __SEV ();
-    __WFE ();
-  }
+    /* Check the current Core */
+    if (HAL_GetCurrentCPUID () == CM7_CPUID)
+    {
+        __WFE ();
+    }
+    else
+    {
+        __SEV ();
+        __WFE ();
+    }
 #else
-  __WFE ();
+    __WFE ();
 #endif /* defined (DUAL_CORE) */
 }
 
@@ -985,86 +985,86 @@ void HAL_PWREx_ClearPendingEvent (void)
   */
 void HAL_PWREx_EnterSTANDBYMode (uint32_t Domain)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_DOMAIN (Domain));
+    /* Check the parameters */
+    assert_param (IS_PWR_DOMAIN (Domain));
 
-  /* Select the domain Power Down DeepSleep */
-  if (Domain == PWR_D1_DOMAIN)
-  {
-#if defined (DUAL_CORE)
-    /* Check current core */
-    if (HAL_GetCurrentCPUID () != CM7_CPUID)
+    /* Select the domain Power Down DeepSleep */
+    if (Domain == PWR_D1_DOMAIN)
     {
-      /*
-         When the domain selected and the cortex-mx don't match, entering
-         standby mode will not be performed
-      */
-      return;
-    }
+#if defined (DUAL_CORE)
+        /* Check current core */
+        if (HAL_GetCurrentCPUID () != CM7_CPUID)
+        {
+            /*
+               When the domain selected and the cortex-mx don't match, entering
+               standby mode will not be performed
+            */
+            return;
+        }
 #endif /* defined (DUAL_CORE) */
 
-    /* Allow DSTANDBY mode when D1/CD domain enters Deepsleep */
-    SET_BIT (PWR-> CPUCR, PWR_CPUCR_PDDS_D1);
+        /* Allow DSTANDBY mode when D1/CD domain enters Deepsleep */
+        SET_BIT (PWR-> CPUCR, PWR_CPUCR_PDDS_D1);
 
 #if defined (DUAL_CORE)
-    /* Allow DSTANDBY mode when D1/CD domain enters Deepsleep */
-    SET_BIT (PWR-> CPU2CR, PWR_CPU2CR_PDDS_D1);
+        /* Allow DSTANDBY mode when D1/CD domain enters Deepsleep */
+        SET_BIT (PWR-> CPU2CR, PWR_CPU2CR_PDDS_D1);
 #endif /*DUAL_CORE*/
 
-    /* Set SLEEPDEEP bit of Cortex System Control Register */
-    SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+        /* Set SLEEPDEEP bit of Cortex System Control Register */
+        SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
 
-    /* This option is used to ensure that store operations are completed */
+        /* This option is used to ensure that store operations are completed */
 #if defined (__CC_ARM)
-    __force_stores ();
+        __force_stores ();
 #endif /* defined (__CC_ARM) */
 
-    /* Request Wait For Interrupt */
-    __WFI ();
-  }
-#if defined (PWR_CPUCR_PDDS_D2)
-  else if (Domain == PWR_D2_DOMAIN)
-  {
-    /* Allow DSTANDBY mode when D2 domain enters Deepsleep */
-    SET_BIT (PWR-> CPUCR, PWR_CPUCR_PDDS_D2);
-
-#if defined (DUAL_CORE)
-    /* Check current core */
-    if (HAL_GetCurrentCPUID () != CM4_CPUID)
-    {
-      /*
-         When the domain selected and the cortex-mx don't match, entering
-         standby mode will not be performed
-      */
-      return;
+        /* Request Wait For Interrupt */
+        __WFI ();
     }
-
-    /* Allow DSTANDBY mode when D2 domain enters Deepsleep */
-    SET_BIT (PWR-> CPU2CR, PWR_CPU2CR_PDDS_D2);
-
-    /* Set SLEEPDEEP bit of Cortex System Control Register */
-    SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
-
-    /* This option is used to ensure that store operations are completed */
-#if defined (__CC_ARM)
-    __force_stores ();
-#endif /* defined (__CC_ARM) */
-
-    /* Request Wait For Interrupt */
-    __WFI ();
-#endif /* defined (DUAL_CORE) */
-  }
-#endif /* defined (PWR_CPUCR_PDDS_D2) */
-  else
-  {
-    /* Allow DSTANDBY mode when D3/SRD domain enters Deepsleep */
-    SET_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
+#if defined (PWR_CPUCR_PDDS_D2)
+    else if (Domain == PWR_D2_DOMAIN)
+    {
+        /* Allow DSTANDBY mode when D2 domain enters Deepsleep */
+        SET_BIT (PWR-> CPUCR, PWR_CPUCR_PDDS_D2);
 
 #if defined (DUAL_CORE)
-    /* Allow DSTANDBY mode when D3/SRD domain enters Deepsleep */
-    SET_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D3);
+        /* Check current core */
+        if (HAL_GetCurrentCPUID () != CM4_CPUID)
+        {
+            /*
+               When the domain selected and the cortex-mx don't match, entering
+               standby mode will not be performed
+            */
+            return;
+        }
+
+        /* Allow DSTANDBY mode when D2 domain enters Deepsleep */
+        SET_BIT (PWR-> CPU2CR, PWR_CPU2CR_PDDS_D2);
+
+        /* Set SLEEPDEEP bit of Cortex System Control Register */
+        SET_BIT (SCB->SCR, SCB_SCR_SLEEPDEEP_Msk);
+
+        /* This option is used to ensure that store operations are completed */
+#if defined (__CC_ARM)
+        __force_stores ();
+#endif /* defined (__CC_ARM) */
+
+        /* Request Wait For Interrupt */
+        __WFI ();
 #endif /* defined (DUAL_CORE) */
-  }
+    }
+#endif /* defined (PWR_CPUCR_PDDS_D2) */
+    else
+    {
+        /* Allow DSTANDBY mode when D3/SRD domain enters Deepsleep */
+        SET_BIT (PWR->CPUCR, PWR_CPUCR_PDDS_D3);
+
+#if defined (DUAL_CORE)
+        /* Allow DSTANDBY mode when D3/SRD domain enters Deepsleep */
+        SET_BIT (PWR->CPU2CR, PWR_CPU2CR_PDDS_D3);
+#endif /* defined (DUAL_CORE) */
+    }
 }
 
 /**
@@ -1080,11 +1080,11 @@ void HAL_PWREx_EnterSTANDBYMode (uint32_t Domain)
   */
 void HAL_PWREx_ConfigD3Domain (uint32_t D3State)
 {
-  /* Check the parameter */
-  assert_param (IS_D3_STATE (D3State));
+    /* Check the parameter */
+    assert_param (IS_D3_STATE (D3State));
 
-  /* Keep D3/SRD in run mode */
-  MODIFY_REG (PWR->CPUCR, PWR_CPUCR_RUN_D3, D3State);
+    /* Keep D3/SRD in run mode */
+    MODIFY_REG (PWR->CPUCR, PWR_CPUCR_RUN_D3, D3State);
 }
 
 #if defined (DUAL_CORE)
@@ -1100,28 +1100,28 @@ void HAL_PWREx_ConfigD3Domain (uint32_t D3State)
   */
 void HAL_PWREx_ClearDomainFlags (uint32_t DomainFlags)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_DOMAIN_FLAG (DomainFlags));
+    /* Check the parameter */
+    assert_param (IS_PWR_DOMAIN_FLAG (DomainFlags));
 
-  /* D1 CPU flags */
-  if (DomainFlags == PWR_D1_DOMAIN_FLAGS)
-  {
-    /* Clear D1 domain flags (HOLD2F, STOPF, SBF, SBF_D1, and SBF_D2) */
-    SET_BIT (PWR->CPUCR, PWR_CPUCR_CSSF);
-  }
-  /* D2 CPU flags */
-  else if (DomainFlags == PWR_D2_DOMAIN_FLAGS)
-  {
-    /* Clear D2 domain flags (HOLD1F, STOPF, SBF, SBF_D1, and SBF_D2) */
-    SET_BIT (PWR->CPU2CR, PWR_CPU2CR_CSSF);
-  }
-  else
-  {
-    /* Clear D1 domain flags (HOLD2F, STOPF, SBF, SBF_D1, and SBF_D2) */
-    SET_BIT (PWR->CPUCR, PWR_CPUCR_CSSF);
-    /* Clear D2 domain flags (HOLD1F, STOPF, SBF, SBF_D1, and SBF_D2) */
-    SET_BIT (PWR->CPU2CR, PWR_CPU2CR_CSSF);
-  }
+    /* D1 CPU flags */
+    if (DomainFlags == PWR_D1_DOMAIN_FLAGS)
+    {
+        /* Clear D1 domain flags (HOLD2F, STOPF, SBF, SBF_D1, and SBF_D2) */
+        SET_BIT (PWR->CPUCR, PWR_CPUCR_CSSF);
+    }
+    /* D2 CPU flags */
+    else if (DomainFlags == PWR_D2_DOMAIN_FLAGS)
+    {
+        /* Clear D2 domain flags (HOLD1F, STOPF, SBF, SBF_D1, and SBF_D2) */
+        SET_BIT (PWR->CPU2CR, PWR_CPU2CR_CSSF);
+    }
+    else
+    {
+        /* Clear D1 domain flags (HOLD2F, STOPF, SBF, SBF_D1, and SBF_D2) */
+        SET_BIT (PWR->CPUCR, PWR_CPUCR_CSSF);
+        /* Clear D2 domain flags (HOLD1F, STOPF, SBF, SBF_D1, and SBF_D2) */
+        SET_BIT (PWR->CPU2CR, PWR_CPU2CR_CSSF);
+    }
 }
 
 /**
@@ -1134,40 +1134,40 @@ void HAL_PWREx_ClearDomainFlags (uint32_t DomainFlags)
   */
 HAL_StatusTypeDef HAL_PWREx_HoldCore (uint32_t CPU)
 {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the parameters */
-  assert_param (IS_PWR_CORE (CPU));
+    /* Check the parameters */
+    assert_param (IS_PWR_CORE (CPU));
 
-  /* Check CPU index */
-  if (CPU == PWR_CORE_CPU2)
-  {
-    /* If CPU1 is not held */
-    if ((PWR->CPU2CR & PWR_CPU2CR_HOLD1) != PWR_CPU2CR_HOLD1)
+    /* Check CPU index */
+    if (CPU == PWR_CORE_CPU2)
     {
-      /* Set HOLD2 bit */
-      SET_BIT (PWR->CPUCR, PWR_CPUCR_HOLD2);
+        /* If CPU1 is not held */
+        if ((PWR->CPU2CR & PWR_CPU2CR_HOLD1) != PWR_CPU2CR_HOLD1)
+        {
+            /* Set HOLD2 bit */
+            SET_BIT (PWR->CPUCR, PWR_CPUCR_HOLD2);
+        }
+        else
+        {
+            status = HAL_ERROR;
+        }
     }
     else
     {
-      status = HAL_ERROR;
+        /* If CPU2 is not held */
+        if ((PWR->CPUCR & PWR_CPUCR_HOLD2) != PWR_CPUCR_HOLD2)
+        {
+            /* Set HOLD1 bit */
+            SET_BIT (PWR->CPU2CR, PWR_CPU2CR_HOLD1);
+        }
+        else
+        {
+            status = HAL_ERROR;
+        }
     }
-  }
-  else
-  {
-    /* If CPU2 is not held */
-    if ((PWR->CPUCR & PWR_CPUCR_HOLD2) != PWR_CPUCR_HOLD2)
-    {
-      /* Set HOLD1 bit */
-      SET_BIT (PWR->CPU2CR, PWR_CPU2CR_HOLD1);
-    }
-    else
-    {
-      status = HAL_ERROR;
-    }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1183,20 +1183,20 @@ HAL_StatusTypeDef HAL_PWREx_HoldCore (uint32_t CPU)
   */
 void HAL_PWREx_ReleaseCore (uint32_t CPU)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_CORE (CPU));
+    /* Check the parameters */
+    assert_param (IS_PWR_CORE (CPU));
 
-  /* Check CPU index */
-  if (CPU == PWR_CORE_CPU2)
-  {
-    /* Reset HOLD2 bit */
-    CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_HOLD2);
-  }
-  else
-  {
-    /* Reset HOLD1 bit */
-    CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_HOLD1);
-  }
+    /* Check CPU index */
+    if (CPU == PWR_CORE_CPU2)
+    {
+        /* Reset HOLD2 bit */
+        CLEAR_BIT (PWR->CPUCR, PWR_CPUCR_HOLD2);
+    }
+    else
+    {
+        /* Reset HOLD1 bit */
+        CLEAR_BIT (PWR->CPU2CR, PWR_CPU2CR_HOLD1);
+    }
 }
 #endif /* defined (DUAL_CORE) */
 
@@ -1211,8 +1211,8 @@ void HAL_PWREx_ReleaseCore (uint32_t CPU)
   */
 void HAL_PWREx_EnableFlashPowerDown (void)
 {
-  /* Enable the Flash Power Down */
-  SET_BIT (PWR->CR1, PWR_CR1_FLPS);
+    /* Enable the Flash Power Down */
+    SET_BIT (PWR->CR1, PWR_CR1_FLPS);
 }
 
 /**
@@ -1225,8 +1225,8 @@ void HAL_PWREx_EnableFlashPowerDown (void)
   */
 void HAL_PWREx_DisableFlashPowerDown (void)
 {
-  /* Disable the Flash Power Down */
-  CLEAR_BIT (PWR->CR1, PWR_CR1_FLPS);
+    /* Disable the Flash Power Down */
+    CLEAR_BIT (PWR->CR1, PWR_CR1_FLPS);
 }
 
 #if defined (PWR_CR1_SRDRAMSO)
@@ -1254,11 +1254,11 @@ void HAL_PWREx_DisableFlashPowerDown (void)
   */
 void HAL_PWREx_EnableMemoryShutOff (uint32_t MemoryBlock)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_MEMORY_BLOCK (MemoryBlock));
+    /* Check the parameter */
+    assert_param (IS_PWR_MEMORY_BLOCK (MemoryBlock));
 
-  /* Enable memory block shut-off */
-  SET_BIT (PWR->CR1, MemoryBlock);
+    /* Enable memory block shut-off */
+    SET_BIT (PWR->CR1, MemoryBlock);
 }
 
 /**
@@ -1280,11 +1280,11 @@ void HAL_PWREx_EnableMemoryShutOff (uint32_t MemoryBlock)
   */
 void HAL_PWREx_DisableMemoryShutOff (uint32_t MemoryBlock)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_MEMORY_BLOCK (MemoryBlock));
+    /* Check the parameter */
+    assert_param (IS_PWR_MEMORY_BLOCK (MemoryBlock));
 
-  /* Disable memory block shut-off */
-  CLEAR_BIT (PWR->CR1, MemoryBlock);
+    /* Disable memory block shut-off */
+    CLEAR_BIT (PWR->CR1, MemoryBlock);
 }
 #endif /* defined (PWR_CR1_SRDRAMSO) */
 
@@ -1301,29 +1301,29 @@ void HAL_PWREx_DisableMemoryShutOff (uint32_t MemoryBlock)
   */
 void HAL_PWREx_EnableWakeUpPin (PWREx_WakeupPinTypeDef *sPinParams)
 {
-  uint32_t pinConfig;
-  uint32_t regMask;
-  const uint32_t pullMask = PWR_WKUPEPR_WKUPPUPD1;
+    uint32_t pinConfig;
+    uint32_t regMask;
+    const uint32_t pullMask = PWR_WKUPEPR_WKUPPUPD1;
 
-  /* Check the parameters */
-  assert_param (IS_PWR_WAKEUP_PIN (sPinParams->WakeUpPin));
-  assert_param (IS_PWR_WAKEUP_PIN_POLARITY (sPinParams->PinPolarity));
-  assert_param (IS_PWR_WAKEUP_PIN_PULL (sPinParams->PinPull));
+    /* Check the parameters */
+    assert_param (IS_PWR_WAKEUP_PIN (sPinParams->WakeUpPin));
+    assert_param (IS_PWR_WAKEUP_PIN_POLARITY (sPinParams->PinPolarity));
+    assert_param (IS_PWR_WAKEUP_PIN_PULL (sPinParams->PinPull));
 
-  pinConfig = sPinParams->WakeUpPin | \
-              (sPinParams->PinPolarity << ((POSITION_VAL(sPinParams->WakeUpPin) + PWR_WKUPEPR_WKUPP1_Pos) & 0x1FU)) | \
-              (sPinParams->PinPull << (((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) + PWR_WKUPEPR_WKUPPUPD1_Pos) & 0x1FU));
+    pinConfig = sPinParams->WakeUpPin | \
+                (sPinParams->PinPolarity << ((POSITION_VAL(sPinParams->WakeUpPin) + PWR_WKUPEPR_WKUPP1_Pos) & 0x1FU)) | \
+                (sPinParams->PinPull << (((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) + PWR_WKUPEPR_WKUPPUPD1_Pos) & 0x1FU));
 
-  regMask   = sPinParams->WakeUpPin | \
-              (PWR_WKUPEPR_WKUPP1 << (POSITION_VAL(sPinParams->WakeUpPin) & 0x1FU)) | \
-              (pullMask << ((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) & 0x1FU));
+    regMask   = sPinParams->WakeUpPin | \
+                (PWR_WKUPEPR_WKUPP1 << (POSITION_VAL(sPinParams->WakeUpPin) & 0x1FU)) | \
+                (pullMask << ((POSITION_VAL(sPinParams->WakeUpPin) * PWR_WAKEUP_PINS_PULL_SHIFT_OFFSET) & 0x1FU));
 
-  /* Enable and Specify the Wake-Up pin polarity and the pull configuration
-     for the event detection (rising or falling edge) */
-  MODIFY_REG (PWR->WKUPEPR, regMask, pinConfig);
+    /* Enable and Specify the Wake-Up pin polarity and the pull configuration
+       for the event detection (rising or falling edge) */
+    MODIFY_REG (PWR->WKUPEPR, regMask, pinConfig);
 #ifndef DUAL_CORE
-  /* Configure the Wakeup Pin EXTI Line */
-  MODIFY_REG (EXTI->IMR2, PWR_EXTI_WAKEUP_PINS_MASK, (sPinParams->WakeUpPin << EXTI_IMR2_IM55_Pos));
+    /* Configure the Wakeup Pin EXTI Line */
+    MODIFY_REG (EXTI->IMR2, PWR_EXTI_WAKEUP_PINS_MASK, (sPinParams->WakeUpPin << EXTI_IMR2_IM55_Pos));
 #endif /* !DUAL_CORE */
 }
 
@@ -1343,11 +1343,11 @@ void HAL_PWREx_EnableWakeUpPin (PWREx_WakeupPinTypeDef *sPinParams)
   */
 void HAL_PWREx_DisableWakeUpPin (uint32_t WakeUpPin)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_WAKEUP_PIN (WakeUpPin));
+    /* Check the parameter */
+    assert_param (IS_PWR_WAKEUP_PIN (WakeUpPin));
 
-  /* Disable the WakeUpPin */
-  CLEAR_BIT (PWR->WKUPEPR, WakeUpPin);
+    /* Disable the WakeUpPin */
+    CLEAR_BIT (PWR->WKUPEPR, WakeUpPin);
 }
 
 /**
@@ -1368,11 +1368,11 @@ void HAL_PWREx_DisableWakeUpPin (uint32_t WakeUpPin)
   */
 uint32_t HAL_PWREx_GetWakeupFlag (uint32_t WakeUpFlag)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_WAKEUP_FLAG (WakeUpFlag));
+    /* Check the parameters */
+    assert_param (IS_PWR_WAKEUP_FLAG (WakeUpFlag));
 
-  /* Return the wake up pin flag */
-  return (PWR->WKUPFR & WakeUpFlag);
+    /* Return the wake up pin flag */
+    return (PWR->WKUPFR & WakeUpFlag);
 }
 
 /**
@@ -1393,19 +1393,19 @@ uint32_t HAL_PWREx_GetWakeupFlag (uint32_t WakeUpFlag)
   */
 HAL_StatusTypeDef HAL_PWREx_ClearWakeupFlag (uint32_t WakeUpFlag)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_WAKEUP_FLAG (WakeUpFlag));
+    /* Check the parameter */
+    assert_param (IS_PWR_WAKEUP_FLAG (WakeUpFlag));
 
-  /* Clear the wake up event received from wake up pin x */
-  SET_BIT (PWR->WKUPCR, WakeUpFlag);
+    /* Clear the wake up event received from wake up pin x */
+    SET_BIT (PWR->WKUPCR, WakeUpFlag);
 
-  /* Check if the wake up event is well cleared */
-  if ((PWR->WKUPFR & WakeUpFlag) != 0U)
-  {
-    return HAL_ERROR;
-  }
+    /* Check if the wake up event is well cleared */
+    if ((PWR->WKUPFR & WakeUpFlag) != 0U)
+    {
+        return HAL_ERROR;
+    }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -1415,59 +1415,59 @@ HAL_StatusTypeDef HAL_PWREx_ClearWakeupFlag (uint32_t WakeUpFlag)
   */
 void HAL_PWREx_WAKEUP_PIN_IRQHandler (void)
 {
-  /* Wakeup pin EXTI line interrupt detected */
-  if (READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF1) != 0U)
-  {
-    /* Clear PWR WKUPF1 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP1);
+    /* Wakeup pin EXTI line interrupt detected */
+    if (READ_BIT(PWR->WKUPFR, PWR_WKUPFR_WKUPF1) != 0U)
+    {
+        /* Clear PWR WKUPF1 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP1);
 
-    /* PWR WKUP1 interrupt user callback */
-    HAL_PWREx_WKUP1_Callback ();
-  }
-  else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF2) != 0U)
-  {
-    /* Clear PWR WKUPF2 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP2);
+        /* PWR WKUP1 interrupt user callback */
+        HAL_PWREx_WKUP1_Callback ();
+    }
+    else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF2) != 0U)
+    {
+        /* Clear PWR WKUPF2 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP2);
 
-    /* PWR WKUP2 interrupt user callback */
-    HAL_PWREx_WKUP2_Callback ();
-  }
+        /* PWR WKUP2 interrupt user callback */
+        HAL_PWREx_WKUP2_Callback ();
+    }
 #if defined (PWR_WKUPFR_WKUPF3)
-  else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF3) != 0U)
-  {
-    /* Clear PWR WKUPF3 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP3);
+    else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF3) != 0U)
+    {
+        /* Clear PWR WKUPF3 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP3);
 
-    /* PWR WKUP3 interrupt user callback */
-    HAL_PWREx_WKUP3_Callback ();
-  }
+        /* PWR WKUP3 interrupt user callback */
+        HAL_PWREx_WKUP3_Callback ();
+    }
 #endif /* defined (PWR_WKUPFR_WKUPF3) */
-  else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF4) != 0U)
-  {
-    /* Clear PWR WKUPF4 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP4);
+    else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF4) != 0U)
+    {
+        /* Clear PWR WKUPF4 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP4);
 
-    /* PWR WKUP4 interrupt user callback */
-    HAL_PWREx_WKUP4_Callback ();
-  }
+        /* PWR WKUP4 interrupt user callback */
+        HAL_PWREx_WKUP4_Callback ();
+    }
 #if defined (PWR_WKUPFR_WKUPF5)
-  else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF5) != 0U)
-  {
-    /* Clear PWR WKUPF5 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP5);
+    else if (READ_BIT (PWR->WKUPFR, PWR_WKUPFR_WKUPF5) != 0U)
+    {
+        /* Clear PWR WKUPF5 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP5);
 
-    /* PWR WKUP5 interrupt user callback */
-    HAL_PWREx_WKUP5_Callback ();
-  }
+        /* PWR WKUP5 interrupt user callback */
+        HAL_PWREx_WKUP5_Callback ();
+    }
 #endif /* defined (PWR_WKUPFR_WKUPF5) */
-  else
-  {
-    /* Clear PWR WKUPF6 flag */
-    __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP6);
+    else
+    {
+        /* Clear PWR WKUPF6 flag */
+        __HAL_PWR_CLEAR_WAKEUPFLAG (PWR_FLAG_WKUP6);
 
-    /* PWR WKUP6 interrupt user callback */
-    HAL_PWREx_WKUP6_Callback ();
-  }
+        /* PWR WKUP6 interrupt user callback */
+        HAL_PWREx_WKUP6_Callback ();
+    }
 }
 
 /**
@@ -1476,9 +1476,9 @@ void HAL_PWREx_WAKEUP_PIN_IRQHandler (void)
   */
 __weak void HAL_PWREx_WKUP1_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP1Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP1Callback can be implemented in the user file
+    */
 }
 
 /**
@@ -1487,9 +1487,9 @@ __weak void HAL_PWREx_WKUP1_Callback (void)
   */
 __weak void HAL_PWREx_WKUP2_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP2Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP2Callback can be implemented in the user file
+    */
 }
 
 #if defined (PWR_WKUPFR_WKUPF3)
@@ -1499,9 +1499,9 @@ __weak void HAL_PWREx_WKUP2_Callback (void)
   */
 __weak void HAL_PWREx_WKUP3_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP3Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP3Callback can be implemented in the user file
+    */
 }
 #endif /* defined (PWR_WKUPFR_WKUPF3) */
 
@@ -1511,9 +1511,9 @@ __weak void HAL_PWREx_WKUP3_Callback (void)
   */
 __weak void HAL_PWREx_WKUP4_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP4Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP4Callback can be implemented in the user file
+    */
 }
 
 #if defined (PWR_WKUPFR_WKUPF5)
@@ -1523,9 +1523,9 @@ __weak void HAL_PWREx_WKUP4_Callback (void)
   */
 __weak void HAL_PWREx_WKUP5_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP5Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP5Callback can be implemented in the user file
+    */
 }
 #endif /* defined (PWR_WKUPFR_WKUPF5) */
 
@@ -1535,9 +1535,9 @@ __weak void HAL_PWREx_WKUP5_Callback (void)
   */
 __weak void HAL_PWREx_WKUP6_Callback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWREx_WKUP6Callback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWREx_WKUP6Callback can be implemented in the user file
+    */
 }
 /**
   * @}
@@ -1624,24 +1624,24 @@ __weak void HAL_PWREx_WKUP6_Callback (void)
   */
 HAL_StatusTypeDef HAL_PWREx_EnableBkUpReg (void)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Enable the Backup regulator */
-  SET_BIT (PWR->CR2, PWR_CR2_BREN);
+    /* Enable the Backup regulator */
+    SET_BIT (PWR->CR2, PWR_CR2_BREN);
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
+    /* Get tick */
+    tickstart = HAL_GetTick ();
 
-  /* Wait till Backup regulator ready flag is set */
-  while (__HAL_PWR_GET_FLAG (PWR_FLAG_BRR) == 0U)
-  {
-    if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+    /* Wait till Backup regulator ready flag is set */
+    while (__HAL_PWR_GET_FLAG (PWR_FLAG_BRR) == 0U)
     {
-      return HAL_ERROR;
+        if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -1650,24 +1650,24 @@ HAL_StatusTypeDef HAL_PWREx_EnableBkUpReg (void)
   */
 HAL_StatusTypeDef HAL_PWREx_DisableBkUpReg (void)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Disable the Backup regulator */
-  CLEAR_BIT (PWR->CR2, PWR_CR2_BREN);
+    /* Disable the Backup regulator */
+    CLEAR_BIT (PWR->CR2, PWR_CR2_BREN);
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
+    /* Get tick */
+    tickstart = HAL_GetTick ();
 
-  /* Wait till Backup regulator ready flag is reset */
-  while (__HAL_PWR_GET_FLAG (PWR_FLAG_BRR) != 0U)
-  {
-    if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+    /* Wait till Backup regulator ready flag is reset */
+    while (__HAL_PWR_GET_FLAG (PWR_FLAG_BRR) != 0U)
     {
-      return HAL_ERROR;
+        if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -1676,24 +1676,24 @@ HAL_StatusTypeDef HAL_PWREx_DisableBkUpReg (void)
   */
 HAL_StatusTypeDef HAL_PWREx_EnableUSBReg (void)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Enable the USB regulator */
-  SET_BIT (PWR->CR3, PWR_CR3_USBREGEN);
+    /* Enable the USB regulator */
+    SET_BIT (PWR->CR3, PWR_CR3_USBREGEN);
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
+    /* Get tick */
+    tickstart = HAL_GetTick ();
 
-  /* Wait till the USB regulator ready flag is set */
-  while (__HAL_PWR_GET_FLAG (PWR_FLAG_USB33RDY) == 0U)
-  {
-    if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+    /* Wait till the USB regulator ready flag is set */
+    while (__HAL_PWR_GET_FLAG (PWR_FLAG_USB33RDY) == 0U)
     {
-      return HAL_ERROR;
+        if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -1702,24 +1702,24 @@ HAL_StatusTypeDef HAL_PWREx_EnableUSBReg (void)
   */
 HAL_StatusTypeDef HAL_PWREx_DisableUSBReg (void)
 {
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Disable the USB regulator */
-  CLEAR_BIT (PWR->CR3, PWR_CR3_USBREGEN);
+    /* Disable the USB regulator */
+    CLEAR_BIT (PWR->CR3, PWR_CR3_USBREGEN);
 
-  /* Get tick */
-  tickstart = HAL_GetTick ();
+    /* Get tick */
+    tickstart = HAL_GetTick ();
 
-  /* Wait till the USB regulator ready flag is reset */
-  while(__HAL_PWR_GET_FLAG (PWR_FLAG_USB33RDY) != 0U)
-  {
-    if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+    /* Wait till the USB regulator ready flag is reset */
+    while(__HAL_PWR_GET_FLAG (PWR_FLAG_USB33RDY) != 0U)
     {
-      return HAL_ERROR;
+        if ((HAL_GetTick() - tickstart ) > PWR_FLAG_SETTING_DELAY)
+        {
+            return HAL_ERROR;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -1728,8 +1728,8 @@ HAL_StatusTypeDef HAL_PWREx_DisableUSBReg (void)
   */
 void HAL_PWREx_EnableUSBVoltageDetector (void)
 {
-  /* Enable the USB voltage detector */
-  SET_BIT (PWR->CR3, PWR_CR3_USB33DEN);
+    /* Enable the USB voltage detector */
+    SET_BIT (PWR->CR3, PWR_CR3_USB33DEN);
 }
 
 /**
@@ -1738,8 +1738,8 @@ void HAL_PWREx_EnableUSBVoltageDetector (void)
   */
 void HAL_PWREx_DisableUSBVoltageDetector (void)
 {
-  /* Disable the USB voltage detector */
-  CLEAR_BIT (PWR->CR3, PWR_CR3_USB33DEN);
+    /* Disable the USB voltage detector */
+    CLEAR_BIT (PWR->CR3, PWR_CR3_USB33DEN);
 }
 
 /**
@@ -1754,14 +1754,14 @@ void HAL_PWREx_DisableUSBVoltageDetector (void)
   */
 void HAL_PWREx_EnableBatteryCharging (uint32_t ResistorValue)
 {
-  /* Check the parameter */
-  assert_param (IS_PWR_BATTERY_RESISTOR_SELECT (ResistorValue));
+    /* Check the parameter */
+    assert_param (IS_PWR_BATTERY_RESISTOR_SELECT (ResistorValue));
 
-  /* Specify the charging resistor */
-  MODIFY_REG (PWR->CR3, PWR_CR3_VBRS, ResistorValue);
+    /* Specify the charging resistor */
+    MODIFY_REG (PWR->CR3, PWR_CR3_VBRS, ResistorValue);
 
-  /* Enable the Battery charging */
-  SET_BIT (PWR->CR3, PWR_CR3_VBE);
+    /* Enable the Battery charging */
+    SET_BIT (PWR->CR3, PWR_CR3_VBE);
 }
 
 /**
@@ -1770,8 +1770,8 @@ void HAL_PWREx_EnableBatteryCharging (uint32_t ResistorValue)
   */
 void HAL_PWREx_DisableBatteryCharging (void)
 {
-  /* Disable the Battery charging */
-  CLEAR_BIT (PWR->CR3, PWR_CR3_VBE);
+    /* Disable the Battery charging */
+    CLEAR_BIT (PWR->CR3, PWR_CR3_VBE);
 }
 
 #if defined (PWR_CR1_BOOSTE)
@@ -1784,11 +1784,11 @@ void HAL_PWREx_DisableBatteryCharging (void)
   */
 void HAL_PWREx_EnableAnalogBooster (void)
 {
-  /* Enable the Analog voltage */
-  SET_BIT (PWR->CR1, PWR_CR1_AVD_READY);
+    /* Enable the Analog voltage */
+    SET_BIT (PWR->CR1, PWR_CR1_AVD_READY);
 
-  /* Enable VDDA booster */
-  SET_BIT (PWR->CR1, PWR_CR1_BOOSTE);
+    /* Enable VDDA booster */
+    SET_BIT (PWR->CR1, PWR_CR1_BOOSTE);
 }
 
 /**
@@ -1797,11 +1797,11 @@ void HAL_PWREx_EnableAnalogBooster (void)
   */
 void HAL_PWREx_DisableAnalogBooster (void)
 {
-  /* Disable VDDA booster */
-  CLEAR_BIT (PWR->CR1, PWR_CR1_BOOSTE);
+    /* Disable VDDA booster */
+    CLEAR_BIT (PWR->CR1, PWR_CR1_BOOSTE);
 
-  /* Disable the Analog voltage */
-  CLEAR_BIT (PWR->CR1, PWR_CR1_AVD_READY);
+    /* Disable the Analog voltage */
+    CLEAR_BIT (PWR->CR1, PWR_CR1_AVD_READY);
 }
 #endif /* defined (PWR_CR1_BOOSTE) */
 /**
@@ -1860,8 +1860,8 @@ void HAL_PWREx_DisableAnalogBooster (void)
   */
 void HAL_PWREx_EnableMonitoring (void)
 {
-  /* Enable the VBAT and Temperature monitoring */
-  SET_BIT (PWR->CR2, PWR_CR2_MONEN);
+    /* Enable the VBAT and Temperature monitoring */
+    SET_BIT (PWR->CR2, PWR_CR2_MONEN);
 }
 
 /**
@@ -1870,8 +1870,8 @@ void HAL_PWREx_EnableMonitoring (void)
   */
 void HAL_PWREx_DisableMonitoring (void)
 {
-  /* Disable the VBAT and Temperature monitoring */
-  CLEAR_BIT (PWR->CR2, PWR_CR2_MONEN);
+    /* Disable the VBAT and Temperature monitoring */
+    CLEAR_BIT (PWR->CR2, PWR_CR2_MONEN);
 }
 
 /**
@@ -1881,28 +1881,28 @@ void HAL_PWREx_DisableMonitoring (void)
   */
 uint32_t HAL_PWREx_GetTemperatureLevel (void)
 {
-  uint32_t tempLevel, regValue;
+    uint32_t tempLevel, regValue;
 
-  /* Read the temperature flags */
-  regValue = READ_BIT (PWR->CR2, (PWR_CR2_TEMPH | PWR_CR2_TEMPL));
+    /* Read the temperature flags */
+    regValue = READ_BIT (PWR->CR2, (PWR_CR2_TEMPH | PWR_CR2_TEMPL));
 
-  /* Check if the temperature is below the threshold */
-  if (regValue == PWR_CR2_TEMPL)
-  {
-    tempLevel = PWR_TEMP_BELOW_LOW_THRESHOLD;
-  }
-  /* Check if the temperature is above the threshold */
-  else if (regValue == PWR_CR2_TEMPH)
-  {
-    tempLevel = PWR_TEMP_ABOVE_HIGH_THRESHOLD;
-  }
-  /* The temperature is between the thresholds */
-  else
-  {
-    tempLevel = PWR_TEMP_BETWEEN_HIGH_LOW_THRESHOLD;
-  }
+    /* Check if the temperature is below the threshold */
+    if (regValue == PWR_CR2_TEMPL)
+    {
+        tempLevel = PWR_TEMP_BELOW_LOW_THRESHOLD;
+    }
+    /* Check if the temperature is above the threshold */
+    else if (regValue == PWR_CR2_TEMPH)
+    {
+        tempLevel = PWR_TEMP_ABOVE_HIGH_THRESHOLD;
+    }
+    /* The temperature is between the thresholds */
+    else
+    {
+        tempLevel = PWR_TEMP_BETWEEN_HIGH_LOW_THRESHOLD;
+    }
 
-  return tempLevel;
+    return tempLevel;
 }
 
 /**
@@ -1912,28 +1912,28 @@ uint32_t HAL_PWREx_GetTemperatureLevel (void)
   */
 uint32_t HAL_PWREx_GetVBATLevel (void)
 {
-  uint32_t VBATLevel, regValue;
+    uint32_t VBATLevel, regValue;
 
-  /* Read the VBAT flags */
-  regValue = READ_BIT (PWR->CR2, (PWR_CR2_VBATH | PWR_CR2_VBATL));
+    /* Read the VBAT flags */
+    regValue = READ_BIT (PWR->CR2, (PWR_CR2_VBATH | PWR_CR2_VBATL));
 
-  /* Check if the VBAT is below the threshold */
-  if (regValue == PWR_CR2_VBATL)
-  {
-    VBATLevel = PWR_VBAT_BELOW_LOW_THRESHOLD;
-  }
-  /* Check if the VBAT is above the threshold */
-  else if (regValue == PWR_CR2_VBATH)
-  {
-    VBATLevel = PWR_VBAT_ABOVE_HIGH_THRESHOLD;
-  }
-  /* The VBAT is between the thresholds */
-  else
-  {
-    VBATLevel = PWR_VBAT_BETWEEN_HIGH_LOW_THRESHOLD;
-  }
+    /* Check if the VBAT is below the threshold */
+    if (regValue == PWR_CR2_VBATL)
+    {
+        VBATLevel = PWR_VBAT_BELOW_LOW_THRESHOLD;
+    }
+    /* Check if the VBAT is above the threshold */
+    else if (regValue == PWR_CR2_VBATH)
+    {
+        VBATLevel = PWR_VBAT_ABOVE_HIGH_THRESHOLD;
+    }
+    /* The VBAT is between the thresholds */
+    else
+    {
+        VBATLevel = PWR_VBAT_BETWEEN_HIGH_LOW_THRESHOLD;
+    }
 
-  return VBATLevel;
+    return VBATLevel;
 }
 
 #if defined (PWR_CSR1_MMCVDO)
@@ -1943,19 +1943,19 @@ uint32_t HAL_PWREx_GetVBATLevel (void)
   */
 PWREx_MMC_VoltageLevel HAL_PWREx_GetMMCVoltage (void)
 {
-  PWREx_MMC_VoltageLevel mmc_voltage;
+    PWREx_MMC_VoltageLevel mmc_voltage;
 
-  /* Check voltage detector output on VDDMMC value */
-  if ((PWR->CSR1 & PWR_CSR1_MMCVDO_Msk) == 0U)
-  {
-    mmc_voltage = PWR_MMC_VOLTAGE_BELOW_1V2;
-  }
-  else
-  {
-    mmc_voltage = PWR_MMC_VOLTAGE_EQUAL_ABOVE_1V2;
-  }
+    /* Check voltage detector output on VDDMMC value */
+    if ((PWR->CSR1 & PWR_CSR1_MMCVDO_Msk) == 0U)
+    {
+        mmc_voltage = PWR_MMC_VOLTAGE_BELOW_1V2;
+    }
+    else
+    {
+        mmc_voltage = PWR_MMC_VOLTAGE_EQUAL_ABOVE_1V2;
+    }
 
-  return mmc_voltage;
+    return mmc_voltage;
 }
 #endif /* defined (PWR_CSR1_MMCVDO) */
 
@@ -1975,47 +1975,47 @@ PWREx_MMC_VoltageLevel HAL_PWREx_GetMMCVoltage (void)
   */
 void HAL_PWREx_ConfigAVD (PWREx_AVDTypeDef *sConfigAVD)
 {
-  /* Check the parameters */
-  assert_param (IS_PWR_AVD_LEVEL (sConfigAVD->AVDLevel));
-  assert_param (IS_PWR_AVD_MODE (sConfigAVD->Mode));
+    /* Check the parameters */
+    assert_param (IS_PWR_AVD_LEVEL (sConfigAVD->AVDLevel));
+    assert_param (IS_PWR_AVD_MODE (sConfigAVD->Mode));
 
-  /* Set the ALS[18:17] bits according to AVDLevel value */
-  MODIFY_REG (PWR->CR1, PWR_CR1_ALS, sConfigAVD->AVDLevel);
+    /* Set the ALS[18:17] bits according to AVDLevel value */
+    MODIFY_REG (PWR->CR1, PWR_CR1_ALS, sConfigAVD->AVDLevel);
 
-  /* Clear any previous config */
+    /* Clear any previous config */
 #if !defined (DUAL_CORE)
-  __HAL_PWR_AVD_EXTI_DISABLE_EVENT ();
-  __HAL_PWR_AVD_EXTI_DISABLE_IT ();
+    __HAL_PWR_AVD_EXTI_DISABLE_EVENT ();
+    __HAL_PWR_AVD_EXTI_DISABLE_IT ();
 #endif /* !defined (DUAL_CORE) */
 
-  __HAL_PWR_AVD_EXTI_DISABLE_RISING_EDGE ();
-  __HAL_PWR_AVD_EXTI_DISABLE_FALLING_EDGE ();
+    __HAL_PWR_AVD_EXTI_DISABLE_RISING_EDGE ();
+    __HAL_PWR_AVD_EXTI_DISABLE_FALLING_EDGE ();
 
 #if !defined (DUAL_CORE)
-  /* Configure the interrupt mode */
-  if ((sConfigAVD->Mode & AVD_MODE_IT) == AVD_MODE_IT)
-  {
-    __HAL_PWR_AVD_EXTI_ENABLE_IT ();
-  }
+    /* Configure the interrupt mode */
+    if ((sConfigAVD->Mode & AVD_MODE_IT) == AVD_MODE_IT)
+    {
+        __HAL_PWR_AVD_EXTI_ENABLE_IT ();
+    }
 
-  /* Configure the event mode */
-  if ((sConfigAVD->Mode & AVD_MODE_EVT) == AVD_MODE_EVT)
-  {
-    __HAL_PWR_AVD_EXTI_ENABLE_EVENT ();
-  }
+    /* Configure the event mode */
+    if ((sConfigAVD->Mode & AVD_MODE_EVT) == AVD_MODE_EVT)
+    {
+        __HAL_PWR_AVD_EXTI_ENABLE_EVENT ();
+    }
 #endif /* !defined (DUAL_CORE) */
 
-  /* Rising edge configuration */
-  if ((sConfigAVD->Mode & AVD_RISING_EDGE) == AVD_RISING_EDGE)
-  {
-    __HAL_PWR_AVD_EXTI_ENABLE_RISING_EDGE ();
-  }
+    /* Rising edge configuration */
+    if ((sConfigAVD->Mode & AVD_RISING_EDGE) == AVD_RISING_EDGE)
+    {
+        __HAL_PWR_AVD_EXTI_ENABLE_RISING_EDGE ();
+    }
 
-  /* Falling edge configuration */
-  if ((sConfigAVD->Mode & AVD_FALLING_EDGE) == AVD_FALLING_EDGE)
-  {
-    __HAL_PWR_AVD_EXTI_ENABLE_FALLING_EDGE ();
-  }
+    /* Falling edge configuration */
+    if ((sConfigAVD->Mode & AVD_FALLING_EDGE) == AVD_FALLING_EDGE)
+    {
+        __HAL_PWR_AVD_EXTI_ENABLE_FALLING_EDGE ();
+    }
 }
 
 /**
@@ -2024,8 +2024,8 @@ void HAL_PWREx_ConfigAVD (PWREx_AVDTypeDef *sConfigAVD)
   */
 void HAL_PWREx_EnableAVD (void)
 {
-  /* Enable the Analog Voltage Detector */
-  SET_BIT (PWR->CR1, PWR_CR1_AVDEN);
+    /* Enable the Analog Voltage Detector */
+    SET_BIT (PWR->CR1, PWR_CR1_AVDEN);
 }
 
 /**
@@ -2034,8 +2034,8 @@ void HAL_PWREx_EnableAVD (void)
   */
 void HAL_PWREx_DisableAVD (void)
 {
-  /* Disable the Analog Voltage Detector */
-  CLEAR_BIT (PWR->CR1, PWR_CR1_AVDEN);
+    /* Disable the Analog Voltage Detector */
+    CLEAR_BIT (PWR->CR1, PWR_CR1_AVDEN);
 }
 
 /**
@@ -2045,71 +2045,71 @@ void HAL_PWREx_DisableAVD (void)
   */
 void HAL_PWREx_PVD_AVD_IRQHandler (void)
 {
-  /* Check if the Programmable Voltage Detector is enabled (PVD) */
-  if (READ_BIT (PWR->CR1, PWR_CR1_PVDEN) != 0U)
-  {
-#if defined (DUAL_CORE)
-    if (HAL_GetCurrentCPUID () == CM7_CPUID)
-#endif /* defined (DUAL_CORE) */
+    /* Check if the Programmable Voltage Detector is enabled (PVD) */
+    if (READ_BIT (PWR->CR1, PWR_CR1_PVDEN) != 0U)
     {
-      /* Check PWR D1/CD EXTI flag */
-      if (__HAL_PWR_PVD_EXTI_GET_FLAG () != 0U)
-      {
-        /* PWR PVD interrupt user callback */
-        HAL_PWR_PVDCallback ();
-
-        /* Clear PWR EXTI D1/CD pending bit */
-        __HAL_PWR_PVD_EXTI_CLEAR_FLAG ();
-      }
-    }
 #if defined (DUAL_CORE)
-    else
-    {
-      /* Check PWR EXTI D2 flag */
-      if (__HAL_PWR_PVD_EXTID2_GET_FLAG () != 0U)
-      {
-        /* PWR PVD interrupt user callback */
-        HAL_PWR_PVDCallback ();
-
-        /* Clear PWR EXTI D2 pending bit */
-        __HAL_PWR_PVD_EXTID2_CLEAR_FLAG();
-      }
-    }
+        if (HAL_GetCurrentCPUID () == CM7_CPUID)
 #endif /* defined (DUAL_CORE) */
-  }
+        {
+            /* Check PWR D1/CD EXTI flag */
+            if (__HAL_PWR_PVD_EXTI_GET_FLAG () != 0U)
+            {
+                /* PWR PVD interrupt user callback */
+                HAL_PWR_PVDCallback ();
 
-  /* Check if the Analog Voltage Detector is enabled (AVD) */
-  if (READ_BIT (PWR->CR1, PWR_CR1_AVDEN) != 0U)
-  {
+                /* Clear PWR EXTI D1/CD pending bit */
+                __HAL_PWR_PVD_EXTI_CLEAR_FLAG ();
+            }
+        }
 #if defined (DUAL_CORE)
-    if (HAL_GetCurrentCPUID () == CM7_CPUID)
-#endif /* defined (DUAL_CORE) */
-    {
-      /* Check PWR EXTI D1/CD flag */
-      if (__HAL_PWR_AVD_EXTI_GET_FLAG () != 0U)
-      {
-        /* PWR AVD interrupt user callback */
-        HAL_PWREx_AVDCallback ();
+        else
+        {
+            /* Check PWR EXTI D2 flag */
+            if (__HAL_PWR_PVD_EXTID2_GET_FLAG () != 0U)
+            {
+                /* PWR PVD interrupt user callback */
+                HAL_PWR_PVDCallback ();
 
-        /* Clear PWR EXTI D1/CD pending bit */
-        __HAL_PWR_AVD_EXTI_CLEAR_FLAG ();
-      }
+                /* Clear PWR EXTI D2 pending bit */
+                __HAL_PWR_PVD_EXTID2_CLEAR_FLAG();
+            }
+        }
+#endif /* defined (DUAL_CORE) */
     }
+
+    /* Check if the Analog Voltage Detector is enabled (AVD) */
+    if (READ_BIT (PWR->CR1, PWR_CR1_AVDEN) != 0U)
+    {
 #if defined (DUAL_CORE)
-    else
-    {
-      /* Check PWR EXTI D2 flag */
-      if (__HAL_PWR_AVD_EXTID2_GET_FLAG () != 0U)
-      {
-        /* PWR AVD interrupt user callback */
-        HAL_PWREx_AVDCallback ();
-
-        /* Clear PWR EXTI D2 pending bit */
-        __HAL_PWR_AVD_EXTID2_CLEAR_FLAG ();
-      }
-    }
+        if (HAL_GetCurrentCPUID () == CM7_CPUID)
 #endif /* defined (DUAL_CORE) */
-  }
+        {
+            /* Check PWR EXTI D1/CD flag */
+            if (__HAL_PWR_AVD_EXTI_GET_FLAG () != 0U)
+            {
+                /* PWR AVD interrupt user callback */
+                HAL_PWREx_AVDCallback ();
+
+                /* Clear PWR EXTI D1/CD pending bit */
+                __HAL_PWR_AVD_EXTI_CLEAR_FLAG ();
+            }
+        }
+#if defined (DUAL_CORE)
+        else
+        {
+            /* Check PWR EXTI D2 flag */
+            if (__HAL_PWR_AVD_EXTID2_GET_FLAG () != 0U)
+            {
+                /* PWR AVD interrupt user callback */
+                HAL_PWREx_AVDCallback ();
+
+                /* Clear PWR EXTI D2 pending bit */
+                __HAL_PWR_AVD_EXTID2_CLEAR_FLAG ();
+            }
+        }
+#endif /* defined (DUAL_CORE) */
+    }
 }
 
 /**
@@ -2118,9 +2118,9 @@ void HAL_PWREx_PVD_AVD_IRQHandler (void)
   */
 __weak void HAL_PWREx_AVDCallback (void)
 {
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_PWR_AVDCallback can be implemented in the user file
-  */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_PWR_AVDCallback can be implemented in the user file
+    */
 }
 /**
   * @}

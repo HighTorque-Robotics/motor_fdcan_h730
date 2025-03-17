@@ -21,7 +21,7 @@
 #define STM32H7xx_HAL_DMA_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -46,33 +46,33 @@
   */
 typedef enum
 {
-  MEMORY0      = 0x00U,    /*!< Memory 0     */
-  MEMORY1      = 0x01U,    /*!< Memory 1     */
+    MEMORY0      = 0x00U,    /*!< Memory 0     */
+    MEMORY1      = 0x01U,    /*!< Memory 1     */
 
-}HAL_DMA_MemoryTypeDef;
+} HAL_DMA_MemoryTypeDef;
 
 /**
   * @brief  HAL DMAMUX Synchronization configuration structure definition
   */
 typedef struct
 {
-  uint32_t SyncSignalID;  /*!< Specifies the synchronization signal gating the DMA request in periodic mode.
+    uint32_t SyncSignalID;  /*!< Specifies the synchronization signal gating the DMA request in periodic mode.
                               This parameter can be a value of @ref DMAEx_MUX_SyncSignalID_selection */
 
-  uint32_t SyncPolarity;  /*!< Specifies the polarity of the signal on which the DMA request is synchronized.
+    uint32_t SyncPolarity;  /*!< Specifies the polarity of the signal on which the DMA request is synchronized.
                               This parameter can be a value of @ref DMAEx_MUX_SyncPolarity_selection */
 
-  FunctionalState SyncEnable;  /*!< Specifies if the synchronization shall be enabled or disabled
+    FunctionalState SyncEnable;  /*!< Specifies if the synchronization shall be enabled or disabled
                                     This parameter can take the value ENABLE or DISABLE*/
 
 
-  FunctionalState EventEnable;    /*!< Specifies if an event shall be generated once the RequestNumber is reached.
+    FunctionalState EventEnable;    /*!< Specifies if an event shall be generated once the RequestNumber is reached.
                                        This parameter can take the value ENABLE or DISABLE */
 
-  uint32_t RequestNumber; /*!< Specifies the number of DMA request that will be authorized after a sync event.
+    uint32_t RequestNumber; /*!< Specifies the number of DMA request that will be authorized after a sync event.
                                This parameters can be in the range 1 to 32 */
 
-}HAL_DMA_MuxSyncConfigTypeDef;
+} HAL_DMA_MuxSyncConfigTypeDef;
 
 
 /**
@@ -80,16 +80,16 @@ typedef struct
   */
 typedef struct
 {
- uint32_t SignalID;      /*!< Specifies the ID of the signal used for DMAMUX request generator
+    uint32_t SignalID;      /*!< Specifies the ID of the signal used for DMAMUX request generator
                               This parameter can be a value of @ref DMAEx_MUX_SignalGeneratorID_selection */
 
-  uint32_t Polarity;       /*!< Specifies the polarity of the signal on which the request is generated.
+    uint32_t Polarity;       /*!< Specifies the polarity of the signal on which the request is generated.
                              This parameter can be a value of @ref DMAEx_MUX_RequestGeneneratorPolarity_selection */
 
-  uint32_t RequestNumber;  /*!< Specifies the number of DMA request that will be generated after a signal event.
+    uint32_t RequestNumber;  /*!< Specifies the number of DMA request that will be generated after a signal event.
                                 This parameters can be in the range 1 to 32 */
 
-}HAL_DMA_MuxRequestGeneratorConfigTypeDef;
+} HAL_DMA_MuxRequestGeneratorConfigTypeDef;
 
 /**
   * @}

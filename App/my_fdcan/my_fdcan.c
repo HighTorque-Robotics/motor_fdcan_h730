@@ -101,7 +101,7 @@ uint16_t get_fdcan_data_size(uint32_t dlc)
         break;
     case FDCAN_DLC_BYTES_3:
         size = 3;
-        break;    
+        break;
     case FDCAN_DLC_BYTES_4:
         size = 4;
         break;
@@ -113,10 +113,10 @@ uint16_t get_fdcan_data_size(uint32_t dlc)
         break;
     case FDCAN_DLC_BYTES_7:
         size = 7;
-        break;  
+        break;
     case FDCAN_DLC_BYTES_8:
         size = 8;
-        break; 
+        break;
     case FDCAN_DLC_BYTES_12:
         size = 12;
         break;
@@ -125,7 +125,7 @@ uint16_t get_fdcan_data_size(uint32_t dlc)
         break;
     case FDCAN_DLC_BYTES_20:
         size = 20;
-        break;    
+        break;
     case FDCAN_DLC_BYTES_24:
         size = 24;
         break;

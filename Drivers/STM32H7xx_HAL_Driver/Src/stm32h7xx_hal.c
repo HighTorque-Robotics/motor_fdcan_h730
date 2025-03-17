@@ -134,49 +134,49 @@ HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
 HAL_StatusTypeDef HAL_Init(void)
 {
 
-uint32_t common_system_clock;
+    uint32_t common_system_clock;
 
 #if defined(DUAL_CORE) && defined(CORE_CM4)
-   /* Configure Cortex-M4 Instruction cache through ART accelerator */
-   __HAL_RCC_ART_CLK_ENABLE();                   /* Enable the Cortex-M4 ART Clock */
-   __HAL_ART_CONFIG_BASE_ADDRESS(0x08100000UL);  /* Configure the Cortex-M4 ART Base address to the Flash Bank 2 : */
-   __HAL_ART_ENABLE();                           /* Enable the Cortex-M4 ART */
+    /* Configure Cortex-M4 Instruction cache through ART accelerator */
+    __HAL_RCC_ART_CLK_ENABLE();                   /* Enable the Cortex-M4 ART Clock */
+    __HAL_ART_CONFIG_BASE_ADDRESS(0x08100000UL);  /* Configure the Cortex-M4 ART Base address to the Flash Bank 2 : */
+    __HAL_ART_ENABLE();                           /* Enable the Cortex-M4 ART */
 #endif /* DUAL_CORE &&  CORE_CM4 */
 
-  /* Set Interrupt Group Priority */
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+    /* Set Interrupt Group Priority */
+    HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-  /* Update the SystemCoreClock global variable */
+    /* Update the SystemCoreClock global variable */
 #if defined(RCC_D1CFGR_D1CPRE)
-  common_system_clock = HAL_RCC_GetSysClockFreq() >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_D1CPRE)>> RCC_D1CFGR_D1CPRE_Pos]) & 0x1FU);
+    common_system_clock = HAL_RCC_GetSysClockFreq() >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >> RCC_D1CFGR_D1CPRE_Pos]) & 0x1FU);
 #else
-  common_system_clock = HAL_RCC_GetSysClockFreq() >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_CDCPRE)>> RCC_CDCFGR1_CDCPRE_Pos]) & 0x1FU);
+    common_system_clock = HAL_RCC_GetSysClockFreq() >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_CDCPRE) >> RCC_CDCFGR1_CDCPRE_Pos]) & 0x1FU);
 #endif
 
-  /* Update the SystemD2Clock global variable */
+    /* Update the SystemD2Clock global variable */
 #if defined(RCC_D1CFGR_HPRE)
-  SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_HPRE)>> RCC_D1CFGR_HPRE_Pos]) & 0x1FU));
+    SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_HPRE) >> RCC_D1CFGR_HPRE_Pos]) & 0x1FU));
 #else
-  SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_HPRE)>> RCC_CDCFGR1_HPRE_Pos]) & 0x1FU));
+    SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_HPRE) >> RCC_CDCFGR1_HPRE_Pos]) & 0x1FU));
 #endif
 
 #if defined(DUAL_CORE) && defined(CORE_CM4)
-  SystemCoreClock = SystemD2Clock;
+    SystemCoreClock = SystemD2Clock;
 #else
-  SystemCoreClock = common_system_clock;
+    SystemCoreClock = common_system_clock;
 #endif /* DUAL_CORE && CORE_CM4 */
 
-  /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
-  if(HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
-  {
-    return HAL_ERROR;
-  }
+    /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
+    if(HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
+    {
+        return HAL_ERROR;
+    }
 
-  /* Init the low level hardware */
-  HAL_MspInit();
+    /* Init the low level hardware */
+    HAL_MspInit();
 
-  /* Return function status */
-  return HAL_OK;
+    /* Return function status */
+    return HAL_OK;
 }
 
 /**
@@ -186,39 +186,39 @@ uint32_t common_system_clock;
   */
 HAL_StatusTypeDef HAL_DeInit(void)
 {
-  /* Reset of all peripherals */
-  __HAL_RCC_AHB3_FORCE_RESET();
-  __HAL_RCC_AHB3_RELEASE_RESET();
+    /* Reset of all peripherals */
+    __HAL_RCC_AHB3_FORCE_RESET();
+    __HAL_RCC_AHB3_RELEASE_RESET();
 
-  __HAL_RCC_AHB1_FORCE_RESET();
-  __HAL_RCC_AHB1_RELEASE_RESET();
+    __HAL_RCC_AHB1_FORCE_RESET();
+    __HAL_RCC_AHB1_RELEASE_RESET();
 
-  __HAL_RCC_AHB2_FORCE_RESET();
-  __HAL_RCC_AHB2_RELEASE_RESET();
+    __HAL_RCC_AHB2_FORCE_RESET();
+    __HAL_RCC_AHB2_RELEASE_RESET();
 
-  __HAL_RCC_AHB4_FORCE_RESET();
- __HAL_RCC_AHB4_RELEASE_RESET();
+    __HAL_RCC_AHB4_FORCE_RESET();
+    __HAL_RCC_AHB4_RELEASE_RESET();
 
-  __HAL_RCC_APB3_FORCE_RESET();
-  __HAL_RCC_APB3_RELEASE_RESET();
+    __HAL_RCC_APB3_FORCE_RESET();
+    __HAL_RCC_APB3_RELEASE_RESET();
 
-  __HAL_RCC_APB1L_FORCE_RESET();
-  __HAL_RCC_APB1L_RELEASE_RESET();
+    __HAL_RCC_APB1L_FORCE_RESET();
+    __HAL_RCC_APB1L_RELEASE_RESET();
 
-  __HAL_RCC_APB1H_FORCE_RESET();
-  __HAL_RCC_APB1H_RELEASE_RESET();
+    __HAL_RCC_APB1H_FORCE_RESET();
+    __HAL_RCC_APB1H_RELEASE_RESET();
 
-   __HAL_RCC_APB2_FORCE_RESET();
-   __HAL_RCC_APB2_RELEASE_RESET();
+    __HAL_RCC_APB2_FORCE_RESET();
+    __HAL_RCC_APB2_RELEASE_RESET();
 
-  __HAL_RCC_APB4_FORCE_RESET();
-  __HAL_RCC_APB4_RELEASE_RESET();
+    __HAL_RCC_APB4_FORCE_RESET();
+    __HAL_RCC_APB4_RELEASE_RESET();
 
-  /* De-Init the low level hardware */
-  HAL_MspDeInit();
+    /* De-Init the low level hardware */
+    HAL_MspDeInit();
 
-  /* Return function status */
-  return HAL_OK;
+    /* Return function status */
+    return HAL_OK;
 }
 
 /**
@@ -227,9 +227,9 @@ HAL_StatusTypeDef HAL_DeInit(void)
   */
 __weak void HAL_MspInit(void)
 {
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_MspInit could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_MspInit could be implemented in the user file
+     */
 }
 
 /**
@@ -238,9 +238,9 @@ __weak void HAL_MspInit(void)
   */
 __weak void HAL_MspDeInit(void)
 {
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_MspDeInit could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_MspDeInit could be implemented in the user file
+     */
 }
 
 /**
@@ -261,31 +261,31 @@ __weak void HAL_MspDeInit(void)
   */
 __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
-  /* Check uwTickFreq for MisraC 2012 (even if uwTickFreq is a enum type that don't take the value zero)*/
-  if((uint32_t)uwTickFreq == 0UL)
-  {
-    return HAL_ERROR;
-  }
+    /* Check uwTickFreq for MisraC 2012 (even if uwTickFreq is a enum type that don't take the value zero)*/
+    if((uint32_t)uwTickFreq == 0UL)
+    {
+        return HAL_ERROR;
+    }
 
     /* Configure the SysTick to have interrupt in 1ms time basis*/
     if (HAL_SYSTICK_Config(SystemCoreClock / (1000UL / (uint32_t)uwTickFreq)) > 0U)
     {
-      return HAL_ERROR;
+        return HAL_ERROR;
     }
 
-  /* Configure the SysTick IRQ priority */
-  if (TickPriority < (1UL << __NVIC_PRIO_BITS))
-  {
-    HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority, 0U);
-    uwTickPrio = TickPriority;
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
+    /* Configure the SysTick IRQ priority */
+    if (TickPriority < (1UL << __NVIC_PRIO_BITS))
+    {
+        HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority, 0U);
+        uwTickPrio = TickPriority;
+    }
+    else
+    {
+        return HAL_ERROR;
+    }
 
-  /* Return function status */
-  return HAL_OK;
+    /* Return function status */
+    return HAL_OK;
 }
 
 /**
@@ -326,7 +326,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 __weak void HAL_IncTick(void)
 {
-  uwTick += (uint32_t)uwTickFreq;
+    uwTick += (uint32_t)uwTickFreq;
 }
 
 /**
@@ -337,7 +337,7 @@ __weak void HAL_IncTick(void)
   */
 __weak uint32_t HAL_GetTick(void)
 {
-  return uwTick;
+    return uwTick;
 }
 
 /**
@@ -346,7 +346,7 @@ __weak uint32_t HAL_GetTick(void)
   */
 uint32_t HAL_GetTickPrio(void)
 {
-  return uwTickPrio;
+    return uwTickPrio;
 }
 
 /**
@@ -355,30 +355,30 @@ uint32_t HAL_GetTickPrio(void)
   */
 HAL_StatusTypeDef HAL_SetTickFreq(HAL_TickFreqTypeDef Freq)
 {
-  HAL_StatusTypeDef status  = HAL_OK;
-  HAL_TickFreqTypeDef prevTickFreq;
+    HAL_StatusTypeDef status  = HAL_OK;
+    HAL_TickFreqTypeDef prevTickFreq;
 
-  assert_param(IS_TICKFREQ(Freq));
+    assert_param(IS_TICKFREQ(Freq));
 
-  if (uwTickFreq != Freq)
-  {
-
-    /* Back up uwTickFreq frequency */
-    prevTickFreq = uwTickFreq;
-
-    /* Update uwTickFreq global variable used by HAL_InitTick() */
-    uwTickFreq = Freq;
-
-    /* Apply the new tick Freq  */
-    status = HAL_InitTick(uwTickPrio);
-    if (status != HAL_OK)
+    if (uwTickFreq != Freq)
     {
-      /* Restore previous tick frequency */
-      uwTickFreq = prevTickFreq;
-    }
-  }
 
-  return status;
+        /* Back up uwTickFreq frequency */
+        prevTickFreq = uwTickFreq;
+
+        /* Update uwTickFreq global variable used by HAL_InitTick() */
+        uwTickFreq = Freq;
+
+        /* Apply the new tick Freq  */
+        status = HAL_InitTick(uwTickPrio);
+        if (status != HAL_OK)
+        {
+            /* Restore previous tick frequency */
+            uwTickFreq = prevTickFreq;
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -387,7 +387,7 @@ HAL_StatusTypeDef HAL_SetTickFreq(HAL_TickFreqTypeDef Freq)
   */
 HAL_TickFreqTypeDef HAL_GetTickFreq(void)
 {
-  return uwTickFreq;
+    return uwTickFreq;
 }
 
 /**
@@ -403,18 +403,18 @@ HAL_TickFreqTypeDef HAL_GetTickFreq(void)
   */
 __weak void HAL_Delay(uint32_t Delay)
 {
-  uint32_t tickstart = HAL_GetTick();
-  uint32_t wait = Delay;
+    uint32_t tickstart = HAL_GetTick();
+    uint32_t wait = Delay;
 
-  /* Add a freq to guarantee minimum wait */
-  if (wait < HAL_MAX_DELAY)
-  {
-    wait += (uint32_t)(uwTickFreq);
-  }
+    /* Add a freq to guarantee minimum wait */
+    if (wait < HAL_MAX_DELAY)
+    {
+        wait += (uint32_t)(uwTickFreq);
+    }
 
-  while ((HAL_GetTick() - tickstart) < wait)
-  {
-  }
+    while ((HAL_GetTick() - tickstart) < wait)
+    {
+    }
 }
 
 /**
@@ -429,8 +429,8 @@ __weak void HAL_Delay(uint32_t Delay)
   */
 __weak void HAL_SuspendTick(void)
 {
-  /* Disable SysTick Interrupt */
-  SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+    /* Disable SysTick Interrupt */
+    SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 }
 
 /**
@@ -445,8 +445,8 @@ __weak void HAL_SuspendTick(void)
   */
 __weak void HAL_ResumeTick(void)
 {
-  /* Enable SysTick Interrupt */
-  SysTick->CTRL  |= SysTick_CTRL_TICKINT_Msk;
+    /* Enable SysTick Interrupt */
+    SysTick->CTRL  |= SysTick_CTRL_TICKINT_Msk;
 }
 
 /**
@@ -455,7 +455,7 @@ __weak void HAL_ResumeTick(void)
   */
 uint32_t HAL_GetHalVersion(void)
 {
- return __STM32H7xx_HAL_VERSION;
+    return __STM32H7xx_HAL_VERSION;
 }
 
 /**
@@ -464,7 +464,7 @@ uint32_t HAL_GetHalVersion(void)
   */
 uint32_t HAL_GetREVID(void)
 {
-   return((DBGMCU->IDCODE) >> 16);
+    return((DBGMCU->IDCODE) >> 16);
 }
 
 /**
@@ -473,7 +473,7 @@ uint32_t HAL_GetREVID(void)
   */
 uint32_t HAL_GetDEVID(void)
 {
-   return((DBGMCU->IDCODE) & IDCODE_DEVID_MASK);
+    return((DBGMCU->IDCODE) & IDCODE_DEVID_MASK);
 }
 
 /**
@@ -482,7 +482,7 @@ uint32_t HAL_GetDEVID(void)
   */
 uint32_t HAL_GetUIDw0(void)
 {
-  return(READ_REG(*((uint32_t *)UID_BASE)));
+    return(READ_REG(*((uint32_t *)UID_BASE)));
 }
 
 /**
@@ -491,7 +491,7 @@ uint32_t HAL_GetUIDw0(void)
   */
 uint32_t HAL_GetUIDw1(void)
 {
-  return(READ_REG(*((uint32_t *)(UID_BASE + 4U))));
+    return(READ_REG(*((uint32_t *)(UID_BASE + 4U))));
 }
 
 /**
@@ -500,7 +500,7 @@ uint32_t HAL_GetUIDw1(void)
   */
 uint32_t HAL_GetUIDw2(void)
 {
-  return(READ_REG(*((uint32_t *)(UID_BASE + 8U))));
+    return(READ_REG(*((uint32_t *)(UID_BASE + 8U))));
 }
 
 /**
@@ -519,10 +519,10 @@ uint32_t HAL_GetUIDw2(void)
   */
 void HAL_SYSCFG_VREFBUF_VoltageScalingConfig(uint32_t VoltageScaling)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_VREFBUF_VOLTAGE_SCALE(VoltageScaling));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_VREFBUF_VOLTAGE_SCALE(VoltageScaling));
 
-  MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_VRS, VoltageScaling);
+    MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_VRS, VoltageScaling);
 }
 
 /**
@@ -535,10 +535,10 @@ void HAL_SYSCFG_VREFBUF_VoltageScalingConfig(uint32_t VoltageScaling)
   */
 void HAL_SYSCFG_VREFBUF_HighImpedanceConfig(uint32_t Mode)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_VREFBUF_HIGH_IMPEDANCE(Mode));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_VREFBUF_HIGH_IMPEDANCE(Mode));
 
-  MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_HIZ, Mode);
+    MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_HIZ, Mode);
 }
 
 /**
@@ -547,10 +547,10 @@ void HAL_SYSCFG_VREFBUF_HighImpedanceConfig(uint32_t Mode)
   */
 void HAL_SYSCFG_VREFBUF_TrimmingConfig(uint32_t TrimmingValue)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_VREFBUF_TRIMMING(TrimmingValue));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_VREFBUF_TRIMMING(TrimmingValue));
 
-  MODIFY_REG(VREFBUF->CCR, VREFBUF_CCR_TRIM, TrimmingValue);
+    MODIFY_REG(VREFBUF->CCR, VREFBUF_CCR_TRIM, TrimmingValue);
 }
 
 /**
@@ -559,23 +559,23 @@ void HAL_SYSCFG_VREFBUF_TrimmingConfig(uint32_t TrimmingValue)
   */
 HAL_StatusTypeDef HAL_SYSCFG_EnableVREFBUF(void)
 {
-  uint32_t  tickstart;
+    uint32_t  tickstart;
 
-  SET_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
+    SET_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
 
-  /* Get Start Tick*/
-  tickstart = HAL_GetTick();
+    /* Get Start Tick*/
+    tickstart = HAL_GetTick();
 
-  /* Wait for VRR bit  */
-  while(READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRR) == 0UL)
-  {
-    if((HAL_GetTick() - tickstart) > VREFBUF_TIMEOUT_VALUE)
+    /* Wait for VRR bit  */
+    while(READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRR) == 0UL)
     {
-      return HAL_TIMEOUT;
+        if((HAL_GetTick() - tickstart) > VREFBUF_TIMEOUT_VALUE)
+        {
+            return HAL_TIMEOUT;
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -585,7 +585,7 @@ HAL_StatusTypeDef HAL_SYSCFG_EnableVREFBUF(void)
   */
 void HAL_SYSCFG_DisableVREFBUF(void)
 {
-  CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
+    CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
 }
 
 #if defined(SYSCFG_PMCR_EPIS_SEL)
@@ -599,10 +599,10 @@ void HAL_SYSCFG_DisableVREFBUF(void)
   */
 void HAL_SYSCFG_ETHInterfaceSelect(uint32_t SYSCFG_ETHInterface)
 {
-  /* Check the parameter */
-  assert_param(IS_SYSCFG_ETHERNET_CONFIG(SYSCFG_ETHInterface));
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_ETHERNET_CONFIG(SYSCFG_ETHInterface));
 
-  MODIFY_REG(SYSCFG->PMCR, SYSCFG_PMCR_EPIS_SEL, (uint32_t)(SYSCFG_ETHInterface));
+    MODIFY_REG(SYSCFG->PMCR, SYSCFG_PMCR_EPIS_SEL, (uint32_t)(SYSCFG_ETHInterface));
 }
 #endif /* SYSCFG_PMCR_EPIS_SEL */
 
@@ -629,11 +629,11 @@ void HAL_SYSCFG_ETHInterfaceSelect(uint32_t SYSCFG_ETHInterface)
 
 void HAL_SYSCFG_AnalogSwitchConfig(uint32_t SYSCFG_AnalogSwitch , uint32_t SYSCFG_SwitchState )
 {
-  /* Check the parameter */
-  assert_param(IS_SYSCFG_ANALOG_SWITCH(SYSCFG_AnalogSwitch));
-  assert_param(IS_SYSCFG_SWITCH_STATE(SYSCFG_SwitchState));
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_ANALOG_SWITCH(SYSCFG_AnalogSwitch));
+    assert_param(IS_SYSCFG_SWITCH_STATE(SYSCFG_SwitchState));
 
-  MODIFY_REG(SYSCFG->PMCR, (uint32_t) SYSCFG_AnalogSwitch, (uint32_t)(SYSCFG_SwitchState));
+    MODIFY_REG(SYSCFG->PMCR, (uint32_t) SYSCFG_AnalogSwitch, (uint32_t)(SYSCFG_SwitchState));
 }
 
 #if defined(SYSCFG_PMCR_BOOSTEN)
@@ -647,7 +647,7 @@ void HAL_SYSCFG_AnalogSwitchConfig(uint32_t SYSCFG_AnalogSwitch , uint32_t SYSCF
   */
 void HAL_SYSCFG_EnableBOOST(void)
 {
- SET_BIT(SYSCFG->PMCR, SYSCFG_PMCR_BOOSTEN) ;
+    SET_BIT(SYSCFG->PMCR, SYSCFG_PMCR_BOOSTEN) ;
 }
 
 /**
@@ -659,7 +659,7 @@ void HAL_SYSCFG_EnableBOOST(void)
   */
 void HAL_SYSCFG_DisableBOOST(void)
 {
- CLEAR_BIT(SYSCFG->PMCR, SYSCFG_PMCR_BOOSTEN) ;
+    CLEAR_BIT(SYSCFG->PMCR, SYSCFG_PMCR_BOOSTEN) ;
 }
 #endif /* SYSCFG_PMCR_BOOSTEN */
 
@@ -675,27 +675,27 @@ void HAL_SYSCFG_DisableBOOST(void)
   */
 void HAL_SYSCFG_CM7BootAddConfig(uint32_t BootRegister, uint32_t BootAddress)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_BOOT_REGISTER(BootRegister));
-  assert_param(IS_SYSCFG_BOOT_ADDRESS(BootAddress));
-  if ( BootRegister == SYSCFG_BOOT_ADDR0 )
-  {
-    /* Configure CM7 BOOT ADD0 */
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_BOOT_REGISTER(BootRegister));
+    assert_param(IS_SYSCFG_BOOT_ADDRESS(BootAddress));
+    if ( BootRegister == SYSCFG_BOOT_ADDR0 )
+    {
+        /* Configure CM7 BOOT ADD0 */
 #if defined(DUAL_CORE)
-    MODIFY_REG(SYSCFG->UR2, SYSCFG_UR2_BCM7_ADD0, ((BootAddress >> 16) << SYSCFG_UR2_BCM7_ADD0_Pos));
+        MODIFY_REG(SYSCFG->UR2, SYSCFG_UR2_BCM7_ADD0, ((BootAddress >> 16) << SYSCFG_UR2_BCM7_ADD0_Pos));
 #else
-    MODIFY_REG(SYSCFG->UR2, SYSCFG_UR2_BOOT_ADD0, ((BootAddress >> 16) << SYSCFG_UR2_BOOT_ADD0_Pos));
+        MODIFY_REG(SYSCFG->UR2, SYSCFG_UR2_BOOT_ADD0, ((BootAddress >> 16) << SYSCFG_UR2_BOOT_ADD0_Pos));
 #endif /*DUAL_CORE*/
-  }
-  else
-  {
-    /* Configure CM7 BOOT ADD1 */
+    }
+    else
+    {
+        /* Configure CM7 BOOT ADD1 */
 #if defined(DUAL_CORE)
-    MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BCM7_ADD1, (BootAddress >> 16));
+        MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BCM7_ADD1, (BootAddress >> 16));
 #else
-    MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BOOT_ADD1, (BootAddress >> 16));
+        MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BOOT_ADD1, (BootAddress >> 16));
 #endif /*DUAL_CORE*/
-  }
+    }
 }
 #endif /* SYSCFG_UR2_BOOT_ADD0 || SYSCFG_UR2_BCM7_ADD0 */
 
@@ -711,21 +711,21 @@ void HAL_SYSCFG_CM7BootAddConfig(uint32_t BootRegister, uint32_t BootAddress)
   */
 void HAL_SYSCFG_CM4BootAddConfig(uint32_t BootRegister, uint32_t BootAddress)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_BOOT_REGISTER(BootRegister));
-  assert_param(IS_SYSCFG_BOOT_ADDRESS(BootAddress));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_BOOT_REGISTER(BootRegister));
+    assert_param(IS_SYSCFG_BOOT_ADDRESS(BootAddress));
 
-  if ( BootRegister == SYSCFG_BOOT_ADDR0 )
-  {
-    /* Configure CM4 BOOT ADD0 */
-    MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BCM4_ADD0, ((BootAddress >> 16)<< SYSCFG_UR3_BCM4_ADD0_Pos));
-  }
+    if ( BootRegister == SYSCFG_BOOT_ADDR0 )
+    {
+        /* Configure CM4 BOOT ADD0 */
+        MODIFY_REG(SYSCFG->UR3, SYSCFG_UR3_BCM4_ADD0, ((BootAddress >> 16) << SYSCFG_UR3_BCM4_ADD0_Pos));
+    }
 
-  else
-  {
-    /* Configure CM4 BOOT ADD1 */
-    MODIFY_REG(SYSCFG->UR4, SYSCFG_UR4_BCM4_ADD1, (BootAddress >> 16));
-  }
+    else
+    {
+        /* Configure CM4 BOOT ADD1 */
+        MODIFY_REG(SYSCFG->UR4, SYSCFG_UR4_BCM4_ADD1, (BootAddress >> 16));
+    }
 }
 
 /**
@@ -734,7 +734,7 @@ void HAL_SYSCFG_CM4BootAddConfig(uint32_t BootRegister, uint32_t BootAddress)
   */
 void HAL_SYSCFG_EnableCM7BOOT(void)
 {
- SET_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM7);
+    SET_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM7);
 }
 
 /**
@@ -744,7 +744,7 @@ void HAL_SYSCFG_EnableCM7BOOT(void)
   */
 void HAL_SYSCFG_DisableCM7BOOT(void)
 {
- CLEAR_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM7) ;
+    CLEAR_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM7) ;
 }
 
 /**
@@ -753,7 +753,7 @@ void HAL_SYSCFG_DisableCM7BOOT(void)
   */
 void HAL_SYSCFG_EnableCM4BOOT(void)
 {
- SET_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM4);
+    SET_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM4);
 }
 
 /**
@@ -763,7 +763,7 @@ void HAL_SYSCFG_EnableCM4BOOT(void)
   */
 void HAL_SYSCFG_DisableCM4BOOT(void)
 {
-  CLEAR_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM4);
+    CLEAR_BIT(SYSCFG->UR1, SYSCFG_UR1_BCM4);
 }
 #endif /*DUAL_CORE*/
 /**
@@ -774,7 +774,7 @@ void HAL_SYSCFG_DisableCM4BOOT(void)
   */
 void HAL_EnableCompensationCell(void)
 {
-  SET_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_EN) ;
+    SET_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_EN) ;
 }
 
 /**
@@ -785,7 +785,7 @@ void HAL_EnableCompensationCell(void)
   */
 void HAL_DisableCompensationCell(void)
 {
-  CLEAR_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_EN);
+    CLEAR_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_EN);
 }
 
 
@@ -799,9 +799,9 @@ void HAL_DisableCompensationCell(void)
 void HAL_SYSCFG_EnableIOSpeedOptimize(void)
 {
 #if defined(SYSCFG_CCCSR_HSLV)
-  SET_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_HSLV);
+    SET_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_HSLV);
 #else
-  SET_BIT(SYSCFG->CCCSR, (SYSCFG_CCCSR_HSLV0| SYSCFG_CCCSR_HSLV1 | SYSCFG_CCCSR_HSLV2  | SYSCFG_CCCSR_HSLV3));
+    SET_BIT(SYSCFG->CCCSR, (SYSCFG_CCCSR_HSLV0 | SYSCFG_CCCSR_HSLV1 | SYSCFG_CCCSR_HSLV2  | SYSCFG_CCCSR_HSLV3));
 #endif   /* SYSCFG_CCCSR_HSLV */
 }
 
@@ -815,9 +815,9 @@ void HAL_SYSCFG_EnableIOSpeedOptimize(void)
 void HAL_SYSCFG_DisableIOSpeedOptimize(void)
 {
 #if defined(SYSCFG_CCCSR_HSLV)
-  CLEAR_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_HSLV);
+    CLEAR_BIT(SYSCFG->CCCSR, SYSCFG_CCCSR_HSLV);
 #else
-  CLEAR_BIT(SYSCFG->CCCSR, (SYSCFG_CCCSR_HSLV0| SYSCFG_CCCSR_HSLV1 | SYSCFG_CCCSR_HSLV2  | SYSCFG_CCCSR_HSLV3));
+    CLEAR_BIT(SYSCFG->CCCSR, (SYSCFG_CCCSR_HSLV0 | SYSCFG_CCCSR_HSLV1 | SYSCFG_CCCSR_HSLV2  | SYSCFG_CCCSR_HSLV3));
 #endif   /* SYSCFG_CCCSR_HSLV */
 }
 
@@ -831,9 +831,9 @@ void HAL_SYSCFG_DisableIOSpeedOptimize(void)
   */
 void HAL_SYSCFG_CompensationCodeSelect(uint32_t SYSCFG_CompCode)
 {
-  /* Check the parameter */
-  assert_param(IS_SYSCFG_CODE_SELECT(SYSCFG_CompCode));
-  MODIFY_REG(SYSCFG->CCCSR, SYSCFG_CCCSR_CS, (uint32_t)(SYSCFG_CompCode));
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_CODE_SELECT(SYSCFG_CompCode));
+    MODIFY_REG(SYSCFG->CCCSR, SYSCFG_CCCSR_CS, (uint32_t)(SYSCFG_CompCode));
 }
 
 /**
@@ -848,10 +848,10 @@ void HAL_SYSCFG_CompensationCodeSelect(uint32_t SYSCFG_CompCode)
   */
 void HAL_SYSCFG_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t SYSCFG_NMOSCode )
 {
-  /* Check the parameter */
-  assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_PMOSCode));
-  assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_NMOSCode));
-  MODIFY_REG(SYSCFG->CCCR, SYSCFG_CCCR_NCC|SYSCFG_CCCR_PCC, (((uint32_t)(SYSCFG_PMOSCode)<< 4)|(uint32_t)(SYSCFG_NMOSCode)) );
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_PMOSCode));
+    assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_NMOSCode));
+    MODIFY_REG(SYSCFG->CCCR, SYSCFG_CCCR_NCC | SYSCFG_CCCR_PCC, (((uint32_t)(SYSCFG_PMOSCode) << 4) | (uint32_t)(SYSCFG_NMOSCode)) );
 }
 
 #if defined(SYSCFG_CCCR_NCC_MMC)
@@ -867,10 +867,10 @@ void HAL_SYSCFG_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t SYSCFG
   */
 void HAL_SYSCFG_VDDMMC_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t SYSCFG_NMOSCode )
 {
-  /* Check the parameter */
-  assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_PMOSCode));
-  assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_NMOSCode));
-  MODIFY_REG(SYSCFG->CCCR, (SYSCFG_CCCR_NCC_MMC | SYSCFG_CCCR_PCC_MMC), (((uint32_t)(SYSCFG_PMOSCode)<< 4)|(uint32_t)(SYSCFG_NMOSCode)) );
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_PMOSCode));
+    assert_param(IS_SYSCFG_CODE_CONFIG(SYSCFG_NMOSCode));
+    MODIFY_REG(SYSCFG->CCCR, (SYSCFG_CCCR_NCC_MMC | SYSCFG_CCCR_PCC_MMC), (((uint32_t)(SYSCFG_PMOSCode) << 4) | (uint32_t)(SYSCFG_NMOSCode)) );
 }
 #endif /* SYSCFG_CCCR_NCC_MMC */
 
@@ -882,10 +882,10 @@ void HAL_SYSCFG_VDDMMC_CompensationCodeConfig(uint32_t SYSCFG_PMOSCode, uint32_t
   */
 void HAL_SYSCFG_ADC2ALT_Rout0Config(uint32_t Adc2AltRout0)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_ADC2ALT_ROUT0(Adc2AltRout0));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_ADC2ALT_ROUT0(Adc2AltRout0));
 
-  MODIFY_REG(SYSCFG->ADC2ALT, SYSCFG_ADC2ALT_ADC2_ROUT0, Adc2AltRout0);
+    MODIFY_REG(SYSCFG->ADC2ALT, SYSCFG_ADC2ALT_ADC2_ROUT0, Adc2AltRout0);
 }
 #endif /*SYSCFG_ADC2ALT_ADC2_ROUT0*/
 
@@ -897,10 +897,10 @@ void HAL_SYSCFG_ADC2ALT_Rout0Config(uint32_t Adc2AltRout0)
   */
 void HAL_SYSCFG_ADC2ALT_Rout1Config(uint32_t Adc2AltRout1)
 {
-  /* Check the parameters */
-  assert_param(IS_SYSCFG_ADC2ALT_ROUT1(Adc2AltRout1));
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_ADC2ALT_ROUT1(Adc2AltRout1));
 
-  MODIFY_REG(SYSCFG->ADC2ALT, SYSCFG_ADC2ALT_ADC2_ROUT1, Adc2AltRout1);
+    MODIFY_REG(SYSCFG->ADC2ALT, SYSCFG_ADC2ALT_ADC2_ROUT1, Adc2AltRout1);
 }
 #endif /*SYSCFG_ADC2ALT_ADC2_ROUT1*/
 
@@ -910,7 +910,7 @@ void HAL_SYSCFG_ADC2ALT_Rout1Config(uint32_t Adc2AltRout1)
   */
 void HAL_DBGMCU_EnableDBGSleepMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
 }
 
 /**
@@ -919,7 +919,7 @@ void HAL_DBGMCU_EnableDBGSleepMode(void)
   */
 void HAL_DBGMCU_DisableDBGSleepMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD1);
 }
 
 
@@ -929,7 +929,7 @@ void HAL_DBGMCU_DisableDBGSleepMode(void)
   */
 void HAL_DBGMCU_EnableDBGStopMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
 }
 
 /**
@@ -938,7 +938,7 @@ void HAL_DBGMCU_EnableDBGStopMode(void)
   */
 void HAL_DBGMCU_DisableDBGStopMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD1);
 }
 
 /**
@@ -947,7 +947,7 @@ void HAL_DBGMCU_DisableDBGStopMode(void)
   */
 void HAL_DBGMCU_EnableDBGStandbyMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
 }
 
 /**
@@ -956,7 +956,7 @@ void HAL_DBGMCU_EnableDBGStandbyMode(void)
   */
 void HAL_DBGMCU_DisableDBGStandbyMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD1);
 }
 
 #if defined(DUAL_CORE)
@@ -966,7 +966,7 @@ void HAL_DBGMCU_DisableDBGStandbyMode(void)
   */
 void HAL_EnableDomain2DBGSleepMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD2);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD2);
 }
 
 /**
@@ -975,7 +975,7 @@ void HAL_EnableDomain2DBGSleepMode(void)
   */
 void HAL_DisableDomain2DBGSleepMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD2);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEPD2);
 }
 
 /**
@@ -984,7 +984,7 @@ void HAL_DisableDomain2DBGSleepMode(void)
   */
 void HAL_EnableDomain2DBGStopMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD2);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD2);
 }
 
 /**
@@ -993,7 +993,7 @@ void HAL_EnableDomain2DBGStopMode(void)
   */
 void HAL_DisableDomain2DBGStopMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD2);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD2);
 }
 
 /**
@@ -1002,7 +1002,7 @@ void HAL_DisableDomain2DBGStopMode(void)
   */
 void HAL_EnableDomain2DBGStandbyMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD2);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD2);
 }
 
 /**
@@ -1011,7 +1011,7 @@ void HAL_EnableDomain2DBGStandbyMode(void)
   */
 void HAL_DisableDomain2DBGStandbyMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD2);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD2);
 }
 #endif /*DUAL_CORE*/
 
@@ -1022,7 +1022,7 @@ void HAL_DisableDomain2DBGStandbyMode(void)
   */
 void HAL_EnableDomain3DBGStopMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
 }
 
 /**
@@ -1031,7 +1031,7 @@ void HAL_EnableDomain3DBGStopMode(void)
   */
 void HAL_DisableDomain3DBGStopMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOPD3);
 }
 #endif /*DBGMCU_CR_DBG_STOPD3*/
 
@@ -1042,7 +1042,7 @@ void HAL_DisableDomain3DBGStopMode(void)
   */
 void HAL_EnableDomain3DBGStandbyMode(void)
 {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
+    SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
 }
 
 /**
@@ -1051,7 +1051,7 @@ void HAL_EnableDomain3DBGStandbyMode(void)
   */
 void HAL_DisableDomain3DBGStandbyMode(void)
 {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
+    CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBYD3);
 }
 #endif /*DBGMCU_CR_DBG_STANDBYD3*/
 
@@ -1063,9 +1063,9 @@ void HAL_DisableDomain3DBGStandbyMode(void)
   */
 void HAL_SetFMCMemorySwappingConfig(uint32_t BankMapConfig)
 {
-  /* Check the parameter */
-  assert_param(IS_FMC_SWAPBMAP_MODE(BankMapConfig));
-  MODIFY_REG(FMC_Bank1_R->BTCR[0], FMC_BCR1_BMAP, BankMapConfig);
+    /* Check the parameter */
+    assert_param(IS_FMC_SWAPBMAP_MODE(BankMapConfig));
+    MODIFY_REG(FMC_Bank1_R->BTCR[0], FMC_BCR1_BMAP, BankMapConfig);
 }
 
 /**
@@ -1075,7 +1075,7 @@ void HAL_SetFMCMemorySwappingConfig(uint32_t BankMapConfig)
 */
 uint32_t HAL_GetFMCMemorySwappingConfig(void)
 {
-  return READ_BIT(FMC_Bank1_R->BTCR[0], FMC_BCR1_BMAP);
+    return READ_BIT(FMC_Bank1_R->BTCR[0], FMC_BCR1_BMAP);
 }
 
 /**
@@ -1092,22 +1092,22 @@ uint32_t HAL_GetFMCMemorySwappingConfig(void)
   */
 void HAL_EXTI_EdgeConfig(uint32_t EXTI_Line , uint32_t EXTI_Edge )
 {
-  /* Check the parameter */
-  assert_param(IS_HAL_EXTI_CONFIG_LINE(EXTI_Line));
-  assert_param(IS_EXTI_EDGE_LINE(EXTI_Edge));
+    /* Check the parameter */
+    assert_param(IS_HAL_EXTI_CONFIG_LINE(EXTI_Line));
+    assert_param(IS_EXTI_EDGE_LINE(EXTI_Edge));
 
-  /* Clear Rising Falling edge configuration */
-  CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI->FTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-  CLEAR_BIT( *(__IO uint32_t *) (((uint32_t) &(EXTI->RTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    /* Clear Rising Falling edge configuration */
+    CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI->FTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    CLEAR_BIT( *(__IO uint32_t *) (((uint32_t) & (EXTI->RTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
 
-  if( (EXTI_Edge & EXTI_RISING_EDGE) == EXTI_RISING_EDGE)
-  {
-   SET_BIT( *(__IO uint32_t *) (((uint32_t) &(EXTI->RTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-  }
-  if( (EXTI_Edge & EXTI_FALLING_EDGE) == EXTI_FALLING_EDGE)
-  {
-   SET_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI->FTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-  }
+    if( (EXTI_Edge & EXTI_RISING_EDGE) == EXTI_RISING_EDGE)
+    {
+        SET_BIT( *(__IO uint32_t *) (((uint32_t) & (EXTI->RTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    }
+    if( (EXTI_Edge & EXTI_FALLING_EDGE) == EXTI_FALLING_EDGE)
+    {
+        SET_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI->FTSR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    }
 }
 
 /**
@@ -1118,10 +1118,10 @@ void HAL_EXTI_EdgeConfig(uint32_t EXTI_Line , uint32_t EXTI_Edge )
   */
 void HAL_EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
 {
-  /* Check the parameters */
-  assert_param(IS_HAL_EXTI_CONFIG_LINE(EXTI_Line));
+    /* Check the parameters */
+    assert_param(IS_HAL_EXTI_CONFIG_LINE(EXTI_Line));
 
-  SET_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI->SWIER1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    SET_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI->SWIER1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
 }
 
 
@@ -1133,9 +1133,9 @@ void HAL_EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
   */
 void HAL_EXTI_D1_ClearFlag(uint32_t EXTI_Line)
 {
-  /* Check the parameters */
- assert_param(IS_EXTI_D1_LINE(EXTI_Line));
- WRITE_REG(*(__IO uint32_t *) (((uint32_t) &(EXTI_D1->PR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    /* Check the parameters */
+    assert_param(IS_EXTI_D1_LINE(EXTI_Line));
+    WRITE_REG(*(__IO uint32_t *) (((uint32_t) & (EXTI_D1->PR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
 
 }
 
@@ -1148,9 +1148,9 @@ void HAL_EXTI_D1_ClearFlag(uint32_t EXTI_Line)
   */
 void HAL_EXTI_D2_ClearFlag(uint32_t EXTI_Line)
 {
-  /* Check the parameters */
- assert_param(IS_EXTI_D2_LINE(EXTI_Line));
- WRITE_REG(*(__IO uint32_t *) (((uint32_t) &(EXTI_D2->PR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    /* Check the parameters */
+    assert_param(IS_EXTI_D2_LINE(EXTI_Line));
+    WRITE_REG(*(__IO uint32_t *) (((uint32_t) & (EXTI_D2->PR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
 }
 
 #endif /*DUAL_CORE*/
@@ -1168,35 +1168,35 @@ void HAL_EXTI_D2_ClearFlag(uint32_t EXTI_Line)
   */
 void HAL_EXTI_D1_EventInputConfig(uint32_t EXTI_Line , uint32_t EXTI_Mode,  uint32_t EXTI_LineCmd )
 {
-  /* Check the parameter */
-  assert_param(IS_EXTI_D1_LINE(EXTI_Line));
-  assert_param(IS_EXTI_MODE_LINE(EXTI_Mode));
+    /* Check the parameter */
+    assert_param(IS_EXTI_D1_LINE(EXTI_Line));
+    assert_param(IS_EXTI_MODE_LINE(EXTI_Mode));
 
-  if( (EXTI_Mode & EXTI_MODE_IT) == EXTI_MODE_IT)
-  {
-     if( EXTI_LineCmd == 0UL)
-     {
-       /* Clear EXTI line configuration */
-        CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI_D1->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)),(uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
-     }
-     else
-     {
-        SET_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI_D1->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-     }
-  }
+    if( (EXTI_Mode & EXTI_MODE_IT) == EXTI_MODE_IT)
+    {
+        if( EXTI_LineCmd == 0UL)
+        {
+            /* Clear EXTI line configuration */
+            CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI_D1->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
+        }
+        else
+        {
+            SET_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI_D1->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
+    }
 
-  if( (EXTI_Mode & EXTI_MODE_EVT) == EXTI_MODE_EVT)
-  {
-    if( EXTI_LineCmd == 0UL)
+    if( (EXTI_Mode & EXTI_MODE_EVT) == EXTI_MODE_EVT)
     {
-      /* Clear EXTI line configuration */
-      CLEAR_BIT(  *(__IO uint32_t *) (((uint32_t) &(EXTI_D1->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        if( EXTI_LineCmd == 0UL)
+        {
+            /* Clear EXTI line configuration */
+            CLEAR_BIT(  *(__IO uint32_t *) (((uint32_t) & (EXTI_D1->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
+        else
+        {
+            SET_BIT(  *(__IO uint32_t *) (((uint32_t) & (EXTI_D1->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
     }
-    else
-    {
-      SET_BIT(  *(__IO uint32_t *) (((uint32_t) &(EXTI_D1->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-    }
-  }
 }
 
 #if defined(DUAL_CORE)
@@ -1214,35 +1214,35 @@ void HAL_EXTI_D1_EventInputConfig(uint32_t EXTI_Line , uint32_t EXTI_Mode,  uint
   */
 void HAL_EXTI_D2_EventInputConfig(uint32_t EXTI_Line , uint32_t EXTI_Mode,  uint32_t EXTI_LineCmd )
 {
-  /* Check the parameter */
-  assert_param(IS_EXTI_D2_LINE(EXTI_Line));
-  assert_param(IS_EXTI_MODE_LINE(EXTI_Mode));
+    /* Check the parameter */
+    assert_param(IS_EXTI_D2_LINE(EXTI_Line));
+    assert_param(IS_EXTI_MODE_LINE(EXTI_Mode));
 
-  if( (EXTI_Mode & EXTI_MODE_IT) == EXTI_MODE_IT)
-  {
-    if( EXTI_LineCmd == 0UL)
+    if( (EXTI_Mode & EXTI_MODE_IT) == EXTI_MODE_IT)
     {
-    /* Clear EXTI line configuration */
-     CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI_D2->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)),(uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
+        if( EXTI_LineCmd == 0UL)
+        {
+            /* Clear EXTI line configuration */
+            CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI_D2->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
+        }
+        else
+        {
+            SET_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI_D2->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
     }
-    else
-    {
-     SET_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI_D2->IMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-    }
-  }
 
-  if( (EXTI_Mode & EXTI_MODE_EVT) == EXTI_MODE_EVT)
-  {
-    if( EXTI_LineCmd == 0UL)
+    if( (EXTI_Mode & EXTI_MODE_EVT) == EXTI_MODE_EVT)
     {
-      /* Clear EXTI line configuration */
-      CLEAR_BIT(  *(__IO uint32_t *) (((uint32_t) &(EXTI_D2->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        if( EXTI_LineCmd == 0UL)
+        {
+            /* Clear EXTI line configuration */
+            CLEAR_BIT(  *(__IO uint32_t *) (((uint32_t) & (EXTI_D2->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
+        else
+        {
+            SET_BIT(  *(__IO uint32_t *) (((uint32_t) & (EXTI_D2->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+        }
     }
-    else
-    {
-      SET_BIT(  *(__IO uint32_t *) (((uint32_t) &(EXTI_D2->EMR1)) + ((EXTI_Line >> 5 ) * 0x10UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-    }
-  }
 }
 #endif /*DUAL_CORE*/
 
@@ -1262,31 +1262,31 @@ void HAL_EXTI_D2_EventInputConfig(uint32_t EXTI_Line , uint32_t EXTI_Mode,  uint
   */
 void HAL_EXTI_D3_EventInputConfig(uint32_t EXTI_Line, uint32_t EXTI_LineCmd , uint32_t EXTI_ClearSrc  )
 {
-  __IO uint32_t *pRegv;
+    __IO uint32_t *pRegv;
 
-  /* Check the parameter */
-  assert_param(IS_EXTI_D3_LINE(EXTI_Line));
-  assert_param(IS_EXTI_D3_CLEAR(EXTI_ClearSrc));
+    /* Check the parameter */
+    assert_param(IS_EXTI_D3_LINE(EXTI_Line));
+    assert_param(IS_EXTI_D3_CLEAR(EXTI_ClearSrc));
 
-  if( EXTI_LineCmd == 0UL)
-  {
-    /* Clear EXTI line configuration */
-    CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI->D3PMR1)) + ((EXTI_Line >> 5 ) * 0x20UL)),(uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
-  }
-  else
-  {
-    SET_BIT(*(__IO uint32_t *) (((uint32_t) &(EXTI->D3PMR1)) +((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
-  }
+    if( EXTI_LineCmd == 0UL)
+    {
+        /* Clear EXTI line configuration */
+        CLEAR_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI->D3PMR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)) );
+    }
+    else
+    {
+        SET_BIT(*(__IO uint32_t *) (((uint32_t) & (EXTI->D3PMR1)) + ((EXTI_Line >> 5 ) * 0x20UL)), (uint32_t)(1UL << (EXTI_Line & 0x1FUL)));
+    }
 
-  if(((EXTI_Line>>4)%2UL) == 0UL)
-  {
-    pRegv = (__IO uint32_t *) (((uint32_t) &(EXTI->D3PCR1L)) + ((EXTI_Line >> 5 ) * 0x20UL));
-  }
-  else
-  {
-    pRegv = (__IO uint32_t *) (((uint32_t) &(EXTI->D3PCR1H)) + ((EXTI_Line >> 5 ) * 0x20UL));
-  }
-  MODIFY_REG(*pRegv, (uint32_t)(3UL << ((EXTI_Line*2UL) & 0x1FUL)), (uint32_t)(EXTI_ClearSrc << ((EXTI_Line*2UL) & 0x1FUL)));
+    if(((EXTI_Line >> 4) % 2UL) == 0UL)
+    {
+        pRegv = (__IO uint32_t *) (((uint32_t) & (EXTI->D3PCR1L)) + ((EXTI_Line >> 5 ) * 0x20UL));
+    }
+    else
+    {
+        pRegv = (__IO uint32_t *) (((uint32_t) & (EXTI->D3PCR1H)) + ((EXTI_Line >> 5 ) * 0x20UL));
+    }
+    MODIFY_REG(*pRegv, (uint32_t)(3UL << ((EXTI_Line * 2UL) & 0x1FUL)), (uint32_t)(EXTI_ClearSrc << ((EXTI_Line * 2UL) & 0x1FUL)));
 
 }
 
