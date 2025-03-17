@@ -3,14 +3,6 @@
 #include <string.h>
 
 
-FDCAN_RxHeaderTypeDef fdcan_rx_header1;
-uint8_t fdcan1_rdata[64] = {0};
-
-motor_state_t motor_state;
-uint8_t motor_read_flag = 0;
-
-
-
 //static void print_data(uint8_t *data, uint16_t len)
 //{
 //    for (int i = 0; i < len; i++)
@@ -951,7 +943,7 @@ void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x1C, 0x04, 0x00};
+    const uint8_t cmd[] = {0x1C, 0x04, 0x00, 0x011, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -964,7 +956,7 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x18, 0x04, 0x00};
+    const uint8_t cmd[] = {0x18, 0x04, 0x00, 0x011, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -977,27 +969,9 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x14, 0x04, 0x00};
+    const uint8_t cmd[] = {0x14, 0x04, 0x00, 0x011, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
-}
-
-
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
-{
-    if(hfdcan->Instance == FDCAN1 || hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
-    {
-        HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header1, fdcan1_rdata);
-        if (fdcan_rx_header1.DataLength != 0)
-        {
-            const uint16_t len = get_fdcan_data_size(fdcan_rx_header1.DataLength);
-            motor_state.motor.id = fdcan_rx_header1.Identifier;  // 获取电机 id
-#if READ_MOTOR_FLAG == 1 || READ_MOTOR_FLAG == 2 || READ_MOTOR_FLAG == 3
-            memcpy(&motor_state.data[0], &fdcan1_rdata[3], sizeof(motor_state_type) * 4);  // 获取电机状态数据
-#endif
-            motor_read_flag = 1;
-        }
-    }
 }
 
 

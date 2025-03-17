@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>2</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H730xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;../src/livelybot_fdcan</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;../src/livelybot_fdcan;..\src\convert;..\src\motor_control;..\src\motor;..\src\motor_many;..\test\test_motor</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,9 +405,29 @@
           <GroupName>Src</GroupName>
           <Files>
             <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\motor\motor.c</FilePath>
+            </File>
+            <File>
               <FileName>livelybot_fdcan.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\livelybot_fdcan\livelybot_fdcan.c</FilePath>
+            </File>
+            <File>
+              <FileName>convert.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\convert\convert.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\motor_control\motor_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_many.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\motor_many\motor_many.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -818,6 +838,16 @@
               <FileName>system_stm32h7xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/system_stm32h7xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Test</GroupName>
+          <Files>
+            <File>
+              <FileName>test_motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\test\test_motor\test_motor.c</FilePath>
             </File>
           </Files>
         </Group>
