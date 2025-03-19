@@ -104,6 +104,7 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
+    
     while (1)
     {
         /* USER CODE END WHILE */
@@ -122,6 +123,8 @@ int main(void)
             HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
 
             motor_print_state();
+			set_out_time_int16(&hfdcan1, 1, 1000);
+            // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);
         }
     }
     /* USER CODE END 3 */

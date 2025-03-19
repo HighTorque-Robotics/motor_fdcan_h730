@@ -5,4 +5,8 @@
 #include "convert.h"
 
 
+
+#define  TDATA_MANY_LEN  512
+
+
 #endif

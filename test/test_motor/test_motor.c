@@ -34,6 +34,6 @@ void test_motor_control(const uint8_t id)
         break;
     }
 
-    motor_set_state(&hfdcan1, TINT16, id);
+    motor_set_state(&hfdcan1, TFLOAT, id);
 }
 

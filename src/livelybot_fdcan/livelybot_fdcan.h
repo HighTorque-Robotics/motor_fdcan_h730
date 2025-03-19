@@ -19,6 +19,7 @@
 #define  MODE_TORQUE                0X8082
 #define  MODE_VOLTAGE               0X8083
 #define  MODE_CURRENT               0X8084
+#define  MODE_OUT_TIME              0X8085
 
 #define  MODE_POS_VEL_TQE           0X8090
 #define  MODE_POS_VEL_TQE_KP_KD     0X8093
@@ -59,6 +60,9 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos);
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel);
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
+
+/* 超时时间 */
+void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t);
 
 /* 位置、速度、力矩、PD控制 */
 void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
@@ -113,6 +117,9 @@ void set_many_pos_vel_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, i
 
 /* 一拖多 电机位置、速度、加速度控制 （梯形控制） */
 void set_many_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t acc1, int16_t pos2, int16_t vel2, int16_t acc2);
+
+/* 一拖多 超时时间 */
+void set_many_out_time(FDCAN_HandleTypeDef *fdcanHandle, int16_t t1, int16_t t2, int16_t t3, int16_t t4);
 
 /* 重设零点 */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
