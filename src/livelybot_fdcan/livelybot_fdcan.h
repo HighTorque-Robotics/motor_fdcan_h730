@@ -31,6 +31,9 @@
 
 
 
+void my_memcpy(void *p1, const void *p2, const int16_t len);
+
+
 /* dq µçÑ¹Ä£Ê½ */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt);
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt);

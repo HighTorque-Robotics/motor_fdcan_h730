@@ -4,9 +4,10 @@
 
 #include "my_fdcan.h"
 #include "convert.h"
+#include "livelybot_fdcan.h"
 
 
-#define  MOTOR_MAX_NUM  3
+#define  MOTOR_MAX_NUM  1
 
 
 

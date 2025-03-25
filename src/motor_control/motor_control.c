@@ -120,13 +120,13 @@ void motor_set_pos_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
     switch(type)
     {
     case TFLOAT:
-        set_pos_vel_tqe_float(fdcanHandle, id, pos1, vel2, NAN_FLOAT);
+        set_pos_vel_tqe_float(fdcanHandle, id, pos2, vel2, NAN_FLOAT);
         break;
     case TINT32:
-        set_pos_vel_tqe_int32(fdcanHandle, id, pos1, vel2, NAN_INT32);
+        set_pos_vel_tqe_int32(fdcanHandle, id, pos2, vel2, NAN_INT32);
         break;
     case TINT16:
-        set_pos_vel_tqe_int16(fdcanHandle, id, pos1, vel2, NAN_INT16);
+        set_pos_vel_tqe_int16(fdcanHandle, id, pos2, vel2, NAN_INT16);
         break;
     default:
         break;
@@ -148,13 +148,13 @@ void motor_set_pos_vel_MAXtqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_
     switch(type)
     {
     case TFLOAT:
-        set_pos_vel_tqe_float(fdcanHandle, id, pos1, vel2, tqe2);
+        set_pos_vel_tqe_float(fdcanHandle, id, pos2, vel2, tqe2);
         break;
     case TINT32:
-        set_pos_vel_tqe_int32(fdcanHandle, id, pos1, vel2, tqe2);
+        set_pos_vel_tqe_int32(fdcanHandle, id, pos2, vel2, tqe2);
         break;
     case TINT16:
-        set_pos_vel_tqe_int16(fdcanHandle, id, pos1, vel2, tqe2);
+        set_pos_vel_tqe_int16(fdcanHandle, id, pos2, vel2, tqe2);
         break;
     default:
         break;
@@ -175,13 +175,13 @@ void motor_set_pos_velmax_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_
     switch(type)
     {
     case TFLOAT:
-        set_pos_velmax_acc_float(fdcanHandle, id, pos1, vel2, acc2);
+        set_pos_velmax_acc_float(fdcanHandle, id, pos2, vel2, acc2);
         break;
     case TINT32:
-        set_pos_velmax_acc_int32(fdcanHandle, id, pos1, vel2, acc2);
+        set_pos_velmax_acc_int32(fdcanHandle, id, pos2, vel2, acc2);
         break;
     case TINT16:
-        set_pos_velmax_acc_int16(fdcanHandle, id, pos1, vel2, acc2);
+        set_pos_velmax_acc_int16(fdcanHandle, id, pos2, vel2, acc2);
         break;
     default:
         break;
@@ -221,18 +221,21 @@ void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_ty
     const float tqe1 = tqe_adjust(tqe, motor_type);
     const float pos2 = pos_float2int(pos1, type);
     const float vel2 = vel_float2int(vel1, type);
-    const float tqe2 = tqe_float2int(tqe2, type);
+    const float tqe2 = tqe_float2int(tqe1, type);
+
+    const float kp2 = pid_float2int(kp, type);
+    const float kd2 = pid_float2int(kd, type);
 
     switch(type)
     {
     case TFLOAT:
-        set_pos_vel_tqe_pd_float(fdcanHandle, id, pos2, vel2, tqe2, kp, kd);
+        set_pos_vel_tqe_pd_float(fdcanHandle, id, pos2, vel2, tqe2, kp2, kd2);
         break;
     case TINT32:
-        set_pos_vel_tqe_pd_int32(fdcanHandle, id, pos2, vel2, tqe2, kp, kd);
+        set_pos_vel_tqe_pd_int32(fdcanHandle, id, pos2, vel2, tqe2, kp2, kd2);
         break;
     case TINT16:
-        set_pos_vel_tqe_pd_int16(fdcanHandle, id, pos2, vel2, tqe2, kp, kd);
+        set_pos_vel_tqe_pd_int16(fdcanHandle, id, pos2, vel2, tqe2, kp2, kd2);
         break;
     default:
         break;

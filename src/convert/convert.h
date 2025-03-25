@@ -33,10 +33,10 @@ typedef enum
 
 typedef enum  // 数据类型
 {
-    TINT8 = 0,
-    TINT16,
+    TFLOAT = 0,
     TINT32,
-    TFLOAT,
+    TINT16,
+    TINT8,
 } data_type_t;
 
 
