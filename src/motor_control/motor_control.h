@@ -6,9 +6,6 @@
 #include "convert.h"
 
 
-#define  MOTOR_DATA_TYPE_FLAG  TURNS
-
-
 void motor_set_dq_vlot(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float volt);
 void motor_set_dq_current(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float cur);
 void motor_set_pos(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos);

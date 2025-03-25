@@ -6,6 +6,10 @@
 #include "math.h"
 
 
+#define  MOTOR_DATA_TYPE_FLAG  TURNS
+#define  BROADCAST_ID  0x7F
+
+
 #if 1
 #define  CONVERT_POS_VEL_ERR
 #else
@@ -89,6 +93,10 @@ float vel_int2float(const float in_data, const data_type_t type);
 float tqe_int2float(const float in_data, const data_type_t type);
 float acc_int2float(const float in_data, const data_type_t type);
 float pid_int2float(const float in_data, const data_type_t type);
+
+
+/* Êý¾Ý°áÔË */
+void my_memcpy(void *p1, const void *p2, const int16_t len);
 
 
 #endif

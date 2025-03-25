@@ -1,5 +1,8 @@
 #include "convert.h"
 
+#ifdef __MICROLIB  // 有无启用MicroLIB库
+#include <string.h>
+#endif
 
 
 static int16_t int16_limit(const int32_t data)
@@ -279,3 +282,26 @@ float pid_int2float(const float in_data, const data_type_t type)
 {
     return data_int2float(in_data, type, 1.0f, 10.0f, 1000.0f);
 }
+
+
+
+
+void my_memcpy(void *p1, const void *p2, const int16_t len)
+{
+    if (len <= 0)
+    {
+        return;
+    }
+
+#ifdef __MICROLIB  // 有无启用MicroLIB库
+    memcpy(p1, p2, len);
+#else
+    uint8_t *p11 = (uint8_t *)p1;
+    const uint8_t *p22 = (uint8_t *)p2;
+    for (int i = 0; i < len; i++)
+    {
+        p11[i] = p22[i];
+    }
+#endif
+}
+

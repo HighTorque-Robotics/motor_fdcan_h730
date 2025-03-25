@@ -3,7 +3,7 @@
 
 
 #include "main.h"
-
+#include "convert.h"
 
 
 /* 各个数据类型的无限制 */
@@ -29,9 +29,6 @@
 #define  MODE_POS_VEL_RKP_RKD       0X80A8
 #define  MODE_POS_VEL_ACC           0X80AD
 
-
-
-void my_memcpy(void *p1, const void *p2, const int16_t len);
 
 
 /* dq 电压模式 */
@@ -93,36 +90,6 @@ void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol);
 
 /* 周期返回电机位置、速度、力矩数据(返回数据格式和使用 0x17，0x01 指令获取的格式一样) */
 void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms);
-
-/* 一拖多 位置控制 */
-void set_many_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t pos2, int16_t pos3, int16_t pos4);
-
-/* 一拖多 速度控制 */
-void set_many_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t vel1, int16_t vel2, int16_t vel3, int16_t vel4);
-
-/* 一拖多 力矩控制 */
-void set_many_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t tqe1, int16_t tqe2, int16_t tqe3, int16_t tqe4);
-
-/* 一拖多 电压控制 */
-void set_many_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t volt1, int16_t volt2, int16_t volt3, int16_t volt4);
-
-/* 一拖多 电流控制 */
-void set_many_current_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t current1, int16_t current2, int16_t current3, int16_t current4);
-
-/* 一拖多 电机位置、速度、力矩控制 */
-void set_many_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t tqe1, int16_t pos2, int16_t vel2, int16_t tqe2);
-
-/* 一拖多 电机位置、速度、力矩、PD控制 */
-void set_many_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t tqe1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t vel2, int16_t tqe2, int16_t rkp2, int16_t rkd2);
-
-/* 一拖多 电机位置、速度、PD控制 */
-void set_many_pos_vel_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t rkp1, int16_t rkd1, int16_t pos2, int16_t vel2, int16_t rkp2, int16_t rkd2);
-
-/* 一拖多 电机位置、速度、加速度控制 （梯形控制） */
-void set_many_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t pos1, int16_t vel1, int16_t acc1, int16_t pos2, int16_t vel2, int16_t acc2);
-
-/* 一拖多 超时时间 */
-void set_many_out_time(FDCAN_HandleTypeDef *fdcanHandle, int16_t t1, int16_t t2, int16_t t3, int16_t t4);
 
 /* 重设零点 */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
