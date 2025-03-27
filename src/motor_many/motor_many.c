@@ -6,13 +6,7 @@
 
 
 
-many_data_s many_data_port1;
-
-
-
-
-
-void motor_many_volt(many_data_s *p_many_data, const uint8_t id, const float vol)
+void motor_many_dq_volt(many_data_s *p_many_data, const uint8_t id, const float vol)
 {
     const int16_t vol_int16 = vol_float2int(vol, TINT16);
     const uint16_t index = id - 1;
@@ -30,7 +24,7 @@ void motor_many_volt(many_data_s *p_many_data, const uint8_t id, const float vol
 }
 
 
-void motor_many_current(many_data_s *p_many_data, const uint8_t id, const float cur)
+void motor_many_dq_current(many_data_s *p_many_data, const uint8_t id, const float cur)
 {
     const int16_t cur_int16 = cur_float2int(cur, TINT16);
     const uint16_t index = id - 1;
@@ -50,7 +44,7 @@ void motor_many_current(many_data_s *p_many_data, const uint8_t id, const float 
 
 void motor_many_pos(many_data_s *p_many_data, const uint8_t id, const float pos)
 {
-    const int16_t pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const uint16_t index = id - 1;
 
@@ -69,7 +63,7 @@ void motor_many_pos(many_data_s *p_many_data, const uint8_t id, const float pos)
 
 void motor_many_vel(many_data_s *p_many_data, const uint8_t id, const float vel)
 {
-    const int16_t vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
 
@@ -106,8 +100,8 @@ void motor_many_tqe(many_data_s *p_many_data, const uint8_t id, const float tqe)
 
 void motor_many_pos_vel(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel)
 {
-    const int16_t pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const int16_t vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
@@ -129,10 +123,10 @@ void motor_many_pos_vel(many_data_s *p_many_data, const uint8_t id, const float 
 }
 
 
-void motor_many_pos_vel_tqe(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe)
+void motor_many_pos_vel_MAXtqe(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe)
 {
-    const int16_t pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const int16_t vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const int16_t tqe_int16 = tqe_float2int(tqe, TINT16);
@@ -193,9 +187,9 @@ void motor_many_pos_vel_tqe_kp_kd(many_data_s *p_many_data, const uint8_t id, co
     const int16_t kd_int16 = pid_float2int(kd, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_ACC)
+    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
     {
-        p_many_data->mode = MODE_POS_VEL_ACC;
+        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_kd_s); i++)
         {
             p_many_data->pos_vel_tqe_kp_kd[i].pos = NAN_INT16;
@@ -226,9 +220,9 @@ void motor_many_pos_vel_tqe_kp_ki_kd(many_data_s *p_many_data, const uint8_t id,
     const int16_t kd_int16 = pid_float2int(kd, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_ACC)
+    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KI_KD)
     {
-        p_many_data->mode = MODE_POS_VEL_ACC;
+        p_many_data->mode = MODE_POS_VEL_TQE_KP_KI_KD;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s); i++)
         {
             p_many_data->pos_vel_tqe_kp_ki_kd[i].pos = NAN_INT16;

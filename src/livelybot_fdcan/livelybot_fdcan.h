@@ -13,24 +13,6 @@
 #define  NAN_INT8   0x80
 
 
-
-#define  MODE_POSITION              0X8080
-#define  MODE_VELOCITY              0X8081
-#define  MODE_TORQUE                0X8082
-#define  MODE_VOLTAGE               0X8083
-#define  MODE_CURRENT               0X8084
-#define  MODE_OUT_TIME              0X8085
-
-#define  MODE_POS_VEL_TQE           0X8090
-#define  MODE_POS_VEL_TQE_KP_KD     0X8093
-#define  MODE_POS_VEL_TQE_KP_KI_KD  0X8098
-#define  MODE_POS_VEL_KP_KD         0X809E
-#define  MODE_POS_VEL_TQE_RKP_RKD   0X80A3
-#define  MODE_POS_VEL_RKP_RKD       0X80A8
-#define  MODE_POS_VEL_ACC           0X80AD
-
-
-
 /* dq µçÑ¹Ä£Ê½ */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt);
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt);

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H730xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;../src/livelybot_fdcan;..\src\convert;..\src\motor_control;..\src\motor;..\src\motor_many;..\test\test_motor</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/my_fdcan;../src/livelybot_fdcan;..\src\convert;..\src\motor_control;..\src\motor;..\src\motor_many;..\test\test_motor;..\test\test_motor_many</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -848,6 +848,11 @@
               <FileName>test_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\test\test_motor\test_motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_motor_many.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\test\test_motor_many\test_motor_many.c</FilePath>
             </File>
           </Files>
         </Group>

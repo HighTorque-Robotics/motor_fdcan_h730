@@ -26,8 +26,10 @@
 /* USER CODE BEGIN Includes */
 #include "my_fdcan.h"
 #include "motor_control.h"
-#include "test_motor.h"
 #include "motor.h"
+
+#include "test_motor.h"
+#include "test_motor_many.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,7 +116,8 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
 
-            test_motor_control(1);
+            // test_motor_control(1);
+            test_motor_many();
         }
 
         if (HAL_GetTick() - tick_1000ms >= 1000)
