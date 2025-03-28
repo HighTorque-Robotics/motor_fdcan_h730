@@ -98,6 +98,23 @@ void motor_many_tqe(many_data_s *p_many_data, const uint8_t id, const float tqe)
 }
 
 
+void motor_many_time_out(many_data_s *p_many_data, const uint8_t id, const int16_t t_ms)
+{
+    const uint16_t index = id - 1;
+
+    if (p_many_data->mode != MODE_TIME_OUT)
+    {
+        p_many_data->mode = MODE_TIME_OUT;
+        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
+        {
+            p_many_data->timeout[i] = 0;
+        }
+    }
+
+    p_many_data->timeout[index] = t_ms;
+}
+
+
 void motor_many_pos_vel(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel)
 {
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);

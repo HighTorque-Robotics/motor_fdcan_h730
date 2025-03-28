@@ -94,6 +94,7 @@ void motor_many_dq_current(many_data_s *p_many_data, const uint8_t id, const flo
 void motor_many_pos(many_data_s *p_many_data, const uint8_t id, const float pos);
 void motor_many_vel(many_data_s *p_many_data, const uint8_t id, const float vel);
 void motor_many_tqe(many_data_s *p_many_data, const uint8_t id, const float tqe);
+void motor_many_time_out(many_data_s *p_many_data, const uint8_t id, const int16_t t_ms);
 void motor_many_pos_vel(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel);
 void motor_many_pos_vel_MAXtqe(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe);
 void motor_many_pos_vel_acc(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float acc);

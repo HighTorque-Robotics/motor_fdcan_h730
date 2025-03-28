@@ -785,25 +785,25 @@ void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
 }
 
 
-/**
- * @brief 电机一拖多 超时时间设置 电机超过超时时间没接受到新指令，电机进入刹车模式
- * @param fdcanHandle &hfdcanx
- * @param t1 电机1的超时时间，单位：1ms
- * @param t2 电机2的超时时间，单位：1ms
- * @param t3 电机3的超时时间，单位：1ms
- * @param t4 电机4的超时时间，单位：1ms
- */
-void set_many_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t t1, int16_t t2, int16_t t3, int16_t t4)
-{
-    static uint8_t cmd[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x17, 0x01};
+// /**
+//  * @brief 电机一拖多 超时时间设置 电机超过超时时间没接受到新指令，电机进入刹车模式
+//  * @param fdcanHandle &hfdcanx
+//  * @param t1 电机1的超时时间，单位：1ms
+//  * @param t2 电机2的超时时间，单位：1ms
+//  * @param t3 电机3的超时时间，单位：1ms
+//  * @param t4 电机4的超时时间，单位：1ms
+//  */
+// void set_many_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t t1, int16_t t2, int16_t t3, int16_t t4)
+// {
+//     static uint8_t cmd[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x17, 0x01};
 
-    my_memcpy(&cmd[0], &t1, sizeof(int16_t));
-    my_memcpy(&cmd[2], &t2, sizeof(int16_t));
-    my_memcpy(&cmd[4], &t3, sizeof(int16_t));
-    my_memcpy(&cmd[6], &t4, sizeof(int16_t));
+//     my_memcpy(&cmd[0], &t1, sizeof(int16_t));
+//     my_memcpy(&cmd[2], &t2, sizeof(int16_t));
+//     my_memcpy(&cmd[4], &t3, sizeof(int16_t));
+//     my_memcpy(&cmd[6], &t4, sizeof(int16_t));
 
-    fdcan_send(fdcanHandle, 0X8085, cmd, sizeof(cmd));
-}
+//     fdcan_send(fdcanHandle, 0X8085, cmd, sizeof(cmd));
+// }
 
 
 /**

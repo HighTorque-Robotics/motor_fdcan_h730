@@ -81,6 +81,24 @@ static void motor_process_state(const uint8_t id, const uint8_t *p_data, const u
         motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
         motor_state[id_index].fault = (uint8_t)p_data[21];
     }
+    else if ((id >> 8) <= MANY_MOTOR_SIZE && len == 8)
+    {
+        int16_t pos = 0;
+        int16_t vel = 0;
+        int16_t tqe = 0;
+
+        my_memcpy((uint8_t *)&pos, p_data + 5, sizeof(int16_t));
+        my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int16_t));
+        my_memcpy((uint8_t *)&tqe, p_data + 9, sizeof(int16_t));
+
+        motor_state[id_index].mode = p_data[0];
+        motor_state[id_index].fault =p_data[1];
+
+        motor_state[id_index].position = pos_int2float(pos, TINT16);
+        motor_state[id_index].velocity = vel_int2float(vel, TINT16);
+        const float tqe_temp = tqe_int2float(tqe, TINT16);
+        motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
+    }
 }
 
 

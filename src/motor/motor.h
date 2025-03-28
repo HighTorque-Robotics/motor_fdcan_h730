@@ -5,6 +5,7 @@
 #include "my_fdcan.h"
 #include "convert.h"
 #include "livelybot_fdcan.h"
+#include "motor_many.h"
 
 
 #define  MOTOR_MAX_NUM  1

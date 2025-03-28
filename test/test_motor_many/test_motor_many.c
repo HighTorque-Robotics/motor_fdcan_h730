@@ -4,9 +4,22 @@
 many_data_s many_data_port1;
 
 
+void test_time_out(int16_t t_ms)
+{
+    for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
+    {
+        motor_many_time_out(&many_data_port1, id, t_ms);
+    }
+
+    motor_many_send(&hfdcan1, &many_data_port1);
+    motor_many_send(&hfdcan1, &many_data_port1);
+    motor_many_send(&hfdcan1, &many_data_port1);
+}
+
+
 void test_motor_many()
 {
-    const uint8_t mode = 8;
+    const uint8_t mode = 3;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
