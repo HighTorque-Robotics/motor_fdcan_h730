@@ -5,7 +5,7 @@
 void test_motor_control(const uint8_t id)
 {
     const uint8_t mode = 8;
-    const data_type_t type = 2;
+    const data_type_t type = TINT32;
 
     switch (mode)
     {
@@ -34,7 +34,7 @@ void test_motor_control(const uint8_t id)
         motor_set_pos_velmax_acc(&hfdcan1, type, id, 0.1, 0.5, 0.1);
         break;
     case 8:
-        motor_set_pos_vel_tqe_kp_kd(&hfdcan1, type, id, 0.1, 0.1, 0, 1, 1, M5047_36);
+        motor_set_pos_vel_tqe_kp_kd(&hfdcan1, type, id, 0, 0, 0, 0, 0, M5047_36);
         break;
     // case 7:
     // {

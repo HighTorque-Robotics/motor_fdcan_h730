@@ -106,18 +106,29 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
-    test_time_out(1000);
+    // test_time_out(1000);
     while (1)
     {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
+
+        static uint32_t tick_2ms = 0;
+        if (HAL_GetTick() - tick_2ms >= 2)
+        {
+            tick_2ms = HAL_GetTick();
+            
+            
+            test_motor_many();
+            static uint8_t tdata[8] = {0};
+		}
+
         if (HAL_GetTick() - tick_100ms >= 100)
         {
             tick_100ms = HAL_GetTick();
 
             // test_motor_control(1);
-            test_motor_many();
+            // test_motor_many();
         }
 
         if (HAL_GetTick() - tick_1000ms >= 1000)
@@ -125,7 +136,7 @@ int main(void)
             tick_1000ms = HAL_GetTick();
             HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
 
-            motor_print_state();
+            // motor_print_state();
             // set_out_time_int16(&hfdcan1, 1, 1000);
             // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);
         }

@@ -6,7 +6,7 @@
 #include "my_fdcan.h"
 
 
-#define  MANY_MOTOR_SIZE  2  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
+#define  MANY_MOTOR_SIZE  9  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
 
 #if MANY_MOTOR_SIZE > 0 && MNAY_MOTOR_SIZE <= 30
 #define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_ki_kd_s))

@@ -316,14 +316,42 @@ static uint8_t get_motor_data_len(uint16_t size)
 }
 
 
+static uint8_t get_mode_data_len(uint8_t mode)
+{
+    switch(mode)
+    {
+    case MODE_POSITION:
+    case MODE_VELOCITY:
+    case MODE_TORQUE:  
+    case MODE_VOLTAGE: 
+    case MODE_CURRENT:
+    case MODE_TIME_OUT:
+        return 2;
+    case MODE_POS_VEL_TQE:
+    case MODE_POS_VEL_ACC:
+        return 6;
+    case MODE_POS_VEL_KP_KD:
+    case MODE_POS_VEL_RKP_RKD:
+        return 8;
+    case MODE_POS_VEL_TQE_KP_KD:
+    case MODE_POS_VEL_TQE_RKP_RKD:
+        return 10;
+    case MODE_POS_VEL_TQE_KP_KI_KD:
+        return 12;
+    }
+	
+	return 0;
+}
+
 
 void motor_many_send(FDCAN_HandleTypeDef *fdcanHandle, many_data_s *p_many_data)
 {
     static uint8_t cmd[64] = {0};
-    const uint8_t read_state_cmd1[] = {0xFF, 0xFF};
+    // const uint8_t read_state_cmd1[] = {0xFF, 0xFF};
+    const uint8_t read_state_cmd1[] = {0x17, 0x01};
     uint8_t id = p_many_data->mode;
 
-    uint16_t remaining_len = MANY_DATA_BUF_MAX_LEN;
+    uint16_t remaining_len = get_mode_data_len(id) * MANY_MOTOR_SIZE;
     uint8_t data_len_max = get_data_max(id);
     uint8_t *data = p_many_data->data;
 
