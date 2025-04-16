@@ -1,4 +1,5 @@
 #include "motor_control.h"
+#include "motor.h"
 
 
 
@@ -88,9 +89,9 @@ void motor_set_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, con
 }
 
 
-void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float tqe, const motor_type_t motor_type)
+void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float tqe)
 {
-    const float temp1 = tqe_adjust(tqe, motor_type);
+    const float temp1 = tqe_adjust(tqe, motor_get_model1(fdcanHandle, id));
     const float temp2 = tqe_float2int(temp1, type);
 
     switch(type)
@@ -135,11 +136,11 @@ void motor_set_pos_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 
 
 void motor_set_pos_vel_MAXtqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
-                              const float pos, const float vel, const float tqe, const motor_type_t motor_type)
+                              const float pos, const float vel, const float tqe)
 {
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe1 = tqe_adjust(tqe, motor_type);
+    const float tqe1 = tqe_adjust(tqe, motor_get_model1(fdcanHandle, id));
     const float pos2 = pos_float2int(pos1, type);
     const float vel2 = vel_float2int(vel1, type);
     const float tqe2 = tqe_float2int(tqe1, type);
@@ -214,11 +215,11 @@ void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 
 
 void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
-                                 const float pos, const float vel, const float tqe, const float kp, const float kd, const motor_type_t motor_type)
+                                 const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe1 = tqe_adjust(tqe, motor_type);
+    const float tqe1 = tqe_adjust(tqe, motor_get_model1(fdcanHandle, id));
     const float pos2 = pos_float2int(pos1, type);
     const float vel2 = vel_float2int(vel1, type);
     const float tqe2 = tqe_float2int(tqe1, type);

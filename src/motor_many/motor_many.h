@@ -83,24 +83,24 @@ typedef struct
         uint8_t data[MANY_DATA_BUF_MAX_LEN];
     };
     uint8_t mode;
-} many_data_s;
+} many_data_s, *p_many_data_s;
 #pragma pack()
 
 
 
 
-void motor_many_dq_volt(many_data_s *p_many_data, const uint8_t id, const float vol);
-void motor_many_dq_current(many_data_s *p_many_data, const uint8_t id, const float cur);
-void motor_many_pos(many_data_s *p_many_data, const uint8_t id, const float pos);
-void motor_many_vel(many_data_s *p_many_data, const uint8_t id, const float vel);
-void motor_many_tqe(many_data_s *p_many_data, const uint8_t id, const float tqe);
-void motor_many_time_out(many_data_s *p_many_data, const uint8_t id, const int16_t t_ms);
-void motor_many_pos_vel(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel);
-void motor_many_pos_vel_MAXtqe(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe);
-void motor_many_pos_vel_acc(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float acc);
-void motor_many_pos_vel_tqe_kp_kd(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
-void motor_many_pos_vel_tqe_kp_ki_kd(many_data_s *p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd);
+void motor_many_dq_volt(p_many_data_s p_many_data, const uint8_t id, const float vol);
+void motor_many_dq_current(p_many_data_s p_many_data, const uint8_t id, const float cur);
+void motor_many_pos(p_many_data_s p_many_data, const uint8_t id, const float pos);
+void motor_many_vel(p_many_data_s p_many_data, const uint8_t id, const float vel);
+void motor_many_tqe(p_many_data_s p_many_data, const uint8_t id, const float tqe);
+void motor_many_time_out(p_many_data_s p_many_data, const uint8_t id, const int16_t t_ms);
+void motor_many_pos_vel(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel);
+void motor_many_pos_vel_MAXtqe(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe);
+void motor_many_pos_vel_acc(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float acc);
+void motor_many_pos_vel_tqe_kp_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
+void motor_many_pos_vel_tqe_kp_ki_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd);
 
-void motor_many_send(FDCAN_HandleTypeDef *fdcanHandle, many_data_s *p_many_data);
+void motor_many_send(FDCAN_HandleTypeDef *fdcanHandle, p_many_data_s p_many_data);
 
 #endif

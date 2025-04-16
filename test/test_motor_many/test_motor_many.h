@@ -2,6 +2,7 @@
 #define _TEST_MOTOR_MANY_H
 
 
+#include "motor.h"
 #include "motor_many.h"
 #include "fdcan.h"
 

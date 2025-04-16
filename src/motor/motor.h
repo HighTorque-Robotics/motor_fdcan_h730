@@ -8,7 +8,7 @@
 #include "motor_many.h"
 
 
-#define  MOTOR_MAX_NUM  1
+#define  MOTOR_MAX_NUM  2
 
 
 
@@ -21,14 +21,16 @@ typedef struct
     uint8_t fault;
     const uint8_t id;
     const motor_type_t model;  // µç»úÐÍºÅ
-} motor_state_s;
+} motor_state_s, *p_motor_state_s;
 
 
-
-extern motor_state_s motor_state[MOTOR_MAX_NUM];
+extern many_data_s many_data_port1;
+extern many_data_s many_data_port2;
 
 
 void motor_print_state(void);
+uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+uint8_t motor_get_model2(p_many_data_s p_motor_state, uint8_t id);
 
 
 #endif

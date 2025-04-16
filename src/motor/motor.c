@@ -1,31 +1,117 @@
 #include "motor.h"
 
 
-motor_state_s motor_state[MOTOR_MAX_NUM] =
+static motor_state_s motor_state_port1[MOTOR_MAX_NUM] =
 {
     {
         .id = 1,
         .model = M5047_36,
     },
+
+    {
+        .id = 2,
+        .model = M5047_36,
+    }
 };
+
+
+static motor_state_s motor_state_port2[MOTOR_MAX_NUM] =
+{
+    {
+        .id = 1,
+        .model = M5047_36,
+    },
+
+    {
+        .id = 2,
+        .model = M5047_36,
+    }
+};
+
+
+many_data_s many_data_port1;
+many_data_s many_data_port2;
+
+
 
 
 void motor_print_state()
 {
+    printf("\r\n");
     for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
     {
-        //        printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state[i].id, motor_state[i].mode, motor_state[i].fault,
-        //               motor_state[i].position, motor_state[i].velocity, motor_state[i].torque);
+        printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port1[i].id, motor_state_port1[i].mode, motor_state_port1[i].fault,
+                        motor_state_port1[i].position, motor_state_port1[i].velocity, motor_state_port1[i].torque);
+    }
 
-        printf("%d, %d, %d, %.3lf, %.3lf, %.3lf\r\n", motor_state[i].id, motor_state[i].mode, motor_state[i].fault,
-               motor_state[i].position, motor_state[i].velocity, motor_state[i].torque);
+    printf("\r\n");
+    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
+    {
+        printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port2[i].id, motor_state_port2[i].mode, motor_state_port2[i].fault,
+                        motor_state_port2[i].position, motor_state_port2[i].velocity, motor_state_port2[i].torque);
     }
 }
 
 
-
-static void motor_process_state(const uint8_t id, const uint8_t *p_data, const uint8_t len)
+static p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 {
+    if (fdcanHandle->Instance == FDCAN1)
+    {
+        return motor_state_port1;
+    }
+    else if (fdcanHandle->Instance == FDCAN2)
+    {
+        return motor_state_port2;
+    }
+	
+	return NULL;
+}
+
+
+static p_motor_state_s motor_get_state_pointer2(p_many_data_s p_many_data)
+{
+    if (p_many_data == &many_data_port1)
+    {
+        return motor_state_port1;
+    }
+    else if (p_many_data == &many_data_port2)
+    {
+        return motor_state_port2;
+    }
+	
+	return NULL;
+}
+
+
+uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    if (id < 0 || id > MOTOR_MAX_NUM)
+    {
+        return MNULL;
+    }
+
+    const p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
+    return p_motor_state[id - 1].model;
+}
+
+
+uint8_t motor_get_model2(p_many_data_s p_many_data, uint8_t id)
+{
+    if (id < 0 || id > MOTOR_MAX_NUM)
+    {
+        return MNULL;
+    }
+
+    const p_motor_state_s p_motor_state = motor_get_state_pointer2(p_many_data);
+	const motor_type_t model = p_motor_state[id - 1].model;
+    return model;
+}
+
+
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint8_t *p_data, const uint8_t len)
+{
+    p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
+
     const uint8_t id_index = id - 1;
     if (p_data[0] == 0x24 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT16 ½âÎö
             && p_data[11] == 0x21 && p_data[12] == 0x0F)
@@ -38,12 +124,12 @@ static void motor_process_state(const uint8_t id, const uint8_t *p_data, const u
         my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int16_t));
         my_memcpy((uint8_t *)&tqe, p_data + 9, sizeof(int16_t));
 
-        motor_state[id_index].mode = p_data[3];
-        motor_state[id_index].position = pos_int2float(pos, TINT16);
-        motor_state[id_index].velocity = vel_int2float(vel, TINT16);
+        p_motor_state[id_index].mode = p_data[3];
+        p_motor_state[id_index].position = pos_int2float(pos, TINT16);
+        p_motor_state[id_index].velocity = vel_int2float(vel, TINT16);
         const float tqe_temp = tqe_int2float(tqe, TINT16);
-        motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
-        motor_state[id_index].fault = (uint8_t)p_data[13];
+        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
+        p_motor_state[id_index].fault = (uint8_t)p_data[13];
     }
     else if (p_data[0] == 0x28 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT32 ½âÎö
              && p_data[19] == 0x21 && p_data[20] == 0x0F)
@@ -56,12 +142,12 @@ static void motor_process_state(const uint8_t id, const uint8_t *p_data, const u
         my_memcpy((uint8_t *)&vel, p_data + 11, sizeof(int32_t));
         my_memcpy((uint8_t *)&tqe, p_data + 15, sizeof(int32_t));
 
-        motor_state[id_index].mode = p_data[3];
-        motor_state[id_index].position = pos_int2float(pos, TINT32);
-        motor_state[id_index].velocity = vel_int2float(vel, TINT32);
+        p_motor_state[id_index].mode = p_data[3];
+        p_motor_state[id_index].position = pos_int2float(pos, TINT32);
+        p_motor_state[id_index].velocity = vel_int2float(vel, TINT32);
         const float tqe_temp = tqe_int2float(tqe, TINT32);
-        motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
-        motor_state[id_index].fault = (uint8_t)p_data[21];
+        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
+        p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
     else if (p_data[0] == 0x2C && p_data[1] == 0x04 && p_data[2] == 0x00  // TFLOAT ½âÎö
              && p_data[19] == 0x21 && p_data[20] == 0x0F)
@@ -74,12 +160,12 @@ static void motor_process_state(const uint8_t id, const uint8_t *p_data, const u
         my_memcpy((uint8_t *)&vel, p_data + 11, sizeof(float));
         my_memcpy((uint8_t *)&tqe, p_data + 15, sizeof(float));
 
-        motor_state[id_index].mode = p_data[3];
-        motor_state[id_index].position = pos_int2float(pos, TFLOAT);
-        motor_state[id_index].velocity = vel_int2float(vel, TFLOAT);
+        p_motor_state[id_index].mode = p_data[3];
+        p_motor_state[id_index].position = pos_int2float(pos, TFLOAT);
+        p_motor_state[id_index].velocity = vel_int2float(vel, TFLOAT);
         const float tqe_temp = tqe_int2float(tqe, TFLOAT);
-        motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
-        motor_state[id_index].fault = (uint8_t)p_data[21];
+        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
+        p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
     else if ((id >> 8) <= MANY_MOTOR_SIZE && len == 8)
     {
@@ -87,17 +173,17 @@ static void motor_process_state(const uint8_t id, const uint8_t *p_data, const u
         int16_t vel = 0;
         int16_t tqe = 0;
 
-        my_memcpy((uint8_t *)&pos, p_data + 5, sizeof(int16_t));
-        my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int16_t));
-        my_memcpy((uint8_t *)&tqe, p_data + 9, sizeof(int16_t));
+        my_memcpy((uint8_t *)&pos, p_data + 2, sizeof(int16_t));
+        my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
+        my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
 
-        motor_state[id_index].mode = p_data[0];
-        motor_state[id_index].fault =p_data[1];
+        p_motor_state[id_index].mode = p_data[0];
+        p_motor_state[id_index].fault = p_data[1];
 
-        motor_state[id_index].position = pos_int2float(pos, TINT16);
-        motor_state[id_index].velocity = vel_int2float(vel, TINT16);
+        p_motor_state[id_index].position = pos_int2float(pos, TINT16);
+        p_motor_state[id_index].velocity = vel_int2float(vel, TINT16);
         const float tqe_temp = tqe_int2float(tqe, TINT16);
-        motor_state[id_index].torque = tqe_restore(tqe_temp, motor_state[id_index].model);
+        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
     }
 }
 
@@ -113,7 +199,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         {
             const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-            motor_process_state(fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+            motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
         }
     }
 }

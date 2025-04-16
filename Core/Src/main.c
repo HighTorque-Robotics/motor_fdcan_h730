@@ -117,18 +117,18 @@ int main(void)
         if (HAL_GetTick() - tick_2ms >= 2)
         {
             tick_2ms = HAL_GetTick();
-            
-            
-            test_motor_many();
+
+
+            // test_motor_many();
             static uint8_t tdata[8] = {0};
-		}
+        }
 
         if (HAL_GetTick() - tick_100ms >= 100)
         {
             tick_100ms = HAL_GetTick();
 
             // test_motor_control(1);
-            // test_motor_many();
+            test_motor_many();
         }
 
         if (HAL_GetTick() - tick_1000ms >= 1000)
@@ -136,7 +136,7 @@ int main(void)
             tick_1000ms = HAL_GetTick();
             HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
 
-            // motor_print_state();
+            motor_print_state();
             // set_out_time_int16(&hfdcan1, 1, 1000);
             // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);
         }

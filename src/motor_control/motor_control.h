@@ -10,14 +10,14 @@ void motor_set_dq_vlot(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 void motor_set_dq_current(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float cur);
 void motor_set_pos(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos);
 void motor_set_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float vel);
-void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float tqe, const motor_type_t motor_type);
+void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float tqe);
 void motor_set_pos_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos, const float vel);
 void motor_set_pos_vel_MAXtqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
-                              const float pos, const float vel, const float tqe, const motor_type_t motor_type);
+                              const float pos, const float vel, const float tqe);
 void motor_set_pos_velmax_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc);
 void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float vel, const float acc);
 void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
-                                 const float pos, const float vel, const float tqe, const float kp, const float kd, const motor_type_t motor_type);
+                                 const float pos, const float vel, const float tqe, const float kp, const float kd);
 
 void motor_set_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id);
 
