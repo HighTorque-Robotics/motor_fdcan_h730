@@ -837,6 +837,19 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
+ * @brief 保存电机设置
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    static uint8_t cmd[] = {0x40, 0x01, 0x08, 0x64, 0x20, 0x72, 0x65, 0x73, 0x65, 0x74, 0x0A, 0x50};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
  * @brief 电机停止，注意：需让电机停止后再重置零位，否则无效
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID

@@ -79,6 +79,9 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 /* 保存设置 */
 void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
+/* 重启电机 */
+void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+
 /* 电机停止 */
 void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 

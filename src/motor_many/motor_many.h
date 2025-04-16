@@ -88,6 +88,15 @@ typedef struct
 
 
 
+typedef enum
+{
+    PNULL,
+    PORT1,
+    PORT2
+} port_t;
+
+
+
 
 void motor_many_dq_volt(p_many_data_s p_many_data, const uint8_t id, const float vol);
 void motor_many_dq_current(p_many_data_s p_many_data, const uint8_t id, const float cur);

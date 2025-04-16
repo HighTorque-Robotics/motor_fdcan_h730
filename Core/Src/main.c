@@ -24,12 +24,15 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "led.h"
 #include "my_fdcan.h"
 #include "motor_control.h"
+#include "motor_config.h"
 #include "motor.h"
 
 #include "test_motor.h"
 #include "test_motor_many.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,6 +110,8 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
     // test_time_out(1000);
+
+    motor_pos_reset(&hfdcan1, 1);
     while (1)
     {
         /* USER CODE END WHILE */
@@ -134,8 +139,8 @@ int main(void)
         if (HAL_GetTick() - tick_1000ms >= 1000)
         {
             tick_1000ms = HAL_GetTick();
-            HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
-
+            led_toggle();
+            
             motor_print_state();
             // set_out_time_int16(&hfdcan1, 1, 1000);
             // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);

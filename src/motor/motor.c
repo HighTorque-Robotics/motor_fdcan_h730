@@ -53,7 +53,7 @@ void motor_print_state()
 }
 
 
-static p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
+p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 {
     if (fdcanHandle->Instance == FDCAN1)
     {
@@ -68,7 +68,7 @@ static p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle
 }
 
 
-static p_motor_state_s motor_get_state_pointer2(p_many_data_s p_many_data)
+p_motor_state_s motor_get_state_pointer2(p_many_data_s p_many_data)
 {
     if (p_many_data == &many_data_port1)
     {
@@ -87,6 +87,7 @@ uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
+        led_toggle_err();
         return MNULL;
     }
 
@@ -99,6 +100,7 @@ uint8_t motor_get_model2(p_many_data_s p_many_data, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
+        led_toggle_err();
         return MNULL;
     }
 
@@ -106,6 +108,9 @@ uint8_t motor_get_model2(p_many_data_s p_many_data, uint8_t id)
 	const motor_type_t model = p_motor_state[id - 1].model;
     return model;
 }
+
+
+
 
 
 static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint8_t *p_data, const uint8_t len)
@@ -167,7 +172,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
         p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
-    else if ((id >> 8) <= MANY_MOTOR_SIZE && len == 8)
+    else if (id_index < MANY_MOTOR_SIZE && len == 8)
     {
         int16_t pos = 0;
         int16_t vel = 0;
@@ -184,6 +189,11 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].velocity = vel_int2float(vel, TINT16);
         const float tqe_temp = tqe_int2float(tqe, TINT16);
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
+    }
+    else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04
+        && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
+    {
+        p_motor_state[id_index].ack = 1;
     }
 }
 
