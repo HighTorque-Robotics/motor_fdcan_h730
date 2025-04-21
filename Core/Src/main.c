@@ -108,7 +108,7 @@ int main(void)
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
+    printf("姝ゅ伐绋嬪紩鑴氶厤缃�傜敤浜庨珮鎿庝富鎺ф澘 v1.6 鍙婁互涓婄増鏈琝r\n");
     // test_time_out(1000);
 
     motor_pos_reset(&hfdcan1, 1);

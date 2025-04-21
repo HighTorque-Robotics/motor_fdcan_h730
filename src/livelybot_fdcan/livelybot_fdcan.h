@@ -6,89 +6,89 @@
 #include "convert.h"
 
 
-/* ¸÷¸öÊı¾İÀàĞÍµÄÎŞÏŞÖÆ */
+/* å„ä¸ªæ•°æ®ç±»å‹çš„æ— é™åˆ¶ */
 #define  NAN_FLOAT  NAN
 #define  NAN_INT32  0x80000000
 #define  NAN_INT16  0x8000
 #define  NAN_INT8   0x80
 
 
-/* dq µçÑ¹Ä£Ê½ */
+/* dq ç”µå‹æ¨¡å¼ */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt);
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt);
 void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t volt);
 
-/* dq µçÁ÷Ä£Ê½ */
+/* dq ç”µæµæ¨¡å¼ */
 void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float current);
 void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t current);
 void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t current);
 
-/* Á¦¾Ø¿ØÖÆ */
+/* åŠ›çŸ©æ§åˆ¶ */
 void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque);
 void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque);
 void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque);
 
-/* Î»ÖÃ¡¢ËÙ¶ÈºÍÁ¦¾Ø¿ØÖÆ */
+/* ä½ç½®ã€é€Ÿåº¦å’ŒåŠ›çŸ©æ§åˆ¶ */
 void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque);
 void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque);
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque);
 
-/* Î»ÖÃ */
+/* ä½ç½® */
 void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos);
 void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos);
 void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos);
 
-/* ËÙ¶È */
+/* é€Ÿåº¦ */
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel);
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
-/* ³¬Ê±Ê±¼ä */
+/* è¶…æ—¶æ—¶é—´ */
 void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t);
 
-/* Î»ÖÃ¡¢ËÙ¶È¡¢Á¦¾Ø¡¢PD¿ØÖÆ */
+/* ä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©ã€PDæ§åˆ¶ */
 void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
 void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
 void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 
-/* Í£Ö¹Î»ÖÃ¡¢ËÙ¶È¡¢Á¦¾Ø¡¢PD¿ØÖÆ */
+/* åœæ­¢ä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©ã€PDæ§åˆ¶ */
 void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t stop_pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 
-/* ËÙ¶È¡¢ËÙ¶ÈÏŞÖÆ */
+/* é€Ÿåº¦ã€é€Ÿåº¦é™åˆ¶ */
 void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max);
 
-/* Î»ÖÃ¡¢ËÙ¶È¡¢¼ÓËÙ¶ÈÏŞÖÆ£¨ÌİĞÎ¿ØÖÆ£© */
+/* ä½ç½®ã€é€Ÿåº¦ã€åŠ é€Ÿåº¦é™åˆ¶ï¼ˆæ¢¯å½¢æ§åˆ¶ï¼‰ */
 void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc);
 void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc);
 void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
 
-/* ËÙ¶È¡¢¼ÓËÙ¶È¿ØÖÆ */
+/* é€Ÿåº¦ã€åŠ é€Ÿåº¦æ§åˆ¶ */
 void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc);
 void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc);
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc);
 
-/* vfoc¹Ì¶¨Ä£Ê½ */
+/* vfocå›ºå®šæ¨¡å¼ */
 void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol);
 
-/* ÖÜÆÚ·µ»Øµç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Á¦¾ØÊı¾İ(·µ»ØÊı¾İ¸ñÊ½ºÍÊ¹ÓÃ 0x17£¬0x01 Ö¸Áî»ñÈ¡µÄ¸ñÊ½Ò»Ñù) */
+/* å‘¨æœŸè¿”å›ç”µæœºä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©æ•°æ®(è¿”å›æ•°æ®æ ¼å¼å’Œä½¿ç”¨ 0x17ï¼Œ0x01 æŒ‡ä»¤è·å–çš„æ ¼å¼ä¸€æ ·) */
 void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms);
 
-/* ÖØÉèÁãµã */
+/* é‡è®¾é›¶ç‚¹ */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-/* ±£´æÉèÖÃ */
+/* ä¿å­˜è®¾ç½® */
 void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-/* ÖØÆôµç»ú */
+/* é‡å¯ç”µæœº */
 void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-/* µç»úÍ£Ö¹ */
+/* ç”µæœºåœæ­¢ */
 void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-/* µç»úÉ²³µ */
+/* ç”µæœºåˆ¹è½¦ */
 void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
-/* ¶ÁÈ¡µç»ú×´Ì¬ */
+/* è¯»å–ç”µæœºçŠ¶æ€ */
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);

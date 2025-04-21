@@ -1,26 +1,26 @@
-:: ¸ñÊ½»¯µ±Ç°ÎÄ¼þ¼ÐËùÓÐc¡¢c++´úÂë£¬ÐèÒª°²×°CoolFormat.exe²¢Ìí¼Óµ½»·¾³±äÁ¿
+:: æ ¼å¼åŒ–å½“å‰æ–‡ä»¶å¤¹æ‰€æœ‰cã€c++ä»£ç ï¼Œéœ€è¦å®‰è£…CoolFormat.exeå¹¶æ·»åŠ åˆ°çŽ¯å¢ƒå˜é‡
 
-:: Ê¹ÓÃUTF-8±àÂë
+:: ä½¿ç”¨UTF-8ç¼–ç 
 :: chcp 65001 >nul
 
 @echo off
 setlocal enabledelayedexpansion
 
-:: ÑéÖ¤¹¤¾ß´æÔÚÐÔ
+:: éªŒè¯å·¥å…·å­˜åœ¨æ€§
 where CoolFormat.exe >nul 2>nul
 if errorlevel 1 (
-    echo ´íÎó£ºCoolFormat.exeÎ´°²×°»òÎ´Ìí¼Óµ½PATH»·¾³±äÁ¿
+    echo é”™è¯¯ï¼šCoolFormat.exeæœªå®‰è£…æˆ–æœªæ·»åŠ åˆ°PATHçŽ¯å¢ƒå˜é‡
     pause
     exit /b 1
 )
 
-:: µÝ¹é´¦ÀíÎÄ¼þ
+:: é€’å½’å¤„ç†æ–‡ä»¶
 for /r %%i in (*.c *.cpp *.h *.hpp *.cc *.cxx) do (
-    echo ¸ñÊ½»¯: %%~nxi
+    echo æ ¼å¼åŒ–: %%~nxi
     :: echo CoolFormat.exe -f "%%i"
     CoolFormat.exe -f "%%i"
 )
 
-echo ËùÓÐC/C++ÎÄ¼þÒÑ¸ñÊ½»¯Íê³É
+echo æ‰€æœ‰C/C++æ–‡ä»¶å·²æ ¼å¼åŒ–å®Œæˆ
 :: pause
 

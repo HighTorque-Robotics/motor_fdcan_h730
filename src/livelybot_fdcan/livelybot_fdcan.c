@@ -14,18 +14,18 @@
 
 
 /**
- * @brief µçÑ¹¿ØÖÆ float
+ * @brief ç”µå‹æ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÑ¹£¬Àı£º0.3 -> 0.3v
+ * @param id ç”µæœºID
+ * @param volt ç”µå‹ï¼Œä¾‹ï¼š0.3 -> 0.3v
  */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt)
 {
-    //                          dqµçÑ¹Ä£Ê½    2¸öfloat      d                        q
+    //                          dqç”µå‹æ¨¡å¼    2ä¸ªfloat      d                        q
     static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x0E, 0x1a, 0x00, 0x00, 0x00, 0x00,  0x00, 0x00, 0x00, 0x00,
-                            //  ²éÑ¯Ö¸Áî
+                            //  æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            //  Õ¼Î»£¨fdcan£©
+                            //  å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -36,18 +36,18 @@ void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt)
 
 
 /**
- * @brief µçÑ¹¿ØÖÆ int32
+ * @brief ç”µå‹æ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÑ¹£¬µ¥Î»£º0.001V
+ * @param id ç”µæœºID
+ * @param volt ç”µå‹ï¼Œå•ä½ï¼š0.001V
  */
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt)
 {
-    //                   		 dqµçÑ¹Ä£Ê½   2¸ö32Î»      d                        q
+    //                   		 dqç”µå‹æ¨¡å¼   2ä¸ª32ä½      d                        q
     static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x0A, 0x1a, 0x00, 0x00, 0x00, 0x00,  0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            //  Õ¼Î»£¨fdcan£©
+                            //  å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -58,18 +58,18 @@ void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vol
 
 
 /**
- * @brief µçÑ¹¿ØÖÆ int16
+ * @brief ç”µå‹æ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÑ¹£¬µ¥Î»£º0.1V
+ * @param id ç”µæœºID
+ * @param volt ç”µå‹ï¼Œå•ä½ï¼š0.1V
  */
 void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t volt)
 {
-    //                   		dqµçÑ¹Ä£Ê½   2¸ö16Î»       d           q
+    //                   		dqç”µå‹æ¨¡å¼   2ä¸ª16ä½       d           q
     static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x06, 0x1a, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -80,18 +80,18 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol
 
 
 /**
- * @brief µçÁ÷¿ØÖÆ float
+ * @brief ç”µæµæ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÁ÷£¬Àı£º0.3 -> 0.3A
+ * @param id ç”µæœºID
+ * @param volt ç”µæµï¼Œä¾‹ï¼š0.3 -> 0.3A
  */
 void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float current)
 {
-    //                   		dqµçÁ÷Ä£Ê½   2¸ö32Î»       qµçÁ÷       			  dµçÁ÷
+    //                   		dqç”µæµæ¨¡å¼   2ä¸ª32ä½       qç”µæµ       			  dç”µæµ
     static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x0E, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -102,18 +102,18 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float cu
 
 
 /**
- * @brief µçÁ÷¿ØÖÆ int32
+ * @brief ç”µæµæ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÁ÷£¬µ¥Î»£º0.001A
+ * @param id ç”µæœºID
+ * @param volt ç”µæµï¼Œå•ä½ï¼š0.001A
  */
 void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t current)
 {
-    //                   		 dqµçÁ÷Ä£Ê½   2¸ö32Î»      qµçÁ÷       			   dµçÁ÷
+    //                   		 dqç”µæµæ¨¡å¼   2ä¸ª32ä½      qç”µæµ       			   dç”µæµ
     static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x0A, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -124,18 +124,18 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
 
 
 /**
- * @brief µçÁ÷¿ØÖÆ int16
+ * @brief ç”µæµæ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param volt µçÁ÷£¬µ¥Î»£º0.1A
+ * @param id ç”µæœºID
+ * @param volt ç”µæµï¼Œå•ä½ï¼š0.1A
  */
 void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t current)
 {
-    //                   		dqµçÁ÷Ä£Ê½   2¸ö16Î»      qµçÁ÷       dµçÁ÷       Õ¼Î»£¨fdcan£©
+    //                   		dqç”µæµæ¨¡å¼   2ä¸ª16ä½      qç”µæµ       dç”µæµ       å ä½ï¼ˆfdcanï¼‰
     static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x06, 0x1C, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -146,24 +146,24 @@ void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
 
 
 /**
- * @brief Á¦¾Ø¿ØÖÆ float
+ * @brief åŠ›çŸ©æ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param torque Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id ç”µæœºID
+ * @param torque åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
 {
-    //                     		  Î»ÖÃÄ£Ê½    float  6¸ö        Î»ÖÃ
+    //                     		  ä½ç½®æ¨¡å¼    float  6ä¸ª        ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0c, 0x06, 0x20, 0x00, 0x00,
-                            // 			ËÙ¶È                 	Á¦¾Ø
+                            // 			é€Ÿåº¦                 	åŠ›çŸ©
                             0xc0, 0x7f, 0x00, 0x00, 0x00, 0x00, 0xcd, 0xcc,
                             //			kp                	    kd
                             0xcc, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            //			×î´óÁ¦¾Ø
+                            //			æœ€å¤§åŠ›çŸ©
                             0x00, 0x00, 0x00, 0x00, 0xc0, 0x7f,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50
                            };
 
@@ -174,24 +174,24 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque
 
 
 /**
- * @brief Á¦¾Ø¿ØÖÆ int32
+ * @brief åŠ›çŸ©æ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
- * @param torque Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id id ç”µæœºID
+ * @param torque åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
 {
-    //                     Î»ÖÃÄ£Ê½    		 int32  6¸ö    	    Î»ÖÃ
+    //                     ä½ç½®æ¨¡å¼    		 int32  6ä¸ª    	    ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x08, 0x06, 0x20, 0x00, 0x00,
-                            //          ËÙ¶È                    Á¦¾Ø
+                            //          é€Ÿåº¦                    åŠ›çŸ©
                             0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             //          kp  					kd
                             0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            //          ×î´óÁ¦¾Ø
+                            //          æœ€å¤§åŠ›çŸ©
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50
                            };
 
@@ -202,20 +202,20 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torq
 
 
 /**
- * @brief Á¦¾Ø¿ØÖÆ int16
+ * @brief åŠ›çŸ©æ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
- * @param torque Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id id ç”µæœºID
+ * @param torque åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
 {
-    //                     		Î»ÖÃÄ£Ê½     int16   6¸ö        Î»ÖÃ
+    //                     		ä½ç½®æ¨¡å¼     int16   6ä¸ª        ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x04, 0x06, 0x20, 0x00, 0x80,
-                            //ËÙ¶È      Á¦¾Ø        kp          kd          ×î´óÁ¦¾Ø
+                            //é€Ÿåº¦      åŠ›çŸ©        kp          kd          æœ€å¤§åŠ›çŸ©
                             0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50,
                            };
 
@@ -226,20 +226,20 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torq
 
 
 /**
- * @brief µç»úÎ»ÖÃ-ËÙ¶È-Ç°À¡Á¦¾Ø(×î´óÁ¦¾Ø)¿ØÖÆ£¬floatĞÍ
+ * @brief ç”µæœºä½ç½®-é€Ÿåº¦-å‰é¦ˆåŠ›çŸ©(æœ€å¤§åŠ›çŸ©)æ§åˆ¶ï¼Œfloatå‹
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 1 È¦£¬Èç pos = 0.5 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 1 ×ª/Ãë£¬Èç vel = 0.5 ±íÊ¾ 0.5 ×ª/Ãë
- * @param torque ×î´óÁ¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 1 åœˆï¼Œå¦‚ pos = 0.5 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 1 è½¬/ç§’ï¼Œå¦‚ vel = 0.5 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param torque æœ€å¤§åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
 {
-    //                           Î»ÖÃÄ£Ê½     int32        Î»ÖÃ                    ËÙ¶È                    			  Á¦¾Ø                    Í£Ö¹Î»ÖÃ
+    //                           ä½ç½®æ¨¡å¼     int32        ä½ç½®                    é€Ÿåº¦                    			  åŠ›çŸ©                    åœæ­¢ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0e, 0x20, 0x00, 0x00, 0xc0, 0x7f, 0xcd, 0xcc, 0xcc, 0x3d, 0x0e, 0x25, 0x00, 0x00, 0x80, 0x3f, 0x9a, 0x99, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50, 0x50
                            };
 
@@ -252,20 +252,20 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float p
 
 
 /**
- * @brief µç»úÎ»ÖÃ-ËÙ¶È-Ç°À¡Á¦¾Ø(×î´óÁ¦¾Ø)¿ØÖÆ£¬int32ĞÍ
+ * @brief ç”µæœºä½ç½®-é€Ÿåº¦-å‰é¦ˆåŠ›çŸ©(æœ€å¤§åŠ›çŸ©)æ§åˆ¶ï¼Œint32å‹
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.00001 È¦£¬Èç pos = 50000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 0.00001 ×ª/Ãë£¬Èç vel = 50000 ±íÊ¾ 0.5 ×ª/Ãë
- * @param torque ×î´óÁ¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.00001 åœˆï¼Œå¦‚ pos = 50000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00001 è½¬/ç§’ï¼Œå¦‚ vel = 50000 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param torque æœ€å¤§åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
 {
-    //                           Î»ÖÃÄ£Ê½     int32       Î»ÖÃ                    ËÙ¶È                    			  Á¦¾Ø                    Í£Ö¹Î»ÖÃ
+    //                           ä½ç½®æ¨¡å¼     int32       ä½ç½®                    é€Ÿåº¦                    			  åŠ›çŸ©                    åœæ­¢ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0a, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50, 0x50
                            };
 
@@ -278,20 +278,20 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
 
 
 /**
- * @brief µç»úÎ»ÖÃ-ËÙ¶È-Ç°À¡Á¦¾Ø(×î´óÁ¦¾Ø)¿ØÖÆ£¬int16ĞÍ
+ * @brief ç”µæœºä½ç½®-é€Ÿåº¦-å‰é¦ˆåŠ›çŸ©(æœ€å¤§åŠ›çŸ©)æ§åˆ¶ï¼Œint16å‹
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param torque ×î´óÁ¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param torque æœ€å¤§åŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
  */
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
-    //                            Î»ÖÃÄ£Ê½   2¸öint16      Î»ÖÃ        ËÙ¶È		 2¸öint16	    Á¦¾Ø
+    //                            ä½ç½®æ¨¡å¼   2ä¸ªint16      ä½ç½®        é€Ÿåº¦		 2ä¸ªint16	    åŠ›çŸ©
     static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x06, 0x25, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50,
                            };
 
@@ -304,18 +304,18 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t
 
 
 /**
- * @brief µç»úÎ»ÖÃ¿ØÖÆ float
+ * @brief ç”µæœºä½ç½®æ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 1 È¦£¬Èç pos = 0.5 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 1 åœˆï¼Œå¦‚ pos = 0.5 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
  */
 void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 {
-    //                           Î»ÖÃÄ£Ê½   1¸öfloat      Î»ÖÃ
+    //                           ä½ç½®æ¨¡å¼   1ä¸ªfloat      ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -326,18 +326,18 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 
 
 /**
- * @brief µç»úÎ»ÖÃ¿ØÖÆ int32
+ * @brief ç”µæœºä½ç½®æ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.00001 È¦£¬Èç pos = 50000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.00001 åœˆï¼Œå¦‚ pos = 50000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
  */
 void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 {
-    //                           Î»ÖÃÄ£Ê½   1¸öint32      Î»ÖÃ
+    //                           ä½ç½®æ¨¡å¼   1ä¸ªint32      ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50,
                            };
 
@@ -348,16 +348,16 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 
 
 /**
- * @brief µç»úÎ»ÖÃ¿ØÖÆ int16
+ * @brief ç”µæœºä½ç½®æ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
  */
 void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 {
-    //                          Î»ÖÃÄ£Ê½     1¸öint16     Î»ÖÃ
+    //                          ä½ç½®æ¨¡å¼     1ä¸ªint16     ä½ç½®
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
                            };
 
@@ -368,18 +368,18 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 
 
 /**
- * @brief µç»úËÙ¶È¿ØÖÆ float
+ * @brief ç”µæœºé€Ÿåº¦æ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 1 ×ª/Ãë£¬Èç vel = 0.1 -> 0.1 ×ª/Ãë
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 1 è½¬/ç§’ï¼Œå¦‚ vel = 0.1 -> 0.1 è½¬/ç§’
  */
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
-    //							  Î»ÖÃÄ£Ê½     2¸öfloat 	Î»ÖÃ					ËÙ¶È
+    //							  ä½ç½®æ¨¡å¼     2ä¸ªfloat 	ä½ç½®					é€Ÿåº¦
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0E, 0x20, 0x00, 0x00, 0xc0, 0x7f, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50,
                            };
 
@@ -390,18 +390,18 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 
 
 /**
- * @brief µç»úËÙ¶È¿ØÖÆ int32
+ * @brief ç”µæœºé€Ÿåº¦æ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00001 ×ª/Ãë£¬Èç vel = 50000 ±íÊ¾ 0.5 ×ª/Ãë
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00001 è½¬/ç§’ï¼Œå¦‚ vel = 50000 è¡¨ç¤º 0.5 è½¬/ç§’
  */
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
-    //							  Î»ÖÃÄ£Ê½     2¸öint32 	Î»ÖÃ					ËÙ¶È					Õ¼Î»£¨fdcan£©
+    //							  ä½ç½®æ¨¡å¼     2ä¸ªint32 	ä½ç½®					é€Ÿåº¦					å ä½ï¼ˆfdcanï¼‰
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0A, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50,
                            };
 
@@ -412,18 +412,18 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 
 
 /**
- * @brief µç»úËÙ¶È¿ØÖÆ int16
+ * @brief ç”µæœºé€Ÿåº¦æ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
  */
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
-    //							Î»ÖÃÄ£Ê½     2¸öint16 	  Î»ÖÃ		  ËÙ¶È
+    //							ä½ç½®æ¨¡å¼     2ä¸ªint16 	  ä½ç½®		  é€Ÿåº¦
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -434,14 +434,14 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 
 
 /**
- * @brief µç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Ç°À¡Á¦¾Ø¡¢Kp¡¢Kd¿ØÖÆ float ÀàĞÍ (Êä³öÁ¦¾Ø = Î»ÖÃÆ«²î * Mkp + ËÙ¶ÈÆ«²î * Mkd + Ç°À¡Á¦¾Ø) (Mkp ±íÊ¾µç»úÄÚ²¿ kp, Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @brief ç”µæœºä½ç½®ã€é€Ÿåº¦ã€å‰é¦ˆåŠ›çŸ©ã€Kpã€Kdæ§åˆ¶ float ç±»å‹ (è¾“å‡ºåŠ›çŸ© = ä½ç½®åå·® * Mkp + é€Ÿåº¦åå·® * Mkd + å‰é¦ˆåŠ›çŸ©) (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp, Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 1 È¦£¬Èç pos = 0.5 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 1 ×ª/Ãë£¬Èç vel = 0.5 ±íÊ¾ 0.5 ×ª/Ãë
- * @param tqe Ç°À¡Á¦¾Ø£º£¨µ¥Î»¼ûÎÄµµ£©
- * @param kp Mkp = kp * 1 (Mkp ±íÊ¾µç»úÄÚ²¿ kp)
- * @param kd Mkd = kp * 1 (Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 1 åœˆï¼Œå¦‚ pos = 0.5 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 1 è½¬/ç§’ï¼Œå¦‚ vel = 0.5 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param tqe å‰é¦ˆåŠ›çŸ©ï¼šï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
+ * @param kp Mkp = kp * 1 (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp)
+ * @param kd Mkd = kp * 1 (Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  */
 void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
 {
@@ -450,7 +450,7 @@ void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
         0x01, 0x00, 0x0A,
         0x0f, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x0e, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        // ²éÑ¯Ö¸Áî
+        // æŸ¥è¯¢æŒ‡ä»¤
         0x1C, 0x04, 0x00, 0x11, 0x0f,
     };
 
@@ -465,14 +465,14 @@ void set_pos_vel_tqe_pd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
 
 
 /**
- * @brief µç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Ç°À¡Á¦¾Ø¡¢Kp¡¢Kd¿ØÖÆ int32 (Êä³öÁ¦¾Ø = Î»ÖÃÆ«²î * Mkp + ËÙ¶ÈÆ«²î * Mkd + Ç°À¡Á¦¾Ø) (Mkp ±íÊ¾µç»úÄÚ²¿ kp, Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @brief ç”µæœºä½ç½®ã€é€Ÿåº¦ã€å‰é¦ˆåŠ›çŸ©ã€Kpã€Kdæ§åˆ¶ int32 (è¾“å‡ºåŠ›çŸ© = ä½ç½®åå·® * Mkp + é€Ÿåº¦åå·® * Mkd + å‰é¦ˆåŠ›çŸ©) (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp, Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.00001 È¦£¬Èç pos = 50000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ
- * @param vel ËÙ¶È£ºµ¥Î» 0.00001 ×ª/Ãë£¬Èç vel = 50000 ±íÊ¾ 0.5 ×ª/Ãë
- * @param tqe Ç°À¡Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
- * @param kp Mkp = kp * 0.001 (Mkp ±íÊ¾µç»úÄÚ²¿ kp)
- * @param kd Mkd = kp * 0.001 (Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.00001 åœˆï¼Œå¦‚ pos = 50000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00001 è½¬/ç§’ï¼Œå¦‚ vel = 50000 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param tqe å‰é¦ˆåŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
+ * @param kp Mkp = kp * 0.001 (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp)
+ * @param kd Mkd = kp * 0.001 (Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  */
 void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
 {
@@ -481,7 +481,7 @@ void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
         0x01, 0x00, 0x0A,
         0x0B, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x0A, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        // ²éÑ¯Ö¸Áî
+        // æŸ¥è¯¢æŒ‡ä»¤
         0x18, 0x04, 0x00, 0x11, 0x0f,
     };
 
@@ -496,14 +496,14 @@ void set_pos_vel_tqe_pd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 
 
 /**
- * @brief µç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Ç°À¡Á¦¾Ø¡¢Kp¡¢Kd¿ØÖÆ int16 (Êä³öÁ¦¾Ø = Î»ÖÃÆ«²î * Mkp + ËÙ¶ÈÆ«²î * Mkd + Ç°À¡Á¦¾Ø) (Mkp ±íÊ¾µç»úÄÚ²¿ kp, Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @brief ç”µæœºä½ç½®ã€é€Ÿåº¦ã€å‰é¦ˆåŠ›çŸ©ã€Kpã€Kdæ§åˆ¶ int16 (è¾“å‡ºåŠ›çŸ© = ä½ç½®åå·® * Mkp + é€Ÿåº¦åå·® * Mkd + å‰é¦ˆåŠ›çŸ©) (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp, Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param tqe Ç°À¡Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
- * @param kp Mkp = kp * 0.1 (Mkp ±íÊ¾µç»úÄÚ²¿ kp)
- * @param kd Mkd = kp * 0.1 (Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param tqe å‰é¦ˆåŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
+ * @param kp Mkp = kp * 0.1 (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp)
+ * @param kd Mkd = kp * 0.1 (Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  */
 void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
@@ -512,9 +512,9 @@ void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
         0x01, 0x00, 0x0A,
         0x07, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x06, 0x2b, 0x00, 0x00, 0x00, 0x00,
-        // ²éÑ¯Ö¸Áî
+        // æŸ¥è¯¢æŒ‡ä»¤
         0x14, 0x04, 0x00, 0x11, 0x0f,
-        // Õ¼Î»£¨fdcan£©
+        // å ä½ï¼ˆfdcanï¼‰
         0x50, 0x50,
     };
 
@@ -529,14 +529,14 @@ void set_pos_vel_tqe_pd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
 
 
 /**
- * @brief µç»ú Í£Ö¹Î»ÖÃ¡¢ËÙ¶È¡¢Ç°À¡Á¦¾Ø¡¢Kp¡¢Kd¿ØÖÆ int16 (Êä³öÁ¦¾Ø = Î»ÖÃÆ«²î * Mkp + ËÙ¶ÈÆ«²î * Mkd + Ç°À¡Á¦¾Ø) (Mkp ±íÊ¾µç»úÄÚ²¿ kp, Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @brief ç”µæœº åœæ­¢ä½ç½®ã€é€Ÿåº¦ã€å‰é¦ˆåŠ›çŸ©ã€Kpã€Kdæ§åˆ¶ int16 (è¾“å‡ºåŠ›çŸ© = ä½ç½®åå·® * Mkp + é€Ÿåº¦åå·® * Mkd + å‰é¦ˆåŠ›çŸ©) (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp, Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param stop_pos Í£Ö¹Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param tqe Ç°À¡Á¦¾Ø£¨µ¥Î»¼ûÎÄµµ£©
- * @param kp Mkp = kp * 0.1 (Mkp ±íÊ¾µç»úÄÚ²¿ kp)
- * @param kd Mkd = kp * 0.1 (Mkd ±íÊ¾µç»úÄÚ²¿ kd)
+ * @param id ç”µæœºID
+ * @param stop_pos åœæ­¢ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param tqe å‰é¦ˆåŠ›çŸ©ï¼ˆå•ä½è§æ–‡æ¡£ï¼‰
+ * @param kp Mkp = kp * 0.1 (Mkp è¡¨ç¤ºç”µæœºå†…éƒ¨ kp)
+ * @param kd Mkd = kp * 0.1 (Mkd è¡¨ç¤ºç”µæœºå†…éƒ¨ kd)
  */
 void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t stop_pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
@@ -546,9 +546,9 @@ void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
         0x07, 0x20, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00,
         0x06, 0x2b, 0x00, 0x00, 0x00, 0x00,
         0x05, 0x26, 0x00, 0x00,
-        // ²éÑ¯Ö¸Áî
+        // æŸ¥è¯¢æŒ‡ä»¤
         0x14, 0x04, 0x00, 0x11, 0x0f,
-        // Õ¼Î»£¨fdcan£©
+        // å ä½ï¼ˆfdcanï¼‰
         0x50, 0x50, 0x50, 0x50, 0x50, 0x50
     };
 
@@ -563,19 +563,19 @@ void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
 
 
 /**
- * @brief µç»úËÙ¶È¡¢ËÙ¶ÈÏŞ·ù¿ØÖÆ£¨Èç¹û vel > vel_max£¬ÔòÓÃ vel_max£© int16
+ * @brief ç”µæœºé€Ÿåº¦ã€é€Ÿåº¦é™å¹…æ§åˆ¶ï¼ˆå¦‚æœ vel > vel_maxï¼Œåˆ™ç”¨ vel_maxï¼‰ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param vel_max ËÙ¶ÈÏŞ·ù£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param vel_max é€Ÿåº¦é™å¹…ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
  */
 void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max)
 {
-    //							Î»ÖÃÄ£Ê½				  Î»ÖÃ        ËÙ¶È		  			  ËÙ¶ÈÏŞÖÆ
+    //							ä½ç½®æ¨¡å¼				  ä½ç½®        é€Ÿåº¦		  			  é€Ÿåº¦é™åˆ¶
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x28, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -587,18 +587,18 @@ void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
 
 
 /**
- * @brief Î»ÖÃ¡¢ËÙ¶È¡¢¼ÓËÙ¶ÈÏŞÖÆ£¨ÌİĞÎ¿ØÖÆ£© float
+ * @brief ä½ç½®ã€é€Ÿåº¦ã€åŠ é€Ÿåº¦é™åˆ¶ï¼ˆæ¢¯å½¢æ§åˆ¶ï¼‰ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 1 È¦£¬Èç pos = 0.5 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ¡£
- * @param vel_max ËÙ¶ÈÏŞÖÆ£¬µ¥Î» 1 ×ª/Ãë£¬Èç vel = 0.5 ±íÊ¾ 0.5 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£¬µ¥Î»£º1 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 1 åœˆï¼Œå¦‚ pos = 0.5 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®ã€‚
+ * @param vel_max é€Ÿåº¦é™åˆ¶ï¼Œå•ä½ 1 è½¬/ç§’ï¼Œå¦‚ vel = 0.5 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼Œå•ä½ï¼š1 è½¬/ç§’^2
  */
 void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc)
 {
-    // 							Î»ÖÃÄ£Ê½				  Î»ÖÃ		  						  ËÙ¶ÈÏŞÖÆ
+    // 							ä½ç½®æ¨¡å¼				  ä½ç½®		  						  é€Ÿåº¦é™åˆ¶
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0E, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
                            };
 
@@ -611,18 +611,18 @@ void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
 
 
 /**
- * @brief Î»ÖÃ¡¢ËÙ¶È¡¢¼ÓËÙ¶ÈÏŞÖÆ£¨ÌİĞÎ¿ØÖÆ£© int32
+ * @brief ä½ç½®ã€é€Ÿåº¦ã€åŠ é€Ÿåº¦é™åˆ¶ï¼ˆæ¢¯å½¢æ§åˆ¶ï¼‰ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.00001 È¦£¬Èç pos = 50000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ
- * @param vel_max ËÙ¶ÈÏŞÖÆ£ºµ¥Î» 0.00001 ×ª/Ãë£¬Èç vel = 50000 ±íÊ¾ 0.5 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£ºµ¥Î» 0.00001 ×ª/Ãë^2£¬Èç acc = 50000 ±íÊ¾ 0.5 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.00001 åœˆï¼Œå¦‚ pos = 50000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®
+ * @param vel_max é€Ÿåº¦é™åˆ¶ï¼šå•ä½ 0.00001 è½¬/ç§’ï¼Œå¦‚ vel = 50000 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼šå•ä½ 0.00001 è½¬/ç§’^2ï¼Œå¦‚ acc = 50000 è¡¨ç¤º 0.5 è½¬/ç§’^2
  */
 void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc)
 {
-    // 							Î»ÖÃÄ£Ê½				  Î»ÖÃ		  						  ËÙ¶ÈÏŞÖÆ
+    // 							ä½ç½®æ¨¡å¼				  ä½ç½®		  						  é€Ÿåº¦é™åˆ¶
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0A, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
                            };
 
@@ -635,20 +635,20 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 
 
 /**
- * @brief Î»ÖÃ¡¢ËÙ¶È¡¢¼ÓËÙ¶ÈÏŞÖÆ£¨ÌİĞÎ¿ØÖÆ£© int16
+ * @brief ä½ç½®ã€é€Ÿåº¦ã€åŠ é€Ÿåº¦é™åˆ¶ï¼ˆæ¢¯å½¢æ§åˆ¶ï¼‰ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param pos Î»ÖÃ£ºµ¥Î» 0.0001 È¦£¬Èç pos = 5000 ±íÊ¾×ªµ½ 0.5 È¦µÄÎ»ÖÃ
- * @param vel_max ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£ºµ¥Î» 0.001 ×ª/Ãë^2£¬Èç acc = 100 ±íÊ¾ 0.1 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param pos ä½ç½®ï¼šå•ä½ 0.0001 åœˆï¼Œå¦‚ pos = 5000 è¡¨ç¤ºè½¬åˆ° 0.5 åœˆçš„ä½ç½®
+ * @param vel_max é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼šå•ä½ 0.001 è½¬/ç§’^2ï¼Œå¦‚ acc = 100 è¡¨ç¤º 0.1 è½¬/ç§’^2
  */
 void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
-    // 							Î»ÖÃÄ£Ê½				  Î»ÖÃ		  ËÙ¶ÈÏŞÖÆ
+    // 							ä½ç½®æ¨¡å¼				  ä½ç½®		  é€Ÿåº¦é™åˆ¶
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x06, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50
                            };
 
@@ -661,17 +661,17 @@ void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
 
 
 /**
- * @brief µç»úËÙ¶È¡¢¼ÓËÙ¶È¿ØÖÆ float
+ * @brief ç”µæœºé€Ÿåº¦ã€åŠ é€Ÿåº¦æ§åˆ¶ float
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£¬µ¥Î»£º 1 ×ª/Ãë£¬Èç vel = 0.5 ±íÊ¾ 0.5 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£¬µ¥Î»£º1 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼Œå•ä½ï¼š 1 è½¬/ç§’ï¼Œå¦‚ vel = 0.5 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼Œå•ä½ï¼š1 è½¬/ç§’^2
  */
 void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc)
 {
-    //							Î»ÖÃÄ£Ê½				  Î»ÖÃ					  ËÙ¶È								  ¼ÓËÙ¶È
+    //							ä½ç½®æ¨¡å¼				  ä½ç½®					  é€Ÿåº¦								  åŠ é€Ÿåº¦
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0E, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x0D, 0x29, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x1C, 0x04, 0x00, 0x11, 0x0f,
                            };
 
@@ -683,17 +683,17 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
 
 
 /**
- * @brief µç»úËÙ¶È¡¢¼ÓËÙ¶È¿ØÖÆ int32
+ * @brief ç”µæœºé€Ÿåº¦ã€åŠ é€Ÿåº¦æ§åˆ¶ int32
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00001 ×ª/Ãë£¬Èç vel = 50000 ±íÊ¾ 0.5 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£ºµ¥Î» 0.001 ×ª/Ãë^2£¬Èç vel = 500 ±íÊ¾ 0.5 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00001 è½¬/ç§’ï¼Œå¦‚ vel = 50000 è¡¨ç¤º 0.5 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼šå•ä½ 0.001 è½¬/ç§’^2ï¼Œå¦‚ vel = 500 è¡¨ç¤º 0.5 è½¬/ç§’^2
  */
 void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
 {
-    //							Î»ÖÃÄ£Ê½				  Î»ÖÃ					  ËÙ¶È								  ¼ÓËÙ¶È
+    //							ä½ç½®æ¨¡å¼				  ä½ç½®					  é€Ÿåº¦								  åŠ é€Ÿåº¦
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0A, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x18, 0x04, 0x00, 0x11, 0x0f,
                            };
 
@@ -705,19 +705,19 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
 
 
 /**
- * @brief µç»úËÙ¶È¡¢¼ÓËÙ¶È¿ØÖÆ int16
+ * @brief ç”µæœºé€Ÿåº¦ã€åŠ é€Ÿåº¦æ§åˆ¶ int16
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vel ËÙ¶È£ºµ¥Î» 0.00025 ×ª/Ãë£¬Èç vel = 400 ±íÊ¾ 0.1 ×ª/Ãë
- * @param acc ¼ÓËÙ¶È£ºµ¥Î» 0.01 ×ª/Ãë^2£¬Èç vel = 40 ±íÊ¾ 0.4 ×ª/Ãë^2
+ * @param id ç”µæœºID
+ * @param vel é€Ÿåº¦ï¼šå•ä½ 0.00025 è½¬/ç§’ï¼Œå¦‚ vel = 400 è¡¨ç¤º 0.1 è½¬/ç§’
+ * @param acc åŠ é€Ÿåº¦ï¼šå•ä½ 0.01 è½¬/ç§’^2ï¼Œå¦‚ vel = 40 è¡¨ç¤º 0.4 è½¬/ç§’^2
  */
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
 {
-    //							Î»ÖÃÄ£Ê½				  Î»ÖÃ		  ËÙ¶È					  ¼ÓËÙ¶È
+    //							ä½ç½®æ¨¡å¼				  ä½ç½®		  é€Ÿåº¦					  åŠ é€Ÿåº¦
     static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50
                            };
 
@@ -729,17 +729,17 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
 
 
 /**
- * @brief Ê¹ÓÃµçÑ¹Ä£Ê½½«µç»ú¹Ì¶¨£¨µç»ú²»»á¶¯£¬ÓÃÓÚ¼õÉÙµç»úÍ£Ö¹µÄÉùÒô£¬µ«ÊÇµçÁ÷»áÔö´ó£©
+ * @brief ä½¿ç”¨ç”µå‹æ¨¡å¼å°†ç”µæœºå›ºå®šï¼ˆç”µæœºä¸ä¼šåŠ¨ï¼Œç”¨äºå‡å°‘ç”µæœºåœæ­¢çš„å£°éŸ³ï¼Œä½†æ˜¯ç”µæµä¼šå¢å¤§ï¼‰
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param vol dÏàµçÑ¹
+ * @param id ç”µæœºID
+ * @param vol dç›¸ç”µå‹
  */
 void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol)
 {
     static uint8_t cmd[] = {0x01, 0x00, 0x12, 0x05, 0x19, 0x00, 0x00,
-                            // ²éÑ¯Ö¸Áî
+                            // æŸ¥è¯¢æŒ‡ä»¤
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // Õ¼Î»£¨fdcan£©
+                            // å ä½ï¼ˆfdcanï¼‰
                             0x50, 0x50, 0x50, 0x50
                            };
 
@@ -750,10 +750,10 @@ void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t v
 
 
 /**
- * @brief ÉèÖÃµç»ú³¬Ê±Ê±¼ä£¬µç»ú³¬¹ı³¬Ê±Ê±¼äÃ»½ÓÊÜµ½ĞÂÖ¸Áî£¬µç»ú½øÈëÉ²³µÄ£Ê½
+ * @brief è®¾ç½®ç”µæœºè¶…æ—¶æ—¶é—´ï¼Œç”µæœºè¶…è¿‡è¶…æ—¶æ—¶é—´æ²¡æ¥å—åˆ°æ–°æŒ‡ä»¤ï¼Œç”µæœºè¿›å…¥åˆ¹è½¦æ¨¡å¼
  * @param fdcanHandle &hfdcanx
- * @param id µç»úID
- * @param t µç»ú³¬Ê±Ê±¼ä£¬µ¥Î»£º1ms
+ * @param id ç”µæœºID
+ * @param t ç”µæœºè¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼š1ms
  */
 void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 {
@@ -766,14 +766,14 @@ void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 
 
 /**
- * @brief ÖÜÆÚ·µ»Øµç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Á¦¾ØÊı¾İ(·µ»ØÊı¾İ¸ñÊ½ºÍÊ¹ÓÃ 0x17£¬0x01 Ö¸Áî»ñÈ¡µÄ¸ñÊ½Ò»Ñù)
- *          1. ÖÜÆÚ·µ»Øµç»úÎ»ÖÃ¡¢ËÙ¶È¡¢Á¦¾ØÊı¾İ¡£
- *          2. ·µ»ØÊı¾İ¸ñÊ½ºÍÊ¹ÓÃ  0x17£¬0x01  Ö¸Áî»ñÈ¡µÄ¸ñÊ½Ò»Ñù
- *          3. ÖÜÆÚµ¥Î»Îª ms¡£
- *          4. ×îĞ¡ÖÜÆÚÎª 1ms£¬×î´óÖÜÆÚ 32767ms¡£
- *          5. ÈçĞèÍ£Ö¹ÖÜÆÚ·µ»ØÊı¾İ£¬½«ÖÜÆÚ¸ø 0 ¼´¿É£¬»òÕß¸øµç»ú¶Ïµç¡£
- * @param id µç»úID
- * @param t ·µ»ØÖÜÆÚ£¨µ¥Î»£ºms£©
+ * @brief å‘¨æœŸè¿”å›ç”µæœºä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©æ•°æ®(è¿”å›æ•°æ®æ ¼å¼å’Œä½¿ç”¨ 0x17ï¼Œ0x01 æŒ‡ä»¤è·å–çš„æ ¼å¼ä¸€æ ·)
+ *          1. å‘¨æœŸè¿”å›ç”µæœºä½ç½®ã€é€Ÿåº¦ã€åŠ›çŸ©æ•°æ®ã€‚
+ *          2. è¿”å›æ•°æ®æ ¼å¼å’Œä½¿ç”¨  0x17ï¼Œ0x01  æŒ‡ä»¤è·å–çš„æ ¼å¼ä¸€æ ·
+ *          3. å‘¨æœŸå•ä½ä¸º msã€‚
+ *          4. æœ€å°å‘¨æœŸä¸º 1msï¼Œæœ€å¤§å‘¨æœŸ 32767msã€‚
+ *          5. å¦‚éœ€åœæ­¢å‘¨æœŸè¿”å›æ•°æ®ï¼Œå°†å‘¨æœŸç»™ 0 å³å¯ï¼Œæˆ–è€…ç»™ç”µæœºæ–­ç”µã€‚
+ * @param id ç”µæœºID
+ * @param t è¿”å›å‘¨æœŸï¼ˆå•ä½ï¼šmsï¼‰
  */
 void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms)
 {
@@ -786,12 +786,12 @@ void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
 
 
 // /**
-//  * @brief µç»úÒ»ÍÏ¶à ³¬Ê±Ê±¼äÉèÖÃ µç»ú³¬¹ı³¬Ê±Ê±¼äÃ»½ÓÊÜµ½ĞÂÖ¸Áî£¬µç»ú½øÈëÉ²³µÄ£Ê½
+//  * @brief ç”µæœºä¸€æ‹–å¤š è¶…æ—¶æ—¶é—´è®¾ç½® ç”µæœºè¶…è¿‡è¶…æ—¶æ—¶é—´æ²¡æ¥å—åˆ°æ–°æŒ‡ä»¤ï¼Œç”µæœºè¿›å…¥åˆ¹è½¦æ¨¡å¼
 //  * @param fdcanHandle &hfdcanx
-//  * @param t1 µç»ú1µÄ³¬Ê±Ê±¼ä£¬µ¥Î»£º1ms
-//  * @param t2 µç»ú2µÄ³¬Ê±Ê±¼ä£¬µ¥Î»£º1ms
-//  * @param t3 µç»ú3µÄ³¬Ê±Ê±¼ä£¬µ¥Î»£º1ms
-//  * @param t4 µç»ú4µÄ³¬Ê±Ê±¼ä£¬µ¥Î»£º1ms
+//  * @param t1 ç”µæœº1çš„è¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼š1ms
+//  * @param t2 ç”µæœº2çš„è¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼š1ms
+//  * @param t3 ç”µæœº3çš„è¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼š1ms
+//  * @param t4 ç”µæœº4çš„è¶…æ—¶æ—¶é—´ï¼Œå•ä½ï¼š1ms
 //  */
 // void set_many_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, int16_t t1, int16_t t2, int16_t t3, int16_t t4)
 // {
@@ -807,9 +807,9 @@ void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
 
 
 /**
- * @brief ÖØÉèµç»úÁãÎ»
+ * @brief é‡è®¾ç”µæœºé›¶ä½
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -824,9 +824,9 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief ±£´æµç»úÉèÖÃ
+ * @brief ä¿å­˜ç”µæœºè®¾ç½®
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -837,9 +837,9 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief ±£´æµç»úÉèÖÃ
+ * @brief ä¿å­˜ç”µæœºè®¾ç½®
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -850,9 +850,9 @@ void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief µç»úÍ£Ö¹£¬×¢Òâ£ºĞèÈÃµç»úÍ£Ö¹ºóÔÙÖØÖÃÁãÎ»£¬·ñÔòÎŞĞ§
+ * @brief ç”µæœºåœæ­¢ï¼Œæ³¨æ„ï¼šéœ€è®©ç”µæœºåœæ­¢åå†é‡ç½®é›¶ä½ï¼Œå¦åˆ™æ— æ•ˆ
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -863,9 +863,9 @@ void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief µç»úÉ²³µ
+ * @brief ç”µæœºåˆ¹è½¦
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -876,9 +876,9 @@ void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief »ñÈ¡µç»ú×´Ì¬ float£¬×´Ì¬¡¢Î»ÖÃ¡¢ËÙ¶È¡¢×ª¾Ø
+ * @brief è·å–ç”µæœºçŠ¶æ€ floatï¼ŒçŠ¶æ€ã€ä½ç½®ã€é€Ÿåº¦ã€è½¬çŸ©
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -889,9 +889,9 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief »ñÈ¡µç»ú×´Ì¬ int32£¬×´Ì¬¡¢Î»ÖÃ¡¢ËÙ¶È¡¢×ª¾Ø
+ * @brief è·å–ç”µæœºçŠ¶æ€ int32ï¼ŒçŠ¶æ€ã€ä½ç½®ã€é€Ÿåº¦ã€è½¬çŸ©
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
@@ -902,9 +902,9 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief »ñÈ¡µç»ú×´Ì¬ int16£¬×´Ì¬¡¢Î»ÖÃ¡¢ËÙ¶È¡¢×ª¾Ø
+ * @brief è·å–ç”µæœºçŠ¶æ€ int16ï¼ŒçŠ¶æ€ã€ä½ç½®ã€é€Ÿåº¦ã€è½¬çŸ©
  * @param fdcanHandle &hfdcanx
- * @param id id µç»úID
+ * @param id id ç”µæœºID
  */
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {

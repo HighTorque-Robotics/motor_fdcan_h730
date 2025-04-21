@@ -6,7 +6,7 @@
 #include "my_fdcan.h"
 
 
-#define  MANY_MOTOR_SIZE  9  // Ò»ÍÏ¶àÄ£Ê½ÏÂ£¬Ã¿¸öCANÍ¨µÀ¿ØÖÆµÄµç»úÊýÁ¿£¬È¡Öµ·¶Î§Îª(0£¬30]
+#define  MANY_MOTOR_SIZE  9  // ä¸€æ‹–å¤šæ¨¡å¼ä¸‹ï¼Œæ¯ä¸ªCANé€šé“æŽ§åˆ¶çš„ç”µæœºæ•°é‡ï¼Œå–å€¼èŒƒå›´ä¸º(0ï¼Œ30]
 
 #if MANY_MOTOR_SIZE > 0 && MNAY_MOTOR_SIZE <= 30
 #define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_ki_kd_s))

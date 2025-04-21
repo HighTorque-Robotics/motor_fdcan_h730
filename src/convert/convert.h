@@ -20,7 +20,7 @@
 #define MY_2PI (6.28318530717f)
 #define MY_PI  (3.14159265358f)
 
-/* ¸÷¸öÊı¾İÀàĞÍµÄÎŞÏŞÖÆ */
+/* å„ä¸ªæ•°æ®ç±»å‹çš„æ— é™åˆ¶ */
 #define  NAN_FLOAT  NAN
 #define  NAN_INT32  0x80000000
 #define  NAN_INT16  0x8000
@@ -29,13 +29,13 @@
 
 typedef enum
 {
-    RADIAN_2PI = 0,  // »¡¶ÈÖÆ
-    ANGLE_360,       // ½Ç¶ÈÖÆ
-    TURNS,           // È¦Êı
+    RADIAN_2PI = 0,  // å¼§åº¦åˆ¶
+    ANGLE_360,       // è§’åº¦åˆ¶
+    TURNS,           // åœˆæ•°
 } pos_vel_type_t;
 
 
-typedef enum  // Êı¾İÀàĞÍ
+typedef enum  // æ•°æ®ç±»å‹
 {
     TFLOAT = 0,
     TINT32,
@@ -44,7 +44,7 @@ typedef enum  // Êı¾İÀàĞÍ
 } data_type_t;
 
 
-typedef enum  // µç»úĞÍºÅ
+typedef enum  // ç”µæœºå‹å·
 {
     MNULL = 0,
     M4538_19,
@@ -71,7 +71,7 @@ typedef enum  // µç»úĞÍºÅ
 
 
 
-/* ¿ØÖÆµç»úÓÃ */
+/* æ§åˆ¶ç”µæœºç”¨ */
 float conv_to_turns(const float in_data, const pos_vel_type_t type);
 float tqe_adjust(const float in_data, const motor_type_t motor_type);
 float cur_float2int(const float in_data, const data_type_t type);
@@ -83,7 +83,7 @@ float acc_float2int(const float in_data, const data_type_t type);
 float pid_float2int(const float in_data, const data_type_t type);
 
 
-/* ¶ÁÈ¡µç»úÓÃ */
+/* è¯»å–ç”µæœºç”¨ */
 float conv_from_turns(const float in_data, const pos_vel_type_t type);
 float tqe_restore(const float in_data, const motor_type_t motor_type);
 float cur_int2float(const float in_data, const data_type_t type);
@@ -95,7 +95,7 @@ float acc_int2float(const float in_data, const data_type_t type);
 float pid_int2float(const float in_data, const data_type_t type);
 
 
-/* Êı¾İ°áÔË */
+/* æ•°æ®æ¬è¿ */
 void my_memcpy(void *p1, const void *p2, const int16_t len);
 
 
