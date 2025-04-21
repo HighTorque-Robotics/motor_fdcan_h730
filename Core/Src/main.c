@@ -118,16 +118,6 @@ int main(void)
 
         /* USER CODE BEGIN 3 */
 
-        static uint32_t tick_2ms = 0;
-        if (HAL_GetTick() - tick_2ms >= 2)
-        {
-            tick_2ms = HAL_GetTick();
-
-
-            // test_motor_many();
-            static uint8_t tdata[8] = {0};
-        }
-
         if (HAL_GetTick() - tick_100ms >= 100)
         {
             tick_100ms = HAL_GetTick();

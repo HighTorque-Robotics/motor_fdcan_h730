@@ -98,18 +98,18 @@ typedef enum
 
 
 
-void motor_many_dq_volt(p_many_data_s p_many_data, const uint8_t id, const float vol);
-void motor_many_dq_current(p_many_data_s p_many_data, const uint8_t id, const float cur);
-void motor_many_pos(p_many_data_s p_many_data, const uint8_t id, const float pos);
-void motor_many_vel(p_many_data_s p_many_data, const uint8_t id, const float vel);
-void motor_many_tqe(p_many_data_s p_many_data, const uint8_t id, const float tqe);
-void motor_many_time_out(p_many_data_s p_many_data, const uint8_t id, const int16_t t_ms);
-void motor_many_pos_vel(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel);
-void motor_many_pos_vel_MAXtqe(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe);
-void motor_many_pos_vel_acc(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float acc);
-void motor_many_pos_vel_tqe_kp_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
-void motor_many_pos_vel_tqe_kp_ki_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd);
+void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol);
+void motor_many_dq_current(port_t portx, const uint8_t id, const float cur);
+void motor_many_pos(port_t portx, const uint8_t id, const float pos);
+void motor_many_vel(port_t portx, const uint8_t id, const float vel);
+void motor_many_tqe(port_t portx, const uint8_t id, const float tqe);
+void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms);
+void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel);
+void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe);
+void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);
+void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
+void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd);
 
-void motor_many_send(FDCAN_HandleTypeDef *fdcanHandle, p_many_data_s p_many_data);
+void motor_many_send(port_t portx);
 
 #endif

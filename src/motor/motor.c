@@ -5,7 +5,7 @@ static motor_state_s motor_state_port1[MOTOR_MAX_NUM] =
 {
     {
         .id = 1,
-        .model = M5047_36,
+        .model = M4438_30,
     },
 
     {
@@ -68,15 +68,45 @@ p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 }
 
 
-p_motor_state_s motor_get_state_pointer2(p_many_data_s p_many_data)
+p_motor_state_s motor_get_state_pointer2(port_t portx)
 {
-    if (p_many_data == &many_data_port1)
+    if (portx == PORT1)
     {
         return motor_state_port1;
     }
-    else if (p_many_data == &many_data_port2)
+    else if (portx == PORT2)
     {
         return motor_state_port2;
+    }
+	
+	return NULL;
+}
+
+
+p_many_data_s motor_get_many_pointer(port_t portx)
+{
+    if (portx == PORT1)
+    {
+        return &many_data_port1;
+    }
+    else if (portx == PORT2)
+    {
+        return &many_data_port2;
+    }
+	
+	return NULL;
+}
+
+
+FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
+{
+    if (portx == PORT1)
+    {
+        return &hfdcan1;
+    }
+    else if (portx == PORT2)
+    {
+        return &hfdcan2;
     }
 	
 	return NULL;
@@ -96,7 +126,7 @@ uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 }
 
 
-uint8_t motor_get_model2(p_many_data_s p_many_data, uint8_t id)
+uint8_t motor_get_model2(port_t portx, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
@@ -104,7 +134,7 @@ uint8_t motor_get_model2(p_many_data_s p_many_data, uint8_t id)
         return MNULL;
     }
 
-    const p_motor_state_s p_motor_state = motor_get_state_pointer2(p_many_data);
+    const p_motor_state_s p_motor_state = motor_get_state_pointer2(portx);
 	const motor_type_t model = p_motor_state[id - 1].model;
     return model;
 }

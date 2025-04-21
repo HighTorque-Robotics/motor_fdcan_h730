@@ -7,8 +7,9 @@
 
 
 
-void motor_many_dq_volt(p_many_data_s p_many_data, const uint8_t id, const float vol)
+void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const int16_t vol_int16 = vol_float2int(vol, TINT16);
     const uint16_t index = id - 1;
 
@@ -25,8 +26,9 @@ void motor_many_dq_volt(p_many_data_s p_many_data, const uint8_t id, const float
 }
 
 
-void motor_many_dq_current(p_many_data_s p_many_data, const uint8_t id, const float cur)
+void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const int16_t cur_int16 = cur_float2int(cur, TINT16);
     const uint16_t index = id - 1;
 
@@ -43,8 +45,9 @@ void motor_many_dq_current(p_many_data_s p_many_data, const uint8_t id, const fl
 }
 
 
-void motor_many_pos(p_many_data_s p_many_data, const uint8_t id, const float pos)
+void motor_many_pos(port_t portx, const uint8_t id, const float pos)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const uint16_t index = id - 1;
@@ -62,8 +65,9 @@ void motor_many_pos(p_many_data_s p_many_data, const uint8_t id, const float pos
 }
 
 
-void motor_many_vel(p_many_data_s p_many_data, const uint8_t id, const float vel)
+void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
@@ -81,9 +85,10 @@ void motor_many_vel(p_many_data_s p_many_data, const uint8_t id, const float vel
 }
 
 
-void motor_many_tqe(p_many_data_s p_many_data, const uint8_t id, const float tqe)
+void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 {
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(p_many_data, id));
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
     const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
     const uint16_t index = id - 1;
 
@@ -100,8 +105,9 @@ void motor_many_tqe(p_many_data_s p_many_data, const uint8_t id, const float tqe
 }
 
 
-void motor_many_time_out(p_many_data_s p_many_data, const uint8_t id, const int16_t t_ms)
+void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_TIME_OUT)
@@ -117,8 +123,10 @@ void motor_many_time_out(p_many_data_s p_many_data, const uint8_t id, const int1
 }
 
 
-void motor_many_pos_vel(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel)
+void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
 
@@ -143,11 +151,14 @@ void motor_many_pos_vel(p_many_data_s p_many_data, const uint8_t id, const float
 }
 
 
-void motor_many_pos_vel_MAXtqe(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe)
+void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    
+
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_float2int(tqe_float, TINT16);
+    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
 
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
@@ -171,8 +182,10 @@ void motor_many_pos_vel_MAXtqe(p_many_data_s p_many_data, const uint8_t id, cons
 }
 
 
-void motor_many_pos_vel_acc(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float acc)
+void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const float acc_turns = conv_to_turns(acc, MOTOR_DATA_TYPE_FLAG);
@@ -199,11 +212,13 @@ void motor_many_pos_vel_acc(p_many_data_s p_many_data, const uint8_t id, const f
 }
 
 
-void motor_many_pos_vel_tqe_kp_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
+void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(p_many_data, id));
+    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
 
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
@@ -234,14 +249,17 @@ void motor_many_pos_vel_tqe_kp_kd(p_many_data_s p_many_data, const uint8_t id, c
 }
 
 
-void motor_many_pos_vel_tqe_kp_ki_kd(p_many_data_s p_many_data, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
+void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
 
     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t acc_int16 = tqe_float2int(tqe, TINT16);
+    const int16_t acc_int16 = tqe_float2int(tqe_float, TINT16);
 
     const int16_t kp_int16 = pid_float2int(kp, TINT16);
     const int16_t ki_int16 = pid_float2int(ki, TINT16);
@@ -355,8 +373,11 @@ static uint8_t get_mode_data_len(uint8_t mode)
 }
 
 
-void motor_many_send(FDCAN_HandleTypeDef *fdcanHandle, p_many_data_s p_many_data)
+void motor_many_send(port_t portx)
 {
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+    
     const uint8_t read_state_cmd1[] = {0xFF, 0xFF};
     static uint8_t cmd[64] = {0};
     uint8_t id = p_many_data->mode;
