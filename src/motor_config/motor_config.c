@@ -51,7 +51,7 @@ uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
     set_motor_reset(fdcanHandle, id);
     HAL_Delay(100);
 
-    printf("重置零位成功\r\n");
+    printf("閲嶇疆闆朵綅鎴愬姛锛侊紒锛乗r\n");
     return 0;
 }
 
