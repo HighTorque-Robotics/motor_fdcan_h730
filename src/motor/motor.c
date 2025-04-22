@@ -148,7 +148,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
     const uint8_t id_index = id - 1;
-    if (p_data[0] == 0x24 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT16 Ω‚Œˆ
+    if (p_data[0] == 0x24 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT16 Ëß£Êûê
             && p_data[11] == 0x21 && p_data[12] == 0x0F)
     {
         int16_t pos = 0;
@@ -166,7 +166,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
         p_motor_state[id_index].fault = (uint8_t)p_data[13];
     }
-    else if (p_data[0] == 0x28 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT32 Ω‚Œˆ
+    else if (p_data[0] == 0x28 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT32 Ëß£Êûê
              && p_data[19] == 0x21 && p_data[20] == 0x0F)
     {
         int32_t pos = 0;
@@ -184,7 +184,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
         p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
-    else if (p_data[0] == 0x2C && p_data[1] == 0x04 && p_data[2] == 0x00  // TFLOAT Ω‚Œˆ
+    else if (p_data[0] == 0x2C && p_data[1] == 0x04 && p_data[2] == 0x00  // TFLOAT Ëß£Êûê
              && p_data[19] == 0x21 && p_data[20] == 0x0F)
     {
         float pos = 0;

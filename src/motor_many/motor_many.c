@@ -1,12 +1,17 @@
 #include "motor_many.h"
 #include "motor.h"
 
-#ifdef __MICROLIB  // ��������MicroLIB��
+#ifdef __MICROLIB  // 有无启用MicroLIB库
 #include <string.h>
 #endif
 
 
-
+/**
+ * @brief 一拖多 DQ 电压模式
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V
+ */
 void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -26,6 +31,12 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 }
 
 
+/**
+ * @brief 一拖多 DQ 电流模式
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A
+ */
 void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -45,6 +56,12 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
 }
 
 
+/**
+ * @brief 一拖多 位置模式
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_many_pos(port_t portx, const uint8_t id, const float pos)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -65,6 +82,12 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
 }
 
 
+/**
+ * @brief 一拖多 速度模式
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -85,6 +108,12 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 }
 
 
+/**
+ * @brief 一拖多 力矩模式
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param tqe 目标力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ */
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -105,6 +134,12 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 }
 
 
+/**
+ * @brief 一拖多 设置超时时间
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param t_ms 超时时间，单位：毫秒（ms）
+ */
 void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -123,6 +158,13 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
 }
 
 
+/**
+ * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -151,6 +193,14 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
 }
 
 
+/**
+ * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，并限制最大输出力矩
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ */
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -182,6 +232,14 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
 }
 
 
+/**
+ * @brief 位置、速度、加速度模式（梯形控制）
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转/秒²（rps²）、弧度/秒²（rad/s²）、或度/秒²（°/s²），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -212,6 +270,16 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 }
 
 
+/**
+ * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
+ * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
+ */
 void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -249,44 +317,44 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
 }
 
 
-void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
-{
-    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+// void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
+// {
+//     p_many_data_s p_many_data = motor_get_many_pointer(portx);
 
-    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
+//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+//     const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t acc_int16 = tqe_float2int(tqe_float, TINT16);
+//     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
+//     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
+//     const int16_t acc_int16 = tqe_float2int(tqe_float, TINT16);
 
-    const int16_t kp_int16 = pid_float2int(kp, TINT16);
-    const int16_t ki_int16 = pid_float2int(ki, TINT16);
-    const int16_t kd_int16 = pid_float2int(kd, TINT16);
-    const uint16_t index = id - 1;
+//     const int16_t kp_int16 = pid_float2int(kp, TINT16);
+//     const int16_t ki_int16 = pid_float2int(ki, TINT16);
+//     const int16_t kd_int16 = pid_float2int(kd, TINT16);
+//     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KI_KD)
-    {
-        p_many_data->mode = MODE_POS_VEL_TQE_KP_KI_KD;
-        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s); i++)
-        {
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].pos = NAN_INT16;
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].vel = 0;
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].tqe = 0;
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].kp = 0;
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].ki = 0;
-            p_many_data->pos_vel_tqe_kp_ki_kd[i].kd = 0;
-        }
-    }
+//     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KI_KD)
+//     {
+//         p_many_data->mode = MODE_POS_VEL_TQE_KP_KI_KD;
+//         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s); i++)
+//         {
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].pos = NAN_INT16;
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].vel = 0;
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].tqe = 0;
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].kp = 0;
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].ki = 0;
+//             p_many_data->pos_vel_tqe_kp_ki_kd[i].kd = 0;
+//         }
+//     }
 
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].vel = vel_int16;
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].tqe = acc_int16;
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].kp = kp_int16;
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].ki = ki_int16;
-    p_many_data->pos_vel_tqe_kp_ki_kd[index].kd = kd_int16;
-}
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].pos = pos_int16;
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].vel = vel_int16;
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].tqe = acc_int16;
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].kp = kp_int16;
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].ki = ki_int16;
+//     p_many_data->pos_vel_tqe_kp_ki_kd[index].kd = kd_int16;
+// }
 
 
 
@@ -373,6 +441,10 @@ static uint8_t get_mode_data_len(uint8_t mode)
 }
 
 
+/**
+ * @brief 一拖多 发送
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ */
 void motor_many_send(port_t portx)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);

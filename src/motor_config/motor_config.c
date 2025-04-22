@@ -1,7 +1,7 @@
 #include "motor_config.h"
 
 
-uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef*, uint8_t), FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef*, uint8_t), FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
@@ -28,7 +28,12 @@ uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef*, uint8_t), 
 }
 
 
-
+/**
+ * @brief 重置电机零位
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ * @return 0-成功，1-重置零位失败，2-保存失败
+ */
 uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
 {
     set_motor_reset(fdcanHandle, id);
@@ -51,7 +56,6 @@ uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
     set_motor_reset(fdcanHandle, id);
     HAL_Delay(100);
 
-    printf("重置零位成功！！！\r\n");
     return 0;
 }
 

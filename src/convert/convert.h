@@ -40,7 +40,7 @@ typedef enum  // 数据类型
     TFLOAT = 0,
     TINT32,
     TINT16,
-    TINT8,
+    // TINT8,
 } data_type_t;
 
 

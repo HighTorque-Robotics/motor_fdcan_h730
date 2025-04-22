@@ -3,6 +3,13 @@
 
 
 
+/**
+ * @brief DQ 电压模式（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V
+ */
 void motor_set_dq_vlot(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float volt)
 {
     const float temp = vol_float2int(volt, type);
@@ -24,6 +31,13 @@ void motor_set_dq_vlot(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 }
 
 
+/**
+ * @brief DQ 电流模式（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A
+ */
 void motor_set_dq_current(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float cur)
 {
     const float temp = cur_float2int(cur, type);
@@ -45,6 +59,13 @@ void motor_set_dq_current(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t ty
 }
 
 
+/**
+ * @brief 位置模式，使用最大速度和加速度运动到目标位置（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_set_pos(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos)
 {
     const float temp1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -67,6 +88,13 @@ void motor_set_pos(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, con
 }
 
 
+/**
+ * @brief 速度模式，以最大加速度加速到指定速度（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_set_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float vel)
 {
     const float temp1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -89,6 +117,13 @@ void motor_set_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, con
 }
 
 
+/**
+ * @brief 力矩模式（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param tqe 目标力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ */
 void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float tqe)
 {
     const float temp1 = tqe_adjust(tqe, motor_get_model1(fdcanHandle, id));
@@ -111,6 +146,14 @@ void motor_set_tqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, con
 }
 
 
+/**
+ * @brief 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_set_pos_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos, const float vel)
 {
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -135,6 +178,15 @@ void motor_set_pos_vel(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 }
 
 
+/**
+ * @brief 位置速度模式，以目标速度运动到目标位置，并限制最大输出力矩（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ */
 void motor_set_pos_vel_MAXtqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
                               const float pos, const float vel, const float tqe)
 {
@@ -163,6 +215,15 @@ void motor_set_pos_vel_MAXtqe(FDCAN_HandleTypeDef *fdcanHandle, const data_type_
 }
 
 
+/**
+ * @brief 位置、速度、加速度模式（梯形控制）（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转/秒²（rps²）、弧度/秒²（rad/s²）、或度/秒²（°/s²），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_set_pos_velmax_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc)
 {
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -190,6 +251,14 @@ void motor_set_pos_velmax_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_
 }
 
 
+/**
+ * @brief 速度、加速度模式，以目标加速度加速到目标速度（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转/秒²（rps²）、弧度/秒²（rad/s²）、或度/秒²（°/s²），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ */
 void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float vel, const float acc)
 {
     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -214,6 +283,17 @@ void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 }
 
 
+/**
+ * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息）
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
+ * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
+ */
 void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
                                  const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
@@ -244,6 +324,12 @@ void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_ty
 }
 
 
+/**
+ * @brief 发送查询查询电机状态信息的指令
+ * @param fdcanHandle &hfdcanx
+ * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+ * @param id 电机 ID
+ */
 void motor_set_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id)
 {
     switch(type)

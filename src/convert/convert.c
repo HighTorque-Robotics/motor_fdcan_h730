@@ -1,6 +1,6 @@
 #include "convert.h"
 
-#ifdef __MICROLIB  // ÓĞÎŞÆôÓÃMicroLIB¿â
+#ifdef __MICROLIB  // æœ‰æ— å¯ç”¨MicroLIBåº“
 #include <string.h>
 #endif
 
@@ -41,8 +41,8 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     {
         switch (type)
         {
-        case TINT8:
-            return NAN_INT8;
+        // case TINT8:
+        //     return NAN_INT8;
         case TINT16:
             return NAN_INT16;
         case TINT32:
@@ -56,8 +56,8 @@ static float data_float2int(const float in_data, const data_type_t type, const f
 
     switch (type)
     {
-    case TINT8:
-        return data_limit(in_data * rint8, 127.0f, -128.0f);
+    // case TINT8:
+    //     return data_limit(in_data * rint8, 127.0f, -128.0f);
     case TINT16:
         return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT32:
@@ -74,8 +74,8 @@ static float data_int2float(const float in_data, const data_type_t type, const f
 {
     switch (type)
     {
-    case (TINT8):
-        return in_data / rint8;
+    // case (TINT8):
+    //     return in_data / rint8;
     case (TINT16):
         return in_data / rint16;
     case (TINT32):
@@ -89,10 +89,10 @@ static float data_int2float(const float in_data, const data_type_t type, const f
 
 
 /**
- * @brief ½«»¡¶È»ò½Ç¶È×ª»¯³ÉÈ¦Êı
- * @param in_data »¡¶ÈÖµ»ò½Ç¶ÈÖµ
- * @param type in_dataµÄÀàĞÍ
- * @return È¦ÊıÖµ
+ * @brief å°†å¼§åº¦æˆ–è§’åº¦è½¬åŒ–æˆåœˆæ•°
+ * @param in_data å¼§åº¦å€¼æˆ–è§’åº¦å€¼
+ * @param type in_dataçš„ç±»å‹
+ * @return åœˆæ•°å€¼
  */
 float conv_to_turns(const float in_data, const pos_vel_type_t type)
 {
@@ -116,10 +116,10 @@ float conv_to_turns(const float in_data, const pos_vel_type_t type)
 
 
 /**
- * @brief ½«È¦Êı×ª»¯³É»¡¶È»ò½Ç¶È
- * @param in_data È¦ÊıÖµ
- * @param type Òª×ª»»³ÉµÄÀàĞÍ
- * @return »¡¶ÈÖµ»ò½Ç¶ÈÖµ
+ * @brief å°†åœˆæ•°è½¬åŒ–æˆå¼§åº¦æˆ–è§’åº¦
+ * @param in_data åœˆæ•°å€¼
+ * @param type è¦è½¬æ¢æˆçš„ç±»å‹
+ * @return å¼§åº¦å€¼æˆ–è§’åº¦å€¼
  */
 float conv_from_turns(const float in_data, const pos_vel_type_t type)
 {
@@ -138,10 +138,10 @@ float conv_from_turns(const float in_data, const pos_vel_type_t type)
 
 
 /**
- * @brief Á¦¾Ø²¹³¥£¬Ğ´Á¦¾ØÊ±ÓÃ
- * @param in_data ÕæÊµÁ¦¾ØÊı¾İ
- * @param motor_type µç»úĞÍºÅ
- * @return ¸ø¶¨Á¦¾ØÊı¾İ
+ * @brief åŠ›çŸ©è¡¥å¿ï¼Œå†™åŠ›çŸ©æ—¶ç”¨
+ * @param in_data çœŸå®åŠ›çŸ©æ•°æ®
+ * @param motor_type ç”µæœºå‹å·
+ * @return ç»™å®šåŠ›çŸ©æ•°æ®
  */
 float tqe_adjust(const float in_data, const motor_type_t motor_type)
 {
@@ -169,10 +169,10 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
 
 
 /**
- * @brief Á¦¾Ø²¹³¥£¬¶ÁÁ¦¾ØÊ±ÓÃ
- * @param in_data ¶ÁÁ¦¾ØÊı¾İ
- * @param motor_type µç»úĞÍºÅ
- * @return ÕæÊµÁ¦¾ØÊı¾İ
+ * @brief åŠ›çŸ©è¡¥å¿ï¼Œè¯»åŠ›çŸ©æ—¶ç”¨
+ * @param in_data è¯»åŠ›çŸ©æ•°æ®
+ * @param motor_type ç”µæœºå‹å·
+ * @return çœŸå®åŠ›çŸ©æ•°æ®
  */
 float tqe_restore(const float in_data, const motor_type_t motor_type)
 {
@@ -293,7 +293,7 @@ void my_memcpy(void *p1, const void *p2, const int16_t len)
         return;
     }
 
-#ifdef __MICROLIB  // ÓĞÎŞÆôÓÃMicroLIB¿â
+#ifdef __MICROLIB  // æœ‰æ— å¯ç”¨MicroLIBåº“
     memcpy(p1, p2, len);
 #else
     uint8_t *p11 = (uint8_t *)p1;
