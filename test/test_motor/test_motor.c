@@ -37,7 +37,7 @@ void test_motor_control(const uint8_t id)
         motor_set_pos_vel_tqe_kp_kd(&hfdcan1, type, id, 0, 0, 0, 0, 0);
         break;
     case 9:
-        
+
         break;
     default:
         break;

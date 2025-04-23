@@ -41,14 +41,14 @@ void motor_print_state()
     for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
     {
         printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port1[i].id, motor_state_port1[i].mode, motor_state_port1[i].fault,
-                        motor_state_port1[i].position, motor_state_port1[i].velocity, motor_state_port1[i].torque);
+               motor_state_port1[i].position, motor_state_port1[i].velocity, motor_state_port1[i].torque);
     }
 
     printf("\r\n");
     for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
     {
         printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port2[i].id, motor_state_port2[i].mode, motor_state_port2[i].fault,
-                        motor_state_port2[i].position, motor_state_port2[i].velocity, motor_state_port2[i].torque);
+               motor_state_port2[i].position, motor_state_port2[i].velocity, motor_state_port2[i].torque);
     }
 }
 
@@ -63,8 +63,8 @@ p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
     {
         return motor_state_port2;
     }
-	
-	return NULL;
+
+    return NULL;
 }
 
 
@@ -78,8 +78,8 @@ p_motor_state_s motor_get_state_pointer2(port_t portx)
     {
         return motor_state_port2;
     }
-	
-	return NULL;
+
+    return NULL;
 }
 
 
@@ -93,8 +93,8 @@ p_many_data_s motor_get_many_pointer(port_t portx)
     {
         return &many_data_port2;
     }
-	
-	return NULL;
+
+    return NULL;
 }
 
 
@@ -108,8 +108,8 @@ FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
     {
         return &hfdcan2;
     }
-	
-	return NULL;
+
+    return NULL;
 }
 
 
@@ -135,7 +135,7 @@ uint8_t motor_get_model2(port_t portx, uint8_t id)
     }
 
     const p_motor_state_s p_motor_state = motor_get_state_pointer2(portx);
-	const motor_type_t model = p_motor_state[id - 1].model;
+    const motor_type_t model = p_motor_state[id - 1].model;
     return model;
 }
 
@@ -144,7 +144,7 @@ uint8_t motor_get_model2(port_t portx, uint8_t id)
 
 /**
  * @brief 解析电机返回信息
- * @param fdcanHandle 
+ * @param fdcanHandle
  * @param id 电机 ID
  * @param p_data fdcan 帧数据指针
  * @param len fdcan 数据长度
@@ -227,7 +227,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
     }
     else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04  // 设置信息解析
-        && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
+             && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
     {
         p_motor_state[id_index].ack = 1;
     }
@@ -254,13 +254,13 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
     if(hfdcan->Instance == FDCAN1 || hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
     {
         while (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
-		{
-			if (fdcan_rx_header.DataLength != 0)
-			{
-				const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
+        {
+            if (fdcan_rx_header.DataLength != 0)
+            {
+                const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-				motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
-			}
-		}
+                motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+            }
+        }
     }
 }

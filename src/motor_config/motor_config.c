@@ -1,7 +1,7 @@
 #include "motor_config.h"
 
 
-static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef*, uint8_t), FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, uint8_t), FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;

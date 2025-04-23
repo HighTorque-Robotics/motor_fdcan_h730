@@ -257,7 +257,7 @@ void motor_set_pos_velmax_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param acc 目标加速度，单位可为转/秒²（rps²）、弧度/秒²（rad/s²）、或度/秒²（°/s²），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转/秒2（rps2）、弧度/秒2（rad/s2）、或度/秒2（°/s2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id, const float vel, const float acc)
 {
@@ -351,7 +351,7 @@ void motor_get_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, c
 
 void mootr_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
 {
-    
+
 }
 
 

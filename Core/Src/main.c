@@ -130,7 +130,7 @@ int main(void)
         {
             tick_1000ms = HAL_GetTick();
             led_toggle();
-            
+
             motor_print_state();
             // set_out_time_int16(&hfdcan1, 1, 1000);
             // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);

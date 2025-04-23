@@ -204,7 +204,7 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    
+
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -449,7 +449,7 @@ void motor_many_send(port_t portx)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    
+
     const uint8_t read_state_cmd1[] = {0xFF, 0xFF};
     static uint8_t cmd[64] = {0};
     uint8_t id = p_many_data->mode;

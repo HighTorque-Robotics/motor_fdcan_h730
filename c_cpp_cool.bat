@@ -1,26 +1,24 @@
-:: 格式化当前文件夹所有c、c++代码，需要安装CoolFormat.exe并添加到环境变量
-
-:: 使用UTF-8编码
+:: ʹ��UTF-8����
 :: chcp 65001 >nul
 
 @echo off
 setlocal enabledelayedexpansion
 
-:: 验证工具存在性
+:: ��֤���ߴ�����
 where CoolFormat.exe >nul 2>nul
 if errorlevel 1 (
-    echo 错误：CoolFormat.exe未安装或未添加到PATH环境变量
+    echo ����CoolFormat.exeδ��װ��δ���ӵ�PATH��������
     pause
     exit /b 1
 )
 
-:: 递归处理文件
+:: �ݹ鴦���ļ�
 for /r %%i in (*.c *.cpp *.h *.hpp *.cc *.cxx) do (
-    echo 格式化: %%~nxi
+    echo ��ʽ��: %%~nxi
     :: echo CoolFormat.exe -f "%%i"
     CoolFormat.exe -f "%%i"
 )
 
-echo 所有C/C++文件已格式化完成
+echo ����C/C++�ļ��Ѹ�ʽ�����
 :: pause
 
