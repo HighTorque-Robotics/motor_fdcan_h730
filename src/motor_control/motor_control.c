@@ -330,7 +330,7 @@ void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_ty
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
  */
-void motor_set_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id)
+void motor_get_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id)
 {
     switch(type)
     {
@@ -346,6 +346,12 @@ void motor_set_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, c
     default:
         break;
     }
+}
+
+
+void mootr_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+{
+    
 }
 
 

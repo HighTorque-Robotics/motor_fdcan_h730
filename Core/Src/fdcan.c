@@ -58,9 +58,9 @@ void MX_FDCAN1_Init(void)
     hfdcan1.Init.ExtFiltersNbr = 0;
     hfdcan1.Init.RxFifo0ElmtsNbr = 32;
     hfdcan1.Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_64;
-    hfdcan1.Init.RxFifo1ElmtsNbr = 0;
+    hfdcan1.Init.RxFifo1ElmtsNbr = 10;
     hfdcan1.Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_64;
-    hfdcan1.Init.RxBuffersNbr = 0;
+    hfdcan1.Init.RxBuffersNbr = 10;
     hfdcan1.Init.RxBufferSize = FDCAN_DATA_BYTES_64;
     hfdcan1.Init.TxEventsNbr = 0;
     hfdcan1.Init.TxBuffersNbr = 0;

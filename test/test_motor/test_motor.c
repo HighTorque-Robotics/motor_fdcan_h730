@@ -36,26 +36,9 @@ void test_motor_control(const uint8_t id)
     case 8:
         motor_set_pos_vel_tqe_kp_kd(&hfdcan1, type, id, 0, 0, 0, 0, 0);
         break;
-    // case 7:
-    // {
-    //     static uint32_t tick_500ms = 0;
-    //     if (HAL_GetTick() - tick_500ms >= 500)
-    //     {
-    //         tick_500ms = HAL_GetTick();
-    //         static uint8_t flag = 0;
-    //         if (flag == 0)
-    //         {
-    //             motor_set_pos(&hfdcan1, type, id, -0.5);
-    //             flag = 1;
-    //         }
-    //         else if (flag == 1)
-    //         {
-    //             motor_set_pos(&hfdcan1, type, id, 0.5);
-    //             flag = 0;
-    //         }
-    //     }
-    // }
-    // break;
+    case 9:
+        
+        break;
     default:
         break;
     }

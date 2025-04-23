@@ -142,12 +142,18 @@ uint8_t motor_get_model2(port_t portx, uint8_t id)
 
 
 
-
+/**
+ * @brief 解析电机返回信息
+ * @param fdcanHandle 
+ * @param id 电机 ID
+ * @param p_data fdcan 帧数据指针
+ * @param len fdcan 数据长度
+ */
 static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint8_t *p_data, const uint8_t len)
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
-
     const uint8_t id_index = id - 1;
+
     if (p_data[0] == 0x24 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT16 解析
             && p_data[11] == 0x21 && p_data[12] == 0x0F)
     {
@@ -202,7 +208,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
         p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
-    else if (id_index < MANY_MOTOR_SIZE && len == 8)
+    else if (id_index < MANY_MOTOR_SIZE && len == 8)   // 一拖多模式解析
     {
         int16_t pos = 0;
         int16_t vel = 0;
@@ -220,10 +226,23 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         const float tqe_temp = tqe_int2float(tqe, TINT16);
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
     }
-    else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04
+    else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04  // 设置信息解析
         && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
     {
         p_motor_state[id_index].ack = 1;
+    }
+    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)  // 电机固件版本
+    {
+        if (len == 5)
+        {
+            my_memcpy(&p_motor_state[id_index].version, &p_data[3], sizeof(uint16_t));
+        }
+        else
+        {
+            p_motor_state[id_index].version.major = 3;
+            p_motor_state[id_index].version.minor = 9;
+            p_motor_state[id_index].version.patch = 1;
+        }
     }
 }
 
@@ -234,12 +253,14 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
     if(hfdcan->Instance == FDCAN1 || hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
     {
-        HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata);
-        if (fdcan_rx_header.DataLength != 0)
-        {
-            const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
+        while (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
+		{
+			if (fdcan_rx_header.DataLength != 0)
+			{
+				const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-            motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
-        }
+				motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+			}
+		}
     }
 }

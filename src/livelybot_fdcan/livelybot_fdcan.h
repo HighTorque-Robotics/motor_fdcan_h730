@@ -93,5 +93,8 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
+/* 查询电机固件版本 */
+void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+
 
 #endif

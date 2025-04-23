@@ -111,7 +111,7 @@ int main(void)
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
     // test_time_out(1000);
 
-    motor_pos_reset(&hfdcan1, 1);
+    // motor_pos_reset(&hfdcan1, 1);
     while (1)
     {
         /* USER CODE END WHILE */
@@ -123,7 +123,7 @@ int main(void)
             tick_100ms = HAL_GetTick();
 
             // test_motor_control(1);
-            test_motor_many();
+            //test_motor_many();
         }
 
         if (HAL_GetTick() - tick_1000ms >= 1000)
