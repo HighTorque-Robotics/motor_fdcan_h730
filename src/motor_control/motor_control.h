@@ -22,6 +22,10 @@ void motor_set_pos_vel_tqe_kp_kd_2(FDCAN_HandleTypeDef *fdcanHandle, const data_
                                    const float pos, const float vel, const float tqe, const float kp, const float kd);
 
 void motor_get_state_send(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id);
-void mootr_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
+void motor_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
+
+void motor_set_stop(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
+void motor_set_brake(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
+void motor_set_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
 
 #endif

@@ -36,9 +36,9 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
  */
 uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
 {
-    set_motor_reset(fdcanHandle, id);
-    set_motor_reset(fdcanHandle, id);
-    set_motor_reset(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     if (motor_config_closed_loop(set_pos_rezero, fdcanHandle, id) != 0)
@@ -51,9 +51,31 @@ uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
         return 2;
     }
 
-    set_motor_reset(fdcanHandle, id);
-    set_motor_reset(fdcanHandle, id);
-    set_motor_reset(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    HAL_Delay(100);
+
+    return 0;
+}
+
+
+/**
+ * @brief 保存电机设置
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ * @return 0-成功，1-失败
+ */
+uint8_t motor_conf_write(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+{
+    if (motor_config_closed_loop(set_conf_write, fdcanHandle, id) != 0)
+    {
+        return 1;
+    }
+
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
+    set_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     return 0;

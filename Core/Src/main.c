@@ -109,6 +109,7 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
+    printf("例程版本号：V3.0.0\r\n");
 
     while (1)
     {

@@ -365,11 +365,8 @@ void motor_set_pos_vel_tqe_kp_kd_2(FDCAN_HandleTypeDef *fdcanHandle, const data_
 }
 
 
-
-
-
 /**
- * @brief 发送查询查询电机状态信息的指令
+ * @brief 发送查询查询电机状态信息的指令（在motor_process_state中解析）
  * @param fdcanHandle &hfdcanx
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -393,13 +390,52 @@ void motor_get_state_send(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t ty
 }
 
 
-void mootr_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+/**
+ * @brief 发送查询电机固件版本号指令（在motor_process_state中解析）
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ */
+void motor_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
 {
     // for (uint8_t i = 0; i < 5; i++)
     {
         read_motor_version_int16(fdcanHandle, id);
     }
 }
+
+
+/**
+ * @brief 停止模式，电机三相都断开
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ */
+void motor_set_stop(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+{
+    set_motor_stop_int8(fdcanHandle, id);
+}
+
+
+/**
+ * @brief 刹车模式（阻尼模式），电机三相都接地
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ */
+void motor_set_brake(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+{
+    set_motor_brake_int8(fdcanHandle, id);
+}
+
+
+/**
+ * @brief 电机软重启，重启后进入停止模式
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机 ID
+ */
+void motor_set_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+{
+    set_motor_reset_int8(fdcanHandle, id);
+}
+
 
 
 

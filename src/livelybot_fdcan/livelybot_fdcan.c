@@ -856,10 +856,6 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
     static uint8_t cmd[] = {0x40, 0x01, 0x15, 0x64, 0x20, 0x63, 0x66, 0x67, 0x2d, 0x73, 0x65, 0x74, 0x2d, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x20, 0x30, 0x2e, 0x30, 0x0a};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
-
-    HAL_Delay(1000);
-
-    set_conf_write(fdcanHandle, 1);
 }
 
 
@@ -881,7 +877,7 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x40, 0x01, 0x08, 0x64, 0x20, 0x72, 0x65, 0x73, 0x65, 0x74, 0x0A, 0x50};
 
@@ -894,7 +890,7 @@ void set_motor_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x01, 0x00, 0x00};
 
@@ -907,7 +903,7 @@ void set_motor_stop(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_brake(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void set_motor_brake_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x01, 0x00, 0x0f};
 
