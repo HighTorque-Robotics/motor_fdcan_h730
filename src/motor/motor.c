@@ -71,6 +71,32 @@ void motor_print_version()
 }
 
 
+/**
+ * @brief 获取指定端口和ID的电机状态指针
+ * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
+ * @param id 电机 ID
+ * @return 返回类型为 `p_motor_state_s` 的指针
+ */
+p_motor_state_s motor_get_state(port_t portx, uint8_t id)
+{
+    const uint8_t index = id - 1;
+    
+    switch (portx)
+    {
+    case PORT1:
+        return &(motor_state_port1[index]);
+        
+    case PORT2:
+        return &(motor_state_port2[index]);
+        
+    default:
+        return NULL;
+    }
+	
+	return NULL;
+}
+
+
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 {
     if (fdcanHandle->Instance == FDCAN1)

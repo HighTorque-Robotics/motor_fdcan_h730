@@ -109,12 +109,7 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
-    // test_time_out(1000);
 
-    mootr_get_version(&hfdcan1, 0x7f);
-    HAL_Delay(100);
-    motor_print_version();
-    // motor_pos_reset(&hfdcan1, 1);
     while (1)
     {
         /* USER CODE END WHILE */

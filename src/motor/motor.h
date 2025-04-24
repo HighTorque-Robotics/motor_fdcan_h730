@@ -42,6 +42,8 @@ extern many_data_s many_data_port2;
 void motor_print_state(void);
 void motor_print_version(void);
 
+p_motor_state_s motor_get_state(port_t portx, uint8_t id);
+
 p_many_data_s motor_get_many_pointer(port_t portx);
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx);
 
