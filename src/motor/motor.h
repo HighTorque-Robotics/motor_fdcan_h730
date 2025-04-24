@@ -2,6 +2,12 @@
 #define _MOTOR_H
 
 
+
+
+#define  MOTOR_MAX_NUM  2
+
+
+
 #include "fdcan.h"
 #include "led.h"
 #include "my_fdcan.h"
@@ -10,7 +16,7 @@
 #include "motor_many.h"
 
 
-#define  MOTOR_MAX_NUM  2
+
 
 
 typedef struct

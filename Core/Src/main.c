@@ -120,8 +120,9 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
 
-            // test_motor_control(1);
-            //test_motor_many();
+            // test_motor_control(2);
+            test_motor_many();
+
         }
 
         if (HAL_GetTick() - tick_1000ms >= 1000)
@@ -132,6 +133,7 @@ int main(void)
             motor_print_state();
             // set_out_time_int16(&hfdcan1, 1, 1000);
             // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);
+
         }
     }
     /* USER CODE END 3 */

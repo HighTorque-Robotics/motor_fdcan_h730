@@ -147,6 +147,11 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
 {
 #define TQE_ADJUST(data, k, d)  (((data) - (d)) / (k))
 
+    if (isnan(in_data))
+    {
+        return NAN_FLOAT;
+    }
+
     switch (motor_type)
     {
     case MNULL:
@@ -177,6 +182,11 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
 float tqe_restore(const float in_data, const motor_type_t motor_type)
 {
 #define TQE_RESTORE(data, k, d) ((data) * (k) + (d))
+
+    if (isnan(in_data))
+    {
+        return NAN_FLOAT;
+    }
 
     switch (motor_type)
     {

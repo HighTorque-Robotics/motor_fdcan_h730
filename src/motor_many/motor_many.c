@@ -317,6 +317,52 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
 }
 
 
+/**
+ * @brief 真运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
+ * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param id 电机 ID
+ * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
+ * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
+ */
+void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
+{
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
+
+    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
+    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
+    const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
+
+    const int16_t kp_int16 = pid_float2int(kp, TINT16);
+    const int16_t kd_int16 = pid_float2int(kd, TINT16);
+    const uint16_t index = id - 1;
+
+    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD2)
+    {
+        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD2;
+        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_kd_s); i++)
+        {
+            p_many_data->pos_vel_tqe_kp_kd[i].pos = NAN_INT16;
+            p_many_data->pos_vel_tqe_kp_kd[i].vel = 0;
+            p_many_data->pos_vel_tqe_kp_kd[i].tqe = 0;
+            p_many_data->pos_vel_tqe_kp_kd[i].kp = 0;
+            p_many_data->pos_vel_tqe_kp_kd[i].kd = 0;
+        }
+    }
+
+    p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_int16;
+    p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_int16;
+    p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_int16;
+    p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
+    p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
+}
+
 // void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
 // {
 //     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -362,7 +408,6 @@ static uint8_t get_data_max(uint8_t mode)
 {
     switch (mode)
     {
-    case (MODE_POS_VEL_RKP_RKD):
     case (MODE_POS_VEL_KP_KD):
         return 56;
     default:
@@ -428,10 +473,9 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_POS_VEL_ACC:
         return 6;
     case MODE_POS_VEL_KP_KD:
-    case MODE_POS_VEL_RKP_RKD:
         return 8;
     case MODE_POS_VEL_TQE_KP_KD:
-    case MODE_POS_VEL_TQE_RKP_RKD:
+    case MODE_POS_VEL_TQE_KP_KD2:
         return 10;
     case MODE_POS_VEL_TQE_KP_KI_KD:
         return 12;
