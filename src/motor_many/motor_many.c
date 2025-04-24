@@ -238,7 +238,7 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param acc 目标加速度，单位可为转/秒²（rps²）、弧度/秒²（rad/s²）、或度/秒²（°/s²），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转/秒2（rps2）、弧度/秒2（rad/s2）、或度/秒2（°/s2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc)
 {

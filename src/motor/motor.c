@@ -53,6 +53,24 @@ void motor_print_state()
 }
 
 
+void motor_print_version()
+{
+    printf("\r\n");
+    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
+    {
+        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port1[i].id, 
+            motor_state_port1[i].version.major, motor_state_port1[i].version.minor, motor_state_port1[i].version.patch);
+    }
+
+    printf("\r\n");
+    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
+    {
+        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port2[i].id, 
+            motor_state_port2[i].version.major, motor_state_port2[i].version.minor, motor_state_port2[i].version.patch);
+    }
+}
+
+
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 {
     if (fdcanHandle->Instance == FDCAN1)
@@ -235,7 +253,9 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     {
         if (len == 5)
         {
-            my_memcpy(&p_motor_state[id_index].version, &p_data[3], sizeof(uint16_t));
+            p_motor_state[id_index].version.major = p_data[4] >> 4;
+            p_motor_state[id_index].version.minor = p_data[4] & 0x0F | p_data[3] >> 4;
+            p_motor_state[id_index].version.patch = p_data[3] & 0x0F;
         }
         else
         {

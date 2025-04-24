@@ -19,7 +19,7 @@ void motor_set_vel_acc(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type,
 void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
                                  const float pos, const float vel, const float tqe, const float kp, const float kd);
 
-void motor_set_state(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id);
-
+void motor_get_state_send(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id);
+void mootr_get_version(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
 
 #endif
