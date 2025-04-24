@@ -58,15 +58,15 @@ void motor_print_version()
     printf("\r\n");
     for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
     {
-        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port1[i].id, 
-            motor_state_port1[i].version.major, motor_state_port1[i].version.minor, motor_state_port1[i].version.patch);
+        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port1[i].id,
+               motor_state_port1[i].version.major, motor_state_port1[i].version.minor, motor_state_port1[i].version.patch);
     }
 
     printf("\r\n");
     for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
     {
-        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port2[i].id, 
-            motor_state_port2[i].version.major, motor_state_port2[i].version.minor, motor_state_port2[i].version.patch);
+        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port2[i].id,
+               motor_state_port2[i].version.major, motor_state_port2[i].version.minor, motor_state_port2[i].version.patch);
     }
 }
 
@@ -80,20 +80,20 @@ void motor_print_version()
 p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 {
     const uint8_t index = id - 1;
-    
+
     switch (portx)
     {
     case PORT1:
         return &(motor_state_port1[index]);
-        
+
     case PORT2:
         return &(motor_state_port2[index]);
-        
+
     default:
         return NULL;
     }
-	
-	return NULL;
+
+    return NULL;
 }
 
 

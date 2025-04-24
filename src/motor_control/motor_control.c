@@ -336,7 +336,7 @@ void motor_set_pos_vel_tqe_kp_kd(FDCAN_HandleTypeDef *fdcanHandle, const data_ty
  * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
  */
 void motor_set_pos_vel_tqe_kp_kd_2(FDCAN_HandleTypeDef *fdcanHandle, const data_type_t type, const uint8_t id,
-    const float pos, const float vel, const float tqe, const float kp, const float kd)
+                                   const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
