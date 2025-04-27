@@ -4,9 +4,13 @@
 
 #include "convert.h"
 #include "my_fdcan.h"
+#include "motor.h"
 
 
-#define  MANY_MOTOR_SIZE  2  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
+#define  MANY_PORT_SIZE   2  // 通道数量
+#define  MANY_MOTOR_SIZE  MOTOR_MAX_NUM  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
+
+
 
 #if MANY_MOTOR_SIZE > 0 && MANY_MOTOR_SIZE <= 30
 #define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_ki_kd_s))
@@ -86,16 +90,6 @@ typedef struct
     uint8_t mode;
 } many_data_s, *p_many_data_s;
 #pragma pack()
-
-
-
-typedef enum
-{
-    PNULL,
-    PORT1,
-    PORT2
-} port_t;
-
 
 
 

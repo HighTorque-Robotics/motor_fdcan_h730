@@ -156,19 +156,24 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
     {
     case MNULL:
         return 0;
-    case M5046_20:
-        return TQE_ADJUST(in_data, 0.533654f, -0.519366f);
+    case M4438_30:
+        return TQE_ADJUST(in_data, 0.525600f, -0.050000f);
+    case M4438_32: 
+        return TQE_ADJUST(in_data, 0.485565f, -0.043000f);
     case M4538_19:
-        return TQE_ADJUST(in_data, 0.493835f, -0.473398f);
-    case M5047_36:
-    case M6056_36:
-        return TQE_ADJUST(in_data, 0.465293f, -0.554848f);
+        return TQE_ADJUST(in_data, 0.493835f, -0.233398f);
+    case M5043_20:
+        return TQE_ADJUST(in_data, 0.966000f, -0.115000f);
+    case M5046_20: 
+        return TQE_ADJUST(in_data, 0.533654f, -0.289366f);
     case M5047_09:
-        return TQE_ADJUST(in_data, 0.547474f, -0.150232f);
-    case M4438_32:
-        return TQE_ADJUST(in_data, 0.485565f, -0.083000f);
+        return TQE_ADJUST(in_data, 0.547474f, -0.075232f);
+    case M5047_36:
+        return TQE_ADJUST(in_data, 0.350000f, -0.008030f);
+    case M6056_36:
+        return TQE_ADJUST(in_data, 0.677000f, -0.100000f);
     default:
-        return 0;
+        return TQE_ADJUST(in_data, 0.5f, 0.0f);
     }
 }
 
@@ -192,19 +197,24 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
     {
     case MNULL:
         return 0;
-    case M5046_20:
-        return TQE_RESTORE(in_data, 0.533654f, -0.519366f);
+    case M4438_30:
+        return TQE_RESTORE(in_data, 0.525600f, -0.050000f);
+    case M4438_32: 
+        return TQE_RESTORE(in_data, 0.485565f, -0.043000f);
     case M4538_19:
-        return TQE_RESTORE(in_data, 0.493835f, -0.473398f);
-    case M5047_36:
-    case M6056_36:
-        return TQE_RESTORE(in_data, 0.465293f, -0.554848f);
+        return TQE_RESTORE(in_data, 0.493835f, -0.233398f);
+    case M5043_20:
+        return TQE_RESTORE(in_data, 0.966000f, -0.115000f);
+    case M5046_20: 
+        return TQE_RESTORE(in_data, 0.533654f, -0.289366f);
     case M5047_09:
-        return TQE_RESTORE(in_data, 0.547474f, -0.150232f);
-    case M4438_32:
-        return TQE_RESTORE(in_data, 0.485565f, -0.083000f);
+        return TQE_RESTORE(in_data, 0.547474f, -0.075232f);
+    case M5047_36:
+        return TQE_RESTORE(in_data, 0.350000f, -0.008030f);
+    case M6056_36:
+        return TQE_RESTORE(in_data, 0.677000f, -0.100000f);
     default:
-        return 0;
+        return TQE_RESTORE(in_data, 0.5f, 0.0f);
     }
 }
 

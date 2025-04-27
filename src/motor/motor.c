@@ -1,6 +1,9 @@
 #include "motor.h"
 
 
+
+/************************************下面为需要修改的部分*******************************************/
+
 static motor_state_s motor_state_port1[MOTOR_MAX_NUM] =
 {
     {
@@ -24,14 +27,56 @@ static motor_state_s motor_state_port2[MOTOR_MAX_NUM] =
 
     {
         .id = 2,
-        .model = M5047_36,
+        .model = M4438_30,
     }
 };
 
 
-many_data_s many_data_port1;
-many_data_s many_data_port2;
+p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
+{
+    if (fdcanHandle->Instance == FDCAN2)
+    {
+        return motor_state_port1;
+    }
+    else if (fdcanHandle->Instance == FDCAN3)
+    {
+        return motor_state_port2;
+    }
 
+    return NULL;
+}
+
+
+p_motor_state_s motor_get_state_pointer2(port_t portx)
+{
+    if (portx == PORT1)
+    {
+        return motor_state_port1;
+    }
+    else if (portx == PORT2)
+    {
+        return motor_state_port2;
+    }
+
+    return NULL;
+}
+
+
+FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
+{
+    if (portx == PORT1)
+    {
+        return &hfdcan2;
+    }
+    else if (portx == PORT2)
+    {
+        return &hfdcan3;
+    }
+
+    return NULL;
+}
+
+/*******************************************END***************************************************/
 
 
 
@@ -71,93 +116,7 @@ void motor_print_version()
 }
 
 
-/**
- * @brief 获取指定端口和ID的电机状态指针
- * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
- * @param id 电机 ID
- * @return 返回类型为 `p_motor_state_s` 的指针
- */
-p_motor_state_s motor_get_state(port_t portx, uint8_t id)
-{
-    const uint8_t index = id - 1;
-
-    switch (portx)
-    {
-    case PORT1:
-        return &(motor_state_port1[index]);
-
-    case PORT2:
-        return &(motor_state_port2[index]);
-
-    default:
-        return NULL;
-    }
-
-    return NULL;
-}
-
-
-p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
-{
-    if (fdcanHandle->Instance == FDCAN1)
-    {
-        return motor_state_port1;
-    }
-    else if (fdcanHandle->Instance == FDCAN2)
-    {
-        return motor_state_port2;
-    }
-
-    return NULL;
-}
-
-
-p_motor_state_s motor_get_state_pointer2(port_t portx)
-{
-    if (portx == PORT1)
-    {
-        return motor_state_port1;
-    }
-    else if (portx == PORT2)
-    {
-        return motor_state_port2;
-    }
-
-    return NULL;
-}
-
-
-p_many_data_s motor_get_many_pointer(port_t portx)
-{
-    if (portx == PORT1)
-    {
-        return &many_data_port1;
-    }
-    else if (portx == PORT2)
-    {
-        return &many_data_port2;
-    }
-
-    return NULL;
-}
-
-
-FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
-{
-    if (portx == PORT1)
-    {
-        return &hfdcan1;
-    }
-    else if (portx == PORT2)
-    {
-        return &hfdcan2;
-    }
-
-    return NULL;
-}
-
-
-uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+static uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
@@ -184,6 +143,18 @@ uint8_t motor_get_model2(port_t portx, uint8_t id)
 }
 
 
+/**
+ * @brief 获取指定端口和ID的电机状态指针
+ * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
+ * @param id 电机 ID
+ * @return 返回类型为 `p_motor_state_s` 的指针
+ */
+p_motor_state_s motor_get_state(port_t portx, uint8_t id)
+{
+    const uint8_t index = id - 1;
+
+    return &motor_get_state_pointer2(portx)[index];
+}
 
 
 /**
@@ -252,7 +223,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
         p_motor_state[id_index].fault = (uint8_t)p_data[21];
     }
-    else if (id_index < MANY_MOTOR_SIZE && len == 8)   // 一拖多模式解析
+    else if (id_index < MOTOR_MAX_NUM && len == 8)   // 一拖多模式解析
     {
         int16_t pos = 0;
         int16_t vel = 0;

@@ -109,7 +109,7 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
-    printf("例程版本号：V3.0.0\r\n");
+    printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
 
     while (1)
     {
@@ -121,8 +121,8 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
 
-            // test_motor_control(2);
-            test_motor_many();
+            test_motor_control(2);
+            // test_motor_many();
 
         }
 
@@ -132,9 +132,6 @@ int main(void)
             led_toggle();
 
             motor_print_state();
-            // set_out_time_int16(&hfdcan1, 1, 1000);
-            // set_many_out_time_int16(&hfdcan1, 1000, 1000, 1000, 1000);
-
         }
     }
     /* USER CODE END 3 */

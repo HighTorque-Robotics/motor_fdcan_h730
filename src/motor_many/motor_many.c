@@ -1,9 +1,24 @@
 #include "motor_many.h"
-#include "motor.h"
+
 
 #ifdef __MICROLIB  // 有无启用MicroLIB库
 #include <string.h>
 #endif
+
+
+many_data_s many_data_port[MANY_PORT_SIZE][MANY_DATA_BUF_MAX_LEN];
+
+
+
+p_many_data_s motor_get_many_pointer(port_t portx)
+{
+    if (portx < 1 || portx > MANY_PORT_SIZE)
+    {
+        return NULL;
+    }
+    
+    return many_data_port[portx - 1];
+}
 
 
 /**
