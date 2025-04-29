@@ -873,7 +873,7 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief 保存电机设置
+ * @brief 电机软重启
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
@@ -892,7 +892,7 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x01, 0x00, 0x00};
+    static uint8_t cmd[] = {0x01, 0x00, 0x00, 0x14, 0x04, 0x00, 0x11, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }
@@ -905,7 +905,7 @@ void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_brake_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x01, 0x00, 0x0f};
+    static uint8_t cmd[] = {0x01, 0x00, 0x0f, 0x14, 0x04, 0x00, 0x11, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }

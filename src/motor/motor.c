@@ -4,114 +4,121 @@
 
 /************************************下面为需要修改的部分*******************************************/
 
-static motor_state_s motor_state_port1[MOTOR_MAX_NUM] =
+static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下标 + 1 = 电机 ID 
 {
-    {
-        .id = 1,
-        .model = M4438_30,
+    {  // CAN 通道 PORT1
+        {  // ID = 1
+            .model = M4438_30,
+        },
+
+        {  // ID = 2
+            .model = M5047_36,
+        }
     },
 
-    {
-        .id = 2,
-        .model = M5047_36,
-    }
+    {  // CAN 通道 PORT2
+        {  // ID = 1
+            .model = M4438_30,
+        },
+
+        {  // ID = 2
+            .model = M5047_36,
+        }
+    },
 };
 
 
-static motor_state_s motor_state_port2[MOTOR_MAX_NUM] =
+const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
 {
     {
-        .id = 1,
-        .model = M5047_36,
+        .port = PORT1,
+        .fdcan = &hfdcan2,
+        .state = motor_state_port[0],
     },
 
     {
-        .id = 2,
-        .model = M4438_30,
-    }
+        .port = PORT2,
+        .fdcan = &hfdcan3,
+        .state = motor_state_port[1],
+    },
 };
+
+/*******************************************END***************************************************/
 
 
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle)
 {
-    if (fdcanHandle->Instance == FDCAN2)
+    for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
     {
-        return motor_state_port1;
-    }
-    else if (fdcanHandle->Instance == FDCAN3)
-    {
-        return motor_state_port2;
+        if (fdcanHandle->Instance == port_maping[i].fdcan->Instance)
+        {
+            return port_maping[i].state;
+        }
     }
 
+    MOTOR_ERR();
     return NULL;
 }
 
 
 p_motor_state_s motor_get_state_pointer2(port_t portx)
 {
-    if (portx == PORT1)
+    for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
     {
-        return motor_state_port1;
-    }
-    else if (portx == PORT2)
-    {
-        return motor_state_port2;
+        if (portx == port_maping[i].port)
+        {
+            return port_maping[i].state;
+        }
     }
 
+    MOTOR_ERR();
     return NULL;
 }
 
 
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
 {
-    if (portx == PORT1)
+    for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
     {
-        return &hfdcan2;
-    }
-    else if (portx == PORT2)
-    {
-        return &hfdcan3;
+        if (portx == port_maping[i].port)
+        {
+            return port_maping[i].fdcan;
+        }
     }
 
+    MOTOR_ERR();
     return NULL;
 }
-
-/*******************************************END***************************************************/
 
 
 
 void motor_print_state()
 {
-    printf("\r\n");
-    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
+    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
     {
-        printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port1[i].id, motor_state_port1[i].mode, motor_state_port1[i].fault,
-               motor_state_port1[i].position, motor_state_port1[i].velocity, motor_state_port1[i].torque);
-    }
+        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
+        {
+            const p_motor_state_s p_motor_state = motor_get_state(portx, id);
 
-    printf("\r\n");
-    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
-    {
-        printf("id:%2d, mode:%2d, fault:%2d, pos:%.3lf, vel:%.3lf, tqe:%.3lf\r\n", motor_state_port2[i].id, motor_state_port2[i].mode, motor_state_port2[i].fault,
-               motor_state_port2[i].position, motor_state_port2[i].velocity, motor_state_port2[i].torque);
+            printf("PORT: %d, ID: %2d, mode: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->fault,
+                    p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
+        }
+        printf("\r\n");
     }
 }
 
 
 void motor_print_version()
 {
-    printf("\r\n");
-    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
+    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
     {
-        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port1[i].id,
-               motor_state_port1[i].version.major, motor_state_port1[i].version.minor, motor_state_port1[i].version.patch);
-    }
+        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
+        {
+            const p_version_s p_version = &motor_get_state(portx, id)->version;
 
-    printf("\r\n");
-    for (uint8_t i = 0; i < MOTOR_MAX_NUM; i++)
-    {
-        printf("ID:%2d, version=%d.%d.%d\r\n", motor_state_port2[i].id,
-               motor_state_port2[i].version.major, motor_state_port2[i].version.minor, motor_state_port2[i].version.patch);
+            printf("PORT: %d, ID: %2d, version = %d.%d.%d\r\n", portx, id, p_version->major, p_version->minor, p_version->patch);
+        }
+        printf("\r\n");
     }
 }
 
@@ -120,7 +127,7 @@ static uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
-        led_toggle_err();
+        MOTOR_ERR();
         return MNULL;
     }
 
@@ -133,7 +140,7 @@ uint8_t motor_get_model2(port_t portx, uint8_t id)
 {
     if (id < 0 || id > MOTOR_MAX_NUM)
     {
-        led_toggle_err();
+        MOTOR_ERR();
         return MNULL;
     }
 
@@ -264,20 +271,44 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
 }
 
 
+
+
 static FDCAN_RxHeaderTypeDef fdcan_rx_header;
 static uint8_t fdcan_rdata[64] = {0};
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+
+/**
+ * @brief 解析所有 CAN 通道 FIFO 中的电机状态数据
+ * 
+ */
+void motor_process_state_all()
 {
-    if(hfdcan->Instance == FDCAN1 || hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
+    for (int i = 0; i < MOTOR_MAX_NUM; i++)
     {
-        while (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
+        while (HAL_FDCAN_GetRxMessage(port_maping[i].fdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
         {
             if (fdcan_rx_header.DataLength != 0)
             {
                 const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-                motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+                motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
             }
         }
+    }
+}
+
+
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+{
+    if(hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
+    {
+        // while (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
+        // {
+        //     if (fdcan_rx_header.DataLength != 0)
+        //     {
+        //         const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
+
+        //         motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+        //     }
+        // }
     }
 }

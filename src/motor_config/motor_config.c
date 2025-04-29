@@ -13,6 +13,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
     {
         set_pos_rezero(fdcanHandle, id);
         HAL_Delay(100);
+        motor_process_state_all();
         if (p_motor_state[id_index].ack != 0)
         {
             break;
@@ -34,8 +35,10 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
  * @param id 电机 ID
  * @return 0-成功，1-重置零位失败，2-保存失败
  */
-uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+uint8_t motor_pos_reset(port_t portx, const uint8_t id)
 {
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
     set_motor_reset_int8(fdcanHandle, id);
     set_motor_reset_int8(fdcanHandle, id);
     set_motor_reset_int8(fdcanHandle, id);
@@ -66,8 +69,10 @@ uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
  * @param id 电机 ID
  * @return 0-成功，1-失败
  */
-uint8_t motor_conf_write(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id)
+uint8_t motor_conf_write(port_t portx, const uint8_t id)
 {
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+    
     if (motor_config_closed_loop(set_conf_write, fdcanHandle, id) != 0)
     {
         return 1;

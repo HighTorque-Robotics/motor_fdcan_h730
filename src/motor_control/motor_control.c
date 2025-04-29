@@ -293,7 +293,7 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 
 
 /**
- * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息）
+ * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息） 不建议使用，建议使用 motor_set_pos_vel_tqe_kp_kd_2
  * @param fdcanHandle &hfdcanx
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -335,7 +335,7 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uin
 
 
 /**
- * @brief 真运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息）
+ * @brief 运控模式2 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息）
  * @param fdcanHandle &hfdcanx
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -420,7 +420,7 @@ void motor_get_version(port_t portx, const uint8_t id)
 
 
 /**
- * @brief 停止模式，电机三相都断开
+ * @brief 停止模式，电机三相都断开（并让电机返回状态信息）
  * @param fdcanHandle &hfdcanx
  * @param id 电机 ID
  */
@@ -433,7 +433,7 @@ void motor_set_stop(port_t portx, const uint8_t id)
 
 
 /**
- * @brief 刹车模式（阻尼模式），电机三相都接地
+ * @brief 刹车模式（阻尼模式），电机三相都接地（并让电机返回状态信息）
  * @param fdcanHandle &hfdcanx
  * @param id 电机 ID
  */

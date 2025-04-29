@@ -14,9 +14,10 @@ p_many_data_s motor_get_many_pointer(port_t portx)
 {
     if (portx < 1 || portx > MANY_PORT_SIZE)
     {
+        MOTOR_ERR();
         return NULL;
     }
-    
+
     return many_data_port[portx - 1];
 }
 

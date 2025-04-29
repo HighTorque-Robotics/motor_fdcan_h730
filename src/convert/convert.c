@@ -50,6 +50,7 @@ static float data_float2int(const float in_data, const data_type_t type, const f
         case TFLOAT:
             return NAN_FLOAT;
         default:
+            MOTOR_ERR();
             return 0;
         }
     }
@@ -65,6 +66,7 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     case TFLOAT:
         return in_data;
     default:
+        MOTOR_ERR();
         return 0;
     }
 }
@@ -83,6 +85,7 @@ static float data_int2float(const float in_data, const data_type_t type, const f
     case (TFLOAT):
         return in_data;
     default:
+        MOTOR_ERR();
         return 0;
     }
 }
@@ -110,6 +113,7 @@ float conv_to_turns(const float in_data, const pos_vel_type_t type)
     case TURNS:
         return in_data;
     default:
+        MOTOR_ERR();
         return 0.0f;
     }
 }
@@ -132,6 +136,7 @@ float conv_from_turns(const float in_data, const pos_vel_type_t type)
     case TURNS:
         return in_data;
     default:
+        MOTOR_ERR();
         return 0.0f;
     }
 }
@@ -158,13 +163,13 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
         return 0;
     case M4438_30:
         return TQE_ADJUST(in_data, 0.525600f, -0.050000f);
-    case M4438_32: 
+    case M4438_32:
         return TQE_ADJUST(in_data, 0.485565f, -0.043000f);
     case M4538_19:
         return TQE_ADJUST(in_data, 0.493835f, -0.233398f);
     case M5043_20:
         return TQE_ADJUST(in_data, 0.966000f, -0.115000f);
-    case M5046_20: 
+    case M5046_20:
         return TQE_ADJUST(in_data, 0.533654f, -0.289366f);
     case M5047_09:
         return TQE_ADJUST(in_data, 0.547474f, -0.075232f);
@@ -172,8 +177,11 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
         return TQE_ADJUST(in_data, 0.350000f, -0.008030f);
     case M6056_36:
         return TQE_ADJUST(in_data, 0.677000f, -0.100000f);
-    default:
+    case MGENERAL:
         return TQE_ADJUST(in_data, 0.5f, 0.0f);
+    default:
+        MOTOR_ERR();
+        return 0;
     }
 }
 
@@ -199,13 +207,13 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
         return 0;
     case M4438_30:
         return TQE_RESTORE(in_data, 0.525600f, -0.050000f);
-    case M4438_32: 
+    case M4438_32:
         return TQE_RESTORE(in_data, 0.485565f, -0.043000f);
     case M4538_19:
         return TQE_RESTORE(in_data, 0.493835f, -0.233398f);
     case M5043_20:
         return TQE_RESTORE(in_data, 0.966000f, -0.115000f);
-    case M5046_20: 
+    case M5046_20:
         return TQE_RESTORE(in_data, 0.533654f, -0.289366f);
     case M5047_09:
         return TQE_RESTORE(in_data, 0.547474f, -0.075232f);
@@ -213,8 +221,11 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
         return TQE_RESTORE(in_data, 0.350000f, -0.008030f);
     case M6056_36:
         return TQE_RESTORE(in_data, 0.677000f, -0.100000f);
-    default:
+    case MGENERAL:
         return TQE_RESTORE(in_data, 0.5f, 0.0f);
+    default:
+        MOTOR_ERR();
+        return 0;
     }
 }
 
@@ -310,6 +321,7 @@ void my_memcpy(void *p1, const void *p2, const int16_t len)
 {
     if (len <= 0)
     {
+        MOTOR_ERR();
         return;
     }
 

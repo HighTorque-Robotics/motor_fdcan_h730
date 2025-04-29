@@ -6,7 +6,7 @@
 #include "livelybot_fdcan.h"
 
 
-uint8_t motor_pos_reset(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
-uint8_t motor_conf_write(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id);
+uint8_t motor_pos_reset(port_t portx, const uint8_t id);
+uint8_t motor_conf_write(port_t portx, const uint8_t id);
 
 #endif

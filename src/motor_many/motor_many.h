@@ -7,7 +7,7 @@
 #include "motor.h"
 
 
-#define  MANY_PORT_SIZE   2  // 通道数量
+#define  MANY_PORT_SIZE   MOTOR_PORT_NUM  // 通道数量
 #define  MANY_MOTOR_SIZE  MOTOR_MAX_NUM  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
 
 

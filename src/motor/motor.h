@@ -4,16 +4,15 @@
 
 
 
-#define  MOTOR_MAX_NUM  2
+#define  MOTOR_PORT_NUM  2  // 使用 CAN 通道数量  
+#define  MOTOR_MAX_NUM   2  // 单个 CAN 通道所连接的最大电机数量
 
 
 
 #include "fdcan.h"
-#include "led.h"
 #include "my_fdcan.h"
 #include "convert.h"
 #include "livelybot_fdcan.h"
-
 
 
 typedef enum
@@ -35,16 +34,24 @@ typedef struct
 
 typedef struct
 {
-    float position;
-    float velocity;
-    float torque;
-    uint8_t mode;
-    uint8_t fault;
-    uint8_t ack;
-    const uint8_t id;
-    const motor_type_t model;  // 电机型号
-    version_s version;
-} motor_state_s, *p_motor_state_s;
+    float position;  // 位置
+    float velocity;  // 速度
+    float torque;    // 力矩
+    uint8_t mode;    // 模式
+    uint8_t fault;   // 错误码，可在《寄存器功能、电机运行模式、报错代码、一托多模式说明.xlsx》中查询
+    uint8_t ack;     // 应答，用于电机设置相关的应答
+    const motor_type_t model;  // 电机型号（这个参数由用户自定义，此程序根据这个变量进行电机力矩修正）
+    version_s version;  // 电机固件版本号
+} motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
+
+
+typedef struct 
+{
+    const port_t port;
+    FDCAN_HandleTypeDef *fdcan;
+    const p_motor_state_s state;
+} port_mapping_s, *p_port_mapping_s;
+
 
 
 void motor_print_state(void);
@@ -53,14 +60,15 @@ void motor_print_version(void);
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx);
-
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle);
 p_motor_state_s motor_get_state_pointer2(port_t portx);
-
 uint8_t motor_get_model2(port_t portx, uint8_t id);
 
+void motor_process_state_all(void);
 
 
-#define  MOTOR_SDK_VERSION   "3.0.1" 
+
+
+#define  MOTOR_SDK_VERSION   "3.0.0"
 
 #endif
