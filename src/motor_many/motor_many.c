@@ -299,6 +299,7 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const uint8_t model = motor_get_model2(portx, id);
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -308,8 +309,11 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
 
-    const int16_t kp_int16 = pid_float2int(kp, TINT16);
-    const int16_t kd_int16 = pid_float2int(kd, TINT16);
+    const float kp2 = pid_adjust(kp, model);
+    const float kd2 = pid_adjust(kd, model);
+
+    const int16_t kp_int16 = pid_float2int(kp2, TINT16);
+    const int16_t kd_int16 = pid_float2int(kd2, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
@@ -346,6 +350,7 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const uint8_t model = motor_get_model2(portx, id);
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -355,8 +360,11 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
     const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
 
-    const int16_t kp_int16 = pid_float2int(kp, TINT16);
-    const int16_t kd_int16 = pid_float2int(kd, TINT16);
+    const float kp2 = pid_adjust(kp, model);
+    const float kd2 = pid_adjust(kd, model);
+
+    const int16_t kp_int16 = pid_float2int(kp2, TINT16);
+    const int16_t kd_int16 = pid_float2int(kd2, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD2)
@@ -378,46 +386,6 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
     p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
 }
-
-// void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd)
-// {
-//     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-
-//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-//     const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
-
-//     const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-//     const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-//     const int16_t acc_int16 = tqe_float2int(tqe_float, TINT16);
-
-//     const int16_t kp_int16 = pid_float2int(kp, TINT16);
-//     const int16_t ki_int16 = pid_float2int(ki, TINT16);
-//     const int16_t kd_int16 = pid_float2int(kd, TINT16);
-//     const uint16_t index = id - 1;
-
-//     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KI_KD)
-//     {
-//         p_many_data->mode = MODE_POS_VEL_TQE_KP_KI_KD;
-//         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s); i++)
-//         {
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].pos = NAN_INT16;
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].vel = 0;
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].tqe = 0;
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].kp = 0;
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].ki = 0;
-//             p_many_data->pos_vel_tqe_kp_ki_kd[i].kd = 0;
-//         }
-//     }
-
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].pos = pos_int16;
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].vel = vel_int16;
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].tqe = acc_int16;
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].kp = kp_int16;
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].ki = ki_int16;
-//     p_many_data->pos_vel_tqe_kp_ki_kd[index].kd = kd_int16;
-// }
-
 
 
 static uint8_t get_data_max(uint8_t mode)

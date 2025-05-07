@@ -230,6 +230,50 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
 }
 
 
+/**
+ * @brief PID 补偿
+ * @param id_data PID 数据
+ * @param motor_type 电机型号
+ * @return 补偿的 PID 数据
+ */
+float pid_adjust(const float in_data, const motor_type_t motor_type)
+{
+#define PID_ADJUST(data, k) ((data) / (k))
+
+    if (isnan(in_data))
+    {
+        return NAN_FLOAT;
+    }
+
+    switch (motor_type)
+    {
+    case MNULL:
+        return 0;
+    case M4438_30:
+        return PID_ADJUST(in_data, 0.525600f);
+    case M4438_32:
+        return PID_ADJUST(in_data, 0.485565f);
+    case M4538_19:
+        return PID_ADJUST(in_data, 0.493835f);
+    case M5043_20:
+        return PID_ADJUST(in_data, 0.966000f);
+    case M5046_20:
+        return PID_ADJUST(in_data, 0.533654f);
+    case M5047_09:
+        return PID_ADJUST(in_data, 0.547474f);
+    case M5047_36:
+        return PID_ADJUST(in_data, 0.350000f);
+    case M6056_36:
+        return PID_ADJUST(in_data, 0.677000f);
+    case MGENERAL:
+        return PID_ADJUST(in_data, 0.5f);
+    default:
+        MOTOR_ERR();
+        return 0;
+    }
+}
+
+
 float cur_float2int(const float in_data, const data_type_t type)
 {
     return data_float2int(in_data, type, 1.0f, 10.0f, 1000.0f);

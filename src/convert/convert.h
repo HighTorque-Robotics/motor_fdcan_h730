@@ -77,6 +77,7 @@ typedef enum  // 电机型号
 /* 控制电机用 */
 float conv_to_turns(const float in_data, const pos_vel_type_t type);
 float tqe_adjust(const float in_data, const motor_type_t motor_type);
+float pid_adjust(const float in_data, const motor_type_t motor_type);
 float cur_float2int(const float in_data, const data_type_t type);
 float vol_float2int(const float in_data, const data_type_t type);
 float pos_float2int(const float in_data, const data_type_t type);
