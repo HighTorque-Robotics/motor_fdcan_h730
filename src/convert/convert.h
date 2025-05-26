@@ -69,6 +69,7 @@ typedef enum  // 电机型号
     // M7136_07,
     // M7233_08,
     // M7256_35,
+    M60SG_35,
     MGENERAL,  // 无修正
 } motor_type_t;
 
