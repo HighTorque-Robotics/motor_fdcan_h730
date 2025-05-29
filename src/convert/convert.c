@@ -178,6 +178,7 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
     case M6056_36:
         return TQE_ADJUST(in_data, 0.677000f, -0.100000f);
     case M60SG_35:
+    case M60BM_35:
         return TQE_ADJUST(in_data, 0.794200f, -0.180000f);
     case MGENERAL:
         return TQE_ADJUST(in_data, 0.5f, 0.0f);
@@ -224,6 +225,7 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
     case M6056_36:
         return TQE_RESTORE(in_data, 0.677000f, -0.100000f);
     case M60SG_35:
+    case M60BM_35:
         return TQE_RESTORE(in_data, 0.794200f, -0.180000f);
     case MGENERAL:
         return TQE_RESTORE(in_data, 0.5f, 0.0f);
@@ -270,6 +272,7 @@ float pid_adjust(const float in_data, const motor_type_t motor_type)
     case M6056_36:
         return PID_ADJUST(in_data, 0.677000f);
     case M60SG_35:
+    case M60BM_35:
         return PID_ADJUST(in_data, 0.794200f);
     case MGENERAL:
         return PID_ADJUST(in_data, 0.5f);
