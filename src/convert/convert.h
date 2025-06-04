@@ -49,7 +49,7 @@ typedef enum  // 数据类型
 typedef enum  // 电机型号
 {
     MNULL = 0,
-    // M3536_32,
+    M3536_32,
     // M4438_08,
     // M4438_16,
     M4438_30,
@@ -68,11 +68,20 @@ typedef enum  // 电机型号
     // M6057_36,
     // M7136_07,
     // M7233_08,
-    // M7256_35,
+    M7256_35,
     M60SG_35,
     M60BM_35,
     MGENERAL,  // 无修正
+    MOTOR_TYPE_COUNT,  // 电机类型数量
 } motor_type_t;
+
+
+typedef struct 
+{
+    float k;
+    float d;
+} motor_tqe_adj_t, *p_motor_tqe_adj_t;
+
 
 
 

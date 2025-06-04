@@ -5,6 +5,27 @@
 #endif
 
 
+
+const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] = 
+{
+    [MNULL] = {0.0f, 0.0f},
+    [M3536_32] = {0.458105f, -0.105000f},
+    [M4438_30] = {0.525600f, -0.050000f},
+    [M4438_32] = {0.485565f, -0.043000f},
+    [M4538_19] = {0.493835f, -0.233398f},
+    [M5043_20] = {0.966000f, -0.115000f},
+    [M5046_20] = {0.533654f, -0.289366f},
+    [M5047_09] = {0.547474f, -0.075232f},
+    [M5047_36] = {0.350000f, -0.008030f},
+    [M6056_36] = {0.677000f, -0.100000f},
+    [M7256_35] = {0.676524f, -0.244016f},
+    [M60SG_35] = {0.794200f, -0.180000f},
+    [M60BM_35] = {0.794200f, -0.180000f},
+    [MGENERAL] = {0.5f, 0.0f}
+};
+
+
+
 static int16_t int16_limit(const int32_t data)
 {
     if (data >= 32700)
@@ -150,42 +171,19 @@ float conv_from_turns(const float in_data, const pos_vel_type_t type)
  */
 float tqe_adjust(const float in_data, const motor_type_t motor_type)
 {
-#define TQE_ADJUST(data, k, d)  (((data) - (d)) / (k))
-
     if (isnan(in_data))
     {
         return NAN_FLOAT;
     }
 
-    switch (motor_type)
+    if (motor_type >= MOTOR_TYPE_COUNT)
     {
-    case MNULL:
-        return 0;
-    case M4438_30:
-        return TQE_ADJUST(in_data, 0.525600f, -0.050000f);
-    case M4438_32:
-        return TQE_ADJUST(in_data, 0.485565f, -0.043000f);
-    case M4538_19:
-        return TQE_ADJUST(in_data, 0.493835f, -0.233398f);
-    case M5043_20:
-        return TQE_ADJUST(in_data, 0.966000f, -0.115000f);
-    case M5046_20:
-        return TQE_ADJUST(in_data, 0.533654f, -0.289366f);
-    case M5047_09:
-        return TQE_ADJUST(in_data, 0.547474f, -0.075232f);
-    case M5047_36:
-        return TQE_ADJUST(in_data, 0.350000f, -0.008030f);
-    case M6056_36:
-        return TQE_ADJUST(in_data, 0.677000f, -0.100000f);
-    case M60SG_35:
-    case M60BM_35:
-        return TQE_ADJUST(in_data, 0.794200f, -0.180000f);
-    case MGENERAL:
-        return TQE_ADJUST(in_data, 0.5f, 0.0f);
-    default:
         MOTOR_ERR();
         return 0;
     }
+
+    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
+    return ((in_data - p_motor_tqe_adj->d) / p_motor_tqe_adj->k);
 }
 
 
@@ -197,42 +195,19 @@ float tqe_adjust(const float in_data, const motor_type_t motor_type)
  */
 float tqe_restore(const float in_data, const motor_type_t motor_type)
 {
-#define TQE_RESTORE(data, k, d) ((data) * (k) + (d))
-
     if (isnan(in_data))
     {
         return NAN_FLOAT;
     }
 
-    switch (motor_type)
+    if (motor_type >= MOTOR_TYPE_COUNT)
     {
-    case MNULL:
-        return 0;
-    case M4438_30:
-        return TQE_RESTORE(in_data, 0.525600f, -0.050000f);
-    case M4438_32:
-        return TQE_RESTORE(in_data, 0.485565f, -0.043000f);
-    case M4538_19:
-        return TQE_RESTORE(in_data, 0.493835f, -0.233398f);
-    case M5043_20:
-        return TQE_RESTORE(in_data, 0.966000f, -0.115000f);
-    case M5046_20:
-        return TQE_RESTORE(in_data, 0.533654f, -0.289366f);
-    case M5047_09:
-        return TQE_RESTORE(in_data, 0.547474f, -0.075232f);
-    case M5047_36:
-        return TQE_RESTORE(in_data, 0.350000f, -0.008030f);
-    case M6056_36:
-        return TQE_RESTORE(in_data, 0.677000f, -0.100000f);
-    case M60SG_35:
-    case M60BM_35:
-        return TQE_RESTORE(in_data, 0.794200f, -0.180000f);
-    case MGENERAL:
-        return TQE_RESTORE(in_data, 0.5f, 0.0f);
-    default:
         MOTOR_ERR();
         return 0;
     }
+
+    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
+    return (in_data * p_motor_tqe_adj->k + p_motor_tqe_adj->d);
 }
 
 
@@ -244,42 +219,19 @@ float tqe_restore(const float in_data, const motor_type_t motor_type)
  */
 float pid_adjust(const float in_data, const motor_type_t motor_type)
 {
-#define PID_ADJUST(data, k) ((data) / (k))
-
     if (isnan(in_data))
     {
         return NAN_FLOAT;
     }
 
-    switch (motor_type)
+    if (motor_type >= MOTOR_TYPE_COUNT)
     {
-    case MNULL:
-        return 0;
-    case M4438_30:
-        return PID_ADJUST(in_data, 0.525600f);
-    case M4438_32:
-        return PID_ADJUST(in_data, 0.485565f);
-    case M4538_19:
-        return PID_ADJUST(in_data, 0.493835f);
-    case M5043_20:
-        return PID_ADJUST(in_data, 0.966000f);
-    case M5046_20:
-        return PID_ADJUST(in_data, 0.533654f);
-    case M5047_09:
-        return PID_ADJUST(in_data, 0.547474f);
-    case M5047_36:
-        return PID_ADJUST(in_data, 0.350000f);
-    case M6056_36:
-        return PID_ADJUST(in_data, 0.677000f);
-    case M60SG_35:
-    case M60BM_35:
-        return PID_ADJUST(in_data, 0.794200f);
-    case MGENERAL:
-        return PID_ADJUST(in_data, 0.5f);
-    default:
         MOTOR_ERR();
         return 0;
     }
+
+    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
+    return (in_data / p_motor_tqe_adj->k);
 }
 
 
