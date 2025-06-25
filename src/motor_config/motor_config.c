@@ -72,7 +72,7 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
 uint8_t motor_conf_write(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    
+
     if (motor_config_closed_loop(set_conf_write, fdcanHandle, id) != 0)
     {
         return 1;

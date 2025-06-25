@@ -24,7 +24,7 @@ p_many_data_s motor_get_many_pointer(port_t portx)
 
 /**
  * @brief 一拖多 DQ 电压模式
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V
  */
@@ -49,7 +49,7 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 
 /**
  * @brief 一拖多 DQ 电流模式
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A
  */
@@ -74,7 +74,7 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
 
 /**
  * @brief 一拖多 位置模式
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
@@ -100,7 +100,7 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
 
 /**
  * @brief 一拖多 速度模式
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
@@ -126,7 +126,7 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 
 /**
  * @brief 一拖多 力矩模式
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param tqe 目标力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
  */
@@ -152,7 +152,7 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 
 /**
  * @brief 一拖多 设置超时时间
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param t_ms 超时时间，单位：毫秒（ms）
  */
@@ -176,7 +176,7 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
 
 /**
  * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
@@ -211,7 +211,7 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
 
 /**
  * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，并限制最大输出力矩
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
@@ -250,7 +250,7 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
 
 /**
  * @brief 位置、速度、加速度模式（梯形控制）
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
@@ -288,7 +288,7 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 
 /**
  * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
@@ -339,7 +339,7 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
 
 /**
  * @brief 真运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
@@ -471,7 +471,7 @@ static uint8_t get_mode_data_len(uint8_t mode)
 
 /**
  * @brief 一拖多 发送
- * @param portx can通道（需要在 main.c 中修改 motor_get_state_pointer2 和 motor_get_many_pointer 进行映射）
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  */
 void motor_many_send(port_t portx)
 {

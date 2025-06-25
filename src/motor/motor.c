@@ -4,24 +4,30 @@
 
 /************************************下面为需要修改的部分*******************************************/
 
-static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下标 + 1 = 电机 ID 
+static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下标 + 1 = 电机 ID
 {
-    {  // CAN 通道 PORT1
-        {  // ID = 1
+    {
+        // CAN 通道 PORT1
+        {
+            // ID = 1
             .model = M4438_30,
         },
 
-        {  // ID = 2
+        {
+            // ID = 2
             .model = M5047_36,
         }
     },
 
-    {  // CAN 通道 PORT2
-        {  // ID = 1
+    {
+        // CAN 通道 PORT2
+        {
+            // ID = 1
             .model = M4438_30,
         },
 
-        {  // ID = 2
+        {
+            // ID = 2
             .model = M5047_36,
         }
     },
@@ -32,13 +38,13 @@ const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
 {
     {
         .port = PORT1,
-        .fdcan = &hfdcan2,
+        .fdcan = &hfdcan1,
         .state = motor_state_port[0],
     },
 
     {
         .port = PORT2,
-        .fdcan = &hfdcan3,
+        .fdcan = &hfdcan2,
         .state = motor_state_port[1],
     },
 };
@@ -101,7 +107,7 @@ void motor_print_state()
             const p_motor_state_s p_motor_state = motor_get_state(portx, id);
 
             printf("PORT: %d, ID: %2d, mode: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->fault,
-                    p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
+                   p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
         }
         printf("\r\n");
     }
@@ -278,7 +284,7 @@ static uint8_t fdcan_rdata[64] = {0};
 
 /**
  * @brief 解析所有 CAN 通道 FIFO 中的电机状态数据
- * 
+ *
  */
 void motor_process_state_all()
 {

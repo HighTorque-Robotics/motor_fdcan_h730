@@ -76,7 +76,7 @@ typedef enum  // 电机型号
 } motor_type_t;
 
 
-typedef struct 
+typedef struct
 {
     float k;
     float d;

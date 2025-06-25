@@ -45,7 +45,7 @@ typedef struct
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
 
-typedef struct 
+typedef struct
 {
     const port_t port;
     FDCAN_HandleTypeDef *fdcan;
@@ -69,6 +69,6 @@ void motor_process_state_all(void);
 
 
 
-#define  MOTOR_SDK_VERSION   "3.0.4"
+#define  MOTOR_SDK_VERSION   "3.0.5"
 
 #endif
