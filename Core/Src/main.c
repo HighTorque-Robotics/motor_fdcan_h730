@@ -121,8 +121,8 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
 
-            test_motor_control(1);
-            // test_motor_many();
+            // test_motor_control(1);
+            test_motor_many();
 
         }
 
@@ -133,6 +133,9 @@ int main(void)
 
             motor_print_state();
         }
+
+
+        motor_process_state_all();
     }
     /* USER CODE END 3 */
 }

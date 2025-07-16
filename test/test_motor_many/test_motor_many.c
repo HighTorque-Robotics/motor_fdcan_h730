@@ -8,15 +8,15 @@ void test_time_out(int16_t t_ms)
         motor_many_time_out(PORT1, id, t_ms);
     }
 
-    motor_many_send(PORT1);
-    motor_many_send(PORT1);
-    motor_many_send(PORT1);
+    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
 }
 
 
 void test_motor_many()
 {
-    const uint8_t mode = 9;
+    const uint8_t mode = 3;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
@@ -57,5 +57,5 @@ void test_motor_many()
         }
     }
 
-    motor_many_send(PORT1);
+    motor_many_send(PORT1, MANY_GET_TEMP_FLAUT_POS_VEL_TQE);
 }

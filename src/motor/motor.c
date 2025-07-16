@@ -106,8 +106,8 @@ void motor_print_state()
         {
             const p_motor_state_s p_motor_state = motor_get_state(portx, id);
 
-            printf("PORT: %d, ID: %2d, mode: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->fault,
-                   p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
+            printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
+                   p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
         }
         printf("\r\n");
     }
@@ -246,8 +246,19 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
         my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
 
-        p_motor_state[id_index].mode = p_data[0];
-        p_motor_state[id_index].fault = p_data[1];
+        p_motor_state[id_index].fault = p_data[1] & 0x3F;
+        const uint8_t type = p_data[1] >> 6;
+
+        switch (type)
+        {
+        case MANY_GET_MODE_FLAUT_POS_VEL_TQE:
+            p_motor_state[id_index].mode = p_data[0];
+            break;
+
+        case MANY_GET_TEMP_FLAUT_POS_VEL_TQE:
+            p_motor_state[id_index].temp = p_data[0];
+            break;
+        }
 
         p_motor_state[id_index].position = pos_int2float(pos, TINT16);
         p_motor_state[id_index].velocity = vel_int2float(vel, TINT16);

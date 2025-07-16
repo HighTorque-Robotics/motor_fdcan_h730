@@ -11,11 +11,10 @@
 #define  MANY_MOTOR_SIZE  MOTOR_MAX_NUM  // 一拖多模式下，每个CAN通道控制的电机数量，取值范围为(0，30]
 
 
-
 #if MANY_MOTOR_SIZE > 0 && MANY_MOTOR_SIZE <= 30
 #define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_ki_kd_s))
 #else
-#error "motor size error!!!"
+#error "MANY_MOTOR_SIZE value out of range error!!!"
 #endif
 
 
@@ -28,12 +27,13 @@
 
 #define  MODE_POS_VEL_TQE           0X90
 #define  MODE_POS_VEL_TQE_KP_KD     0X93
-#define  MODE_POS_VEL_TQE_KP_KI_KD  0X98
+// #define  MODE_POS_VEL_TQE_KP_KI_KD  0X98  // 弃用
 #define  MODE_POS_VEL_KP_KD         0X9E
 // #define  MODE_POS_VEL_TQE_RKP_RKD   0XA3  // 弃用
 // #define  MODE_POS_VEL_RKP_RKD       0XA8  // 弃用
 #define  MODE_POS_VEL_ACC           0XAD
 #define  MODE_POS_VEL_TQE_KP_KD2    0XB0
+
 
 
 #pragma pack(1)
@@ -104,8 +104,7 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);
 void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
-void motor_many_pos_vel_tqe_kp_ki_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float ki, const float kd);
 
-void motor_many_send(port_t portx);
+void motor_many_send(port_t portx, many_request_type_t request_type);
 
 #endif

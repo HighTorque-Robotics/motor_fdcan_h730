@@ -8,6 +8,12 @@
 
 many_data_s many_data_port[MANY_PORT_SIZE][MANY_DATA_BUF_MAX_LEN];
 
+const uint8_t many_get_cmd[MANY_GET_MAX_NUM][2] =
+{
+    {0xFF, 0xFF},
+    {0xFF, 0xFE},
+    {0x17, 0x01},
+};
 
 
 p_many_data_s motor_get_many_pointer(port_t portx)
@@ -461,8 +467,6 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_POS_VEL_TQE_KP_KD:
     case MODE_POS_VEL_TQE_KP_KD2:
         return 10;
-    case MODE_POS_VEL_TQE_KP_KI_KD:
-        return 12;
     }
 
     return 0;
@@ -472,13 +476,14 @@ static uint8_t get_mode_data_len(uint8_t mode)
 /**
  * @brief 一拖多 发送
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
+ * @param request_type 决定电机返回帧包含的信息
  */
-void motor_many_send(port_t portx)
+void motor_many_send(port_t portx, many_request_type_t request_type)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    const uint8_t read_state_cmd1[] = {0xFF, 0xFF};
+    uint8_t *p_get_cmd = &many_get_cmd[request_type][0];
     static uint8_t cmd[64] = {0};
     uint8_t id = p_many_data->mode;
 
@@ -494,7 +499,7 @@ void motor_many_send(port_t portx)
         my_memcpy(cmd, data, current_data_len);
         data += current_data_len;
         remaining_len -= current_data_len;
-        my_memcpy(cmd + cmd_len - 2, read_state_cmd1, sizeof(read_state_cmd1));
+        my_memcpy(cmd + cmd_len - 2, p_get_cmd, 2);
         fdcan_send(fdcanHandle, 0x8000 | id, cmd, cmd_len);
         ++id;
     }
