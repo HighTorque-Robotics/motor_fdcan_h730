@@ -483,7 +483,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    uint8_t *p_get_cmd = &many_get_cmd[request_type][0];
+    uint8_t *p_get_cmd = (uint8_t *)&many_get_cmd[request_type][0];
     static uint8_t cmd[64] = {0};
     uint8_t id = p_many_data->mode;
 

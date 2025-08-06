@@ -79,6 +79,6 @@ void motor_process_state_all(void);
 
 
 
-#define  MOTOR_SDK_VERSION   "3.1.0"
+#define  MOTOR_SDK_VERSION   "3.1.1"
 
 #endif
