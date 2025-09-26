@@ -886,13 +886,45 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
 
 /**
- * @brief 电机停止，注意：需让电机停止后再重置零位，否则无效
+ * @brief 电机停止
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x01, 0x00, 0x00, 0x14, 0x04, 0x00, 0x11, 0x0f};
+    static uint8_t cmd[] = {0x01, 0x00, 0x00, 
+                            // 查询指令
+                            0x1C, 0x04, 0x00, 0x11, 0x0f};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 电机停止
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    static uint8_t cmd[] = {0x01, 0x00, 0x00, 
+                            // 查询指令
+                            0x18, 0x04, 0x00, 0x11, 0x0f};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 电机停止
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    static uint8_t cmd[] = {0x01, 0x00, 0x00, 
+                            // 查询指令
+                            0x14, 0x04, 0x00, 0x11, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }
@@ -903,9 +935,41 @@ void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_brake_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x01, 0x00, 0x0f, 0x14, 0x04, 0x00, 0x11, 0x0f};
+    static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
+                            // 查询指令
+                            0x1C, 0x04, 0x00, 0x11, 0x0f};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 电机刹车
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
+                            // 查询指令
+                            0x18, 0x04, 0x00, 0x11, 0x0f};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 电机刹车
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
+                            // 查询指令
+                            0x14, 0x04, 0x00, 0x11, 0x0f};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }

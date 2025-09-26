@@ -88,10 +88,14 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 电机停止 */
-void set_motor_stop_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 电机刹车 */
-void set_motor_brake_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 读取电机状态 */
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);

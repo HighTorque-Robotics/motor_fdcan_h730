@@ -292,51 +292,51 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 }
 
 
-/**
- * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息） 不建议使用，建议使用 motor_set_pos_vel_tqe_kp_kd_2
- * @param fdcanHandle &hfdcanx
- * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
- * @param id 电机 ID
- * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
- * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
- */
-void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
-                                 const float pos, const float vel, const float tqe, const float kp, const float kd)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const uint8_t model = motor_get_model2(portx, id);
+// /**
+//  * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)（并让电机返回状态信息） 不建议使用，建议使用 motor_set_pos_vel_tqe_kp_kd_2
+//  * @param fdcanHandle &hfdcanx
+//  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
+//  * @param id 电机 ID
+//  * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+//  * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
+//  * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
+//  */
+// void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
+//                                  const float pos, const float vel, const float tqe, const float kp, const float kd)
+// {
+//     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+//     const motor_type_t model = motor_get_model2(portx, id);
 
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe1 = tqe_adjust(tqe, model);
-    const float pos2 = pos_float2int(pos1, type);
-    const float vel2 = vel_float2int(vel1, type);
-    const float tqe2 = tqe_float2int(tqe1, type);
+//     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+//     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+//     const float tqe1 = tqe_adjust(tqe, model);
+//     const float pos2 = pos_float2int(pos1, type);
+//     const float vel2 = vel_float2int(vel1, type);
+//     const float tqe2 = tqe_float2int(tqe1, type);
 
-    const float kp2 = pid_adjust(kp, model);
-    const float kd2 = pid_adjust(kd, model);
+//     const float kp2 = pid_adjust(kp, model);
+//     const float kd2 = pid_adjust(kd, model);
 
-    const float kp3 = pid_float2int(kp2, type);
-    const float kd3 = pid_float2int(kd2, type);
+//     const float kp3 = pid_float2int(kp2, type);
+//     const float kd3 = pid_float2int(kd2, type);
 
-    switch(type)
-    {
-    case TFLOAT:
-        set_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
-        break;
-    case TINT32:
-        set_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
-        break;
-    case TINT16:
-        set_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
-        break;
-    default:
-        break;
-    }
-}
+//     switch(type)
+//     {
+//     case TFLOAT:
+//         set_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         break;
+//     case TINT32:
+//         set_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         break;
+//     case TINT16:
+//         set_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         break;
+//     default:
+//         break;
+//     }
+// }
 
 
 /**
@@ -354,7 +354,7 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
                                    const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const uint8_t model = motor_get_model2(portx, id);
+    const motor_type_t model = motor_get_model2(portx, id);
 
     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -434,11 +434,24 @@ void motor_get_version(port_t portx, const uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id 电机 ID
  */
-void motor_set_stop(port_t portx, const uint8_t id)
+void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    set_motor_stop_int8(fdcanHandle, id);
+    switch(type)
+    {
+    case TFLOAT:
+        set_motor_stop_float(fdcanHandle, id);
+        break;
+    case TINT32:
+        set_motor_stop_int32(fdcanHandle, id);
+        break;
+    case TINT16:
+        set_motor_stop_int16(fdcanHandle, id);
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -447,11 +460,24 @@ void motor_set_stop(port_t portx, const uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id 电机 ID
  */
-void motor_set_brake(port_t portx, const uint8_t id)
+void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    set_motor_brake_int8(fdcanHandle, id);
+    switch(type)
+    {
+    case TFLOAT:
+        set_motor_brake_float(fdcanHandle, id);
+        break;
+    case TINT32:
+        set_motor_brake_int32(fdcanHandle, id);
+        break;
+    case TINT16:
+        set_motor_brake_int16(fdcanHandle, id);
+        break;
+    default:
+        break;
+    }
 }
 
 

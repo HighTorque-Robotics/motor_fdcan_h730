@@ -104,7 +104,7 @@ void motor_print_state()
     {
         for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
         {
-            const p_motor_state_s p_motor_state = motor_get_state(portx, id);
+            motor_state_s *p_motor_state = motor_get_state(portx, id);
 
             printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
                    p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
@@ -120,7 +120,7 @@ void motor_print_version()
     {
         for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
         {
-            const p_version_s p_version = &motor_get_state(portx, id)->version;
+            const p_version_s p_version = &(motor_get_state(portx, id)->version);
 
             printf("PORT: %d, ID: %2d, version = %d.%d.%d\r\n", portx, id, p_version->major, p_version->minor, p_version->patch);
         }
@@ -129,9 +129,9 @@ void motor_print_version()
 }
 
 
-static uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+static motor_type_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    if (id < 0 || id > MOTOR_MAX_NUM)
+    if (id <= MNULL || id > MOTOR_MAX_NUM)
     {
         MOTOR_ERR();
         return MNULL;
@@ -142,9 +142,9 @@ static uint8_t motor_get_model1(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 }
 
 
-uint8_t motor_get_model2(port_t portx, uint8_t id)
+motor_type_t motor_get_model2(port_t portx, uint8_t id)
 {
-    if (id < 0 || id > MOTOR_MAX_NUM)
+    if (id <= MNULL || id > MOTOR_MAX_NUM)
     {
         MOTOR_ERR();
         return MNULL;
@@ -166,7 +166,7 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 {
     const uint8_t index = id - 1;
 
-    return &motor_get_state_pointer2(portx)[index];
+    return &(motor_get_state_pointer2(portx)[index]);
 }
 
 

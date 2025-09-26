@@ -305,7 +305,7 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const uint8_t model = motor_get_model2(portx, id);
+    const motor_type_t model = motor_get_model2(portx, id);
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -356,7 +356,7 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const uint8_t model = motor_get_model2(portx, id);
+    const motor_type_t model = motor_get_model2(portx, id);
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);

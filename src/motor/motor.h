@@ -72,13 +72,13 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx);
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle);
 p_motor_state_s motor_get_state_pointer2(port_t portx);
-uint8_t motor_get_model2(port_t portx, uint8_t id);
+motor_type_t motor_get_model2(port_t portx, uint8_t id);
 
 void motor_process_state_all(void);
 
 
 
 
-#define  MOTOR_SDK_VERSION   "3.1.1"
+#define  MOTOR_SDK_VERSION   "3.1.2"
 
 #endif

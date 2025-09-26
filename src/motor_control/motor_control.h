@@ -17,16 +17,14 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_
                               const float pos, const float vel, const float tqe);
 void motor_set_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc);
 void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const float vel, const float acc);
-void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
-                                 const float pos, const float vel, const float tqe, const float kp, const float kd);
 void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const uint8_t id,
                                    const float pos, const float vel, const float tqe, const float kp, const float kd);
 
 void motor_get_state_send(port_t portx, const data_type_t type, const uint8_t id);
 void motor_get_version(port_t portx, const uint8_t id);
 
-void motor_set_stop(port_t portx, const uint8_t id);
-void motor_set_brake(port_t portx, const uint8_t id);
+void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id);
+void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id);
 void motor_set_reset(port_t portx, const uint8_t id);
 
 #endif
