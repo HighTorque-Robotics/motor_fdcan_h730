@@ -121,8 +121,8 @@ int main(void)
         {
             tick_100ms = HAL_GetTick();
 
-            // test_motor_control(1);
-            test_motor_many();
+            test_motor_control(1);
+            // test_motor_many();
 
         }
 

@@ -288,11 +288,9 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
     //                            位置模式   2个int16      位置        速度		 2个int16	    力矩
-    static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x06, 0x25, 0x00, 0x00,
+    static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x06, 0x25, 0x00, 0x00, 0x00, 0x00,
                             // 查询指令
                             0x14, 0x04, 0x00, 0x11, 0x0f,
-                            // 占位（fdcan）
-                            0x50, 0x50,
                            };
 
     my_memcpy(&cmd[7], &vel, sizeof(int16_t));
