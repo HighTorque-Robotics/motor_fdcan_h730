@@ -86,6 +86,7 @@ typedef struct
         many_pos_vel_tqe_kp_kd_s pos_vel_tqe_kp_kd[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_kd_s)];
         many_pos_vel_tqe_kp_ki_kd_s pos_vel_tqe_kp_ki_kd[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s)];
         uint8_t data[MANY_DATA_BUF_MAX_LEN];
+        int16_t data16[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
     };
     uint8_t mode;
 } many_data_s, *p_many_data_s;
