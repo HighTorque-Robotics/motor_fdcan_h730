@@ -11,7 +11,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
     p_motor_state[id_index].ack = 0;
     for (int i = 0; i < 10; i++)
     {
-        set_pos_rezero(fdcanHandle, id);
+        action(fdcanHandle, id);
         HAL_Delay(100);
         motor_process_state_all();
         if (p_motor_state[id_index].ack != 0)

@@ -13,24 +13,24 @@ static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下�
             .model = M4438_30,
         },
 
-        {
-            // ID = 2
-            .model = M5047_36,
-        }
+        // {
+        //     // ID = 2
+        //     .model = M5047_36,
+        // }
     },
 
-    {
-        // CAN 通道 PORT2
-        {
-            // ID = 1
-            .model = M4438_30,
-        },
+    // {
+    //     // CAN 通道 PORT2
+    //     {
+    //         // ID = 1
+    //         .model = M4438_30,
+    //     },
 
-        {
-            // ID = 2
-            .model = M5047_36,
-        }
-    },
+    //     {
+    //         // ID = 2
+    //         .model = M5047_36,
+    //     }
+    // },
 };
 
 
