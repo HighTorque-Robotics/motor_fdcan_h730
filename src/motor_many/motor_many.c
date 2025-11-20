@@ -104,7 +104,7 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
  * @brief 一拖多 速度模式
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 {
@@ -130,7 +130,7 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
  * @brief 一拖多 力矩模式
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param tqe 目标力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 目标力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
  */
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 {
@@ -180,8 +180,8 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
  * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
 {
@@ -213,9 +213,9 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
  * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，并限制最大输出力矩
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
  */
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
@@ -250,9 +250,9 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
  * @brief 位置、速度、加速度模式（梯形控制）
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 目标速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param acc 目标加速度，单位可为转/秒2（rps2）、弧度/秒2（rad/s2）、或度/秒2（°/s2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param acc 目标加速度，单位可为转每秒平方（rev/s^2）、弧度每秒平方（rad/s^2）、或度每秒平方（°/s^2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc)
 {
@@ -282,16 +282,16 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 }
 
 
-/**
- * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
- * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
- * @param id 电机 ID
- * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
- * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
- */
+// /**
+//  * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
+//  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
+//  * @param id 电机 ID
+//  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+//  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+//  */
 // void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 // {
 //     p_many_data_s p_many_data = motor_get_many_pointer(portx);
@@ -338,11 +338,11 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
  * @brief 真运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param pos 位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 速度，单位可为转（rps）、弧度（rad/s）、或度（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 力矩，单位牛米（NM），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
- * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
+ * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
+ * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
