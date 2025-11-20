@@ -292,46 +292,46 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
  * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
  * @param kd Mkd = kd * 1 (Mkd 表示电机内部 kd)
  */
-void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
-{
-    p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const motor_type_t model = motor_get_model2(portx, id);
+// void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
+// {
+//     p_many_data_s p_many_data = motor_get_many_pointer(portx);
+//     const motor_type_t model = motor_get_model2(portx, id);
 
-    /* 单位转换成转 */
-    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
-    const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
+//     /* 单位转换成转 */
+//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+//     const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
+//     const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    /* 力矩修正 */
-    const float tqe_val_adjust = tqe_adjust(tqe, model);
-    const float kp_val_adjust = pid_adjust(kp_turns, model);
-    const float kd_val_adjust = pid_adjust(kd_turns, model);
+//     /* 力矩修正 */
+//     const float tqe_val_adjust = tqe_adjust(tqe, model);
+//     const float kp_val_adjust = pid_adjust(kp_turns, model);
+//     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-    /* float -> int */
-    const float pos_int16 = pos_float2int(pos_turns, TINT16);
-    const float vel_int16 = vel_float2int(vel_turns, TINT16);
-    const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
-    const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
-    const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
+//     /* float -> int */
+//     const float pos_int16 = pos_float2int(pos_turns, TINT16);
+//     const float vel_int16 = vel_float2int(vel_turns, TINT16);
+//     const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
+//     const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
+//     const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
 
-    const uint16_t index = id - 1;
+//     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
-    {
-        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD;
-        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
-        {
-            p_many_data->data16[i] = NAN_INT16;
-        }
-    }
+//     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
+//     {
+//         p_many_data->mode = MODE_POS_VEL_TQE_KP_KD;
+//         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
+//         {
+//             p_many_data->data16[i] = NAN_INT16;
+//         }
+//     }
 
-    p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
-}
+//     p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_int16;
+//     p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_int16;
+//     p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_int16;
+//     p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
+//     p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
+// }
 
 
 /**
