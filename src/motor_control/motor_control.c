@@ -309,29 +309,34 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 //     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 //     const motor_type_t model = motor_get_model2(portx, id);
 
-//     const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-//     const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-//     const float tqe1 = tqe_adjust(tqe, model);
-//     const float pos2 = pos_float2int(pos1, type);
-//     const float vel2 = vel_float2int(vel1, type);
-//     const float tqe2 = tqe_float2int(tqe1, type);
+//     /* 单位转换成转 */
+//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+//     const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
+//     const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-//     const float kp2 = pid_adjust(kp, model);
-//     const float kd2 = pid_adjust(kd, model);
+//     /* 力矩修正 */
+//     const float tqe_val_adjust = tqe_adjust(tqe, model);
+//     const float kp_val_adjust = pid_adjust(kp_turns, model);
+//     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-//     const float kp3 = pid_float2int(kp2, type);
-//     const float kd3 = pid_float2int(kd2, type);
+//     /* float -> int */
+//     const float pos_int = pos_float2int(pos_turns, type);
+//     const float vel_int = vel_float2int(vel_turns, type);
+//     const float tqe_int = tqe_float2int(tqe_val_adjust, type);
+//     const float kp_int = pid_float2int(kp_val_adjust, type);
+//     const float kd_int = pid_float2int(kd_val_adjust, type);
 
 //     switch(type)
 //     {
 //     case TFLOAT:
-//         set_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         set_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
 //         break;
 //     case TINT32:
-//         set_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         set_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
 //         break;
 //     case TINT16:
-//         set_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+//         set_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
 //         break;
 //     default:
 //         break;
@@ -356,29 +361,34 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const motor_type_t model = motor_get_model2(portx, id);
 
-    const float pos1 = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel1 = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe1 = tqe_adjust(tqe, model);
-    const float pos2 = pos_float2int(pos1, type);
-    const float vel2 = vel_float2int(vel1, type);
-    const float tqe2 = tqe_float2int(tqe1, type);
+    /* 单位转换成转 */
+    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
+    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
+    const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
+    const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    const float kp2 = pid_adjust(kp, model);
-    const float kd2 = pid_adjust(kd, model);
+    /* 力矩修正 */
+    const float tqe_val_adjust = tqe_adjust(tqe, model);
+    const float kp_val_adjust = pid_adjust(kp_turns, model);
+    const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-    const float kp3 = pid_float2int(kp2, type);
-    const float kd3 = pid_float2int(kd2, type);
+    /* float -> int */
+    const float pos_int = pos_float2int(pos_turns, type);
+    const float vel_int = vel_float2int(vel_turns, type);
+    const float tqe_int = tqe_float2int(tqe_val_adjust, type);
+    const float kp_int = pid_float2int(kp_val_adjust, type);
+    const float kd_int = pid_float2int(kd_val_adjust, type);
 
     switch(type)
     {
     case TFLOAT:
-        set_pos_vel_tqe_kp_kd_float_2(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+        set_pos_vel_tqe_kp_kd_float_2(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
         break;
     case TINT32:
-        set_pos_vel_tqe_kp_kd_int32_2(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+        set_pos_vel_tqe_kp_kd_int32_2(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
         break;
     case TINT16:
-        set_pos_vel_tqe_kp_kd_int16_2(fdcanHandle, id, pos2, vel2, tqe2, kp3, kd3);
+        set_pos_vel_tqe_kp_kd_int16_2(fdcanHandle, id, pos_int, vel_int, tqe_int, kp_int, kd_int);
         break;
     default:
         break;

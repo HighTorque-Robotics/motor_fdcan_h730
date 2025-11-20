@@ -32,7 +32,7 @@
 // #define  MODE_POS_VEL_TQE_RKP_RKD   0XA3  // 弃用
 // #define  MODE_POS_VEL_RKP_RKD       0XA8  // 弃用
 #define  MODE_POS_VEL_ACC           0XAD
-#define  MODE_POS_VEL_TQE_KP_KD2    0XB0
+#define  MODE_POS_VEL_TQE_KP_KD_2   0XB0
 
 
 

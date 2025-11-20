@@ -297,19 +297,24 @@ void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float po
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const motor_type_t model = motor_get_model2(portx, id);
 
+    /* 单位转换成转 */
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
+    const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
+    /* 力矩修正 */
+    const float tqe_val_adjust = tqe_adjust(tqe, model);
+    const float kp_val_adjust = pid_adjust(kp_turns, model);
+    const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-    const float kp2 = pid_adjust(kp, model);
-    const float kd2 = pid_adjust(kd, model);
+    /* float -> int */
+    const float pos_int16 = pos_float2int(pos_turns, TINT16);
+    const float vel_int16 = vel_float2int(vel_turns, TINT16);
+    const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
+    const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
+    const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
 
-    const int16_t kp_int16 = pid_float2int(kp2, TINT16);
-    const int16_t kd_int16 = pid_float2int(kd2, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
@@ -344,24 +349,29 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const motor_type_t model = motor_get_model2(portx, id);
 
+    /* 单位转换成转 */
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
+    const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
+    /* 力矩修正 */
+    const float tqe_val_adjust = tqe_adjust(tqe, model);
+    const float kp_val_adjust = pid_adjust(kp_turns, model);
+    const float kd_val_adjust = pid_adjust(kd_turns, model);
 
-    const float kp2 = pid_adjust(kp, model);
-    const float kd2 = pid_adjust(kd, model);
+    /* float -> int */
+    const float pos_int16 = pos_float2int(pos_turns, TINT16);
+    const float vel_int16 = vel_float2int(vel_turns, TINT16);
+    const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
+    const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
+    const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
 
-    const int16_t kp_int16 = pid_float2int(kp2, TINT16);
-    const int16_t kd_int16 = pid_float2int(kd2, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD2)
+    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD_2)
     {
-        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD2;
+        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD_2;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = NAN_INT16;
@@ -447,7 +457,7 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_POS_VEL_KP_KD:
         return 8;
     case MODE_POS_VEL_TQE_KP_KD:
-    case MODE_POS_VEL_TQE_KP_KD2:
+    case MODE_POS_VEL_TQE_KP_KD_2:
         return 10;
     }
 
