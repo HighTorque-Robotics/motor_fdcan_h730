@@ -300,8 +300,8 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 //     /* 单位转换成转 */
 //     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
 //     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-//     const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
-//     const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
+//     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
+//     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
 //     /* 力矩修正 */
 //     const float tqe_val_adjust = tqe_adjust(tqe, model);
@@ -352,8 +352,8 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     /* 单位转换成转 */
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float kp_turns = conv_to_turns(kp, MOTOR_DATA_TYPE_FLAG);
-    const float kd_turns = conv_to_turns(kd, MOTOR_DATA_TYPE_FLAG);
+    const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
+    const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
     /* 力矩修正 */
     const float tqe_val_adjust = tqe_adjust(tqe, model);
