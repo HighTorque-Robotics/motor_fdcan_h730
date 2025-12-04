@@ -33,7 +33,7 @@ p_many_data_s motor_get_many_pointer(port_t portx)
 void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const int16_t vol_int16 = vol_float2int(vol, TINT16);
+    const int16_t vol_raw = vol_float2int(vol, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_VOLTAGE)
@@ -45,7 +45,7 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
         }
     }
     
-    p_many_data->voltage[index] = vol_int16;
+    p_many_data->voltage[index] = vol_raw;
 }
 
 
@@ -58,7 +58,7 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
 void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const int16_t cur_int16 = cur_float2int(cur, TINT16);
+    const int16_t cur_raw = cur_float2int(cur, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_CURRENT)
@@ -70,7 +70,7 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
         }
     }
 
-    p_many_data->current[index] = cur_int16;
+    p_many_data->current[index] = cur_raw;
 }
 
 
@@ -84,7 +84,7 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
+    const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POSITION)
@@ -96,7 +96,7 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
         }
     }
 
-    p_many_data->position[index] = pos_int16;
+    p_many_data->position[index] = pos_raw;
 }
 
 
@@ -110,7 +110,7 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
+    const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_VELOCITY)
@@ -122,7 +122,7 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
         }
     }
 
-    p_many_data->velocity[index] = vel_int16;
+    p_many_data->velocity[index] = vel_raw;
 }
 
 
@@ -135,8 +135,8 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
-    const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
+    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const int16_t tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_TORQUE)
@@ -148,7 +148,7 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
         }
     }
 
-    p_many_data->torque[index] = tqe_int16;
+    p_many_data->torque[index] = tqe_raw;
 }
 
 
@@ -190,8 +190,8 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
+    const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
+    const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE)
@@ -203,8 +203,8 @@ void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const f
         }
     }
 
-    p_many_data->pos_vel_tqe[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe[index].vel = vel_int16;
+    p_many_data->pos_vel_tqe[index].pos = pos_raw;
+    p_many_data->pos_vel_tqe[index].vel = vel_raw;
     p_many_data->pos_vel_tqe[index].tqe = NAN_INT16;
 }
 
@@ -224,11 +224,11 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_float = tqe_adjust(tqe, motor_get_model2(portx, id));
+    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t tqe_int16 = tqe_float2int(tqe_float, TINT16);
+    const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
+    const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
+    const int16_t tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE)
@@ -240,9 +240,9 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
         }
     }
 
-    p_many_data->pos_vel_tqe[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe[index].vel = vel_int16;
-    p_many_data->pos_vel_tqe[index].tqe = tqe_int16;
+    p_many_data->pos_vel_tqe[index].pos = pos_raw;
+    p_many_data->pos_vel_tqe[index].vel = vel_raw;
+    p_many_data->pos_vel_tqe[index].tqe = tqe_raw;
 }
 
 
@@ -262,9 +262,9 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
     const float acc_turns = conv_to_turns(acc, MOTOR_DATA_TYPE_FLAG);
 
-    const int16_t pos_int16 = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_int16 = vel_float2int(vel_turns, TINT16);
-    const int16_t acc_int16 = acc_float2int(acc_turns, TINT16);
+    const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
+    const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
+    const int16_t acc_raw = acc_float2int(acc_turns, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_ACC)
@@ -276,9 +276,9 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
         }
     }
 
-    p_many_data->pos_vel_tqe[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe[index].vel = vel_int16;
-    p_many_data->pos_vel_tqe[index].tqe = acc_int16;
+    p_many_data->pos_vel_tqe[index].pos = pos_raw;
+    p_many_data->pos_vel_tqe[index].vel = vel_raw;
+    p_many_data->pos_vel_tqe[index].tqe = acc_raw;
 }
 
 
@@ -309,11 +309,11 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 //     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
 //     /* float -> int */
-//     const float pos_int16 = pos_float2int(pos_turns, TINT16);
-//     const float vel_int16 = vel_float2int(vel_turns, TINT16);
-//     const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
-//     const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
-//     const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
+//     const float pos_raw = pos_float2int(pos_turns, TINT16);
+//     const float vel_raw = vel_float2int(vel_turns, TINT16);
+//     const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
+//     const float kp_raw = pid_float2int(kp_val_adjust, TINT16);
+//     const float kd_raw = pid_float2int(kd_val_adjust, TINT16);
 
 //     const uint16_t index = id - 1;
 
@@ -326,11 +326,11 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 //         }
 //     }
 
-//     p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_int16;
-//     p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_int16;
-//     p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_int16;
-//     p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
-//     p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
+//     p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_raw;
+//     p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_raw;
+//     p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_raw;
+//     p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_raw;
+//     p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_raw;
 // }
 
 
@@ -361,11 +361,11 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     const float kd_val_adjust = pid_adjust(kd_turns, model);
 
     /* float -> int */
-    const float pos_int16 = pos_float2int(pos_turns, TINT16);
-    const float vel_int16 = vel_float2int(vel_turns, TINT16);
-    const float tqe_int16 = tqe_float2int(tqe_val_adjust, TINT16);
-    const float kp_int16 = pid_float2int(kp_val_adjust, TINT16);
-    const float kd_int16 = pid_float2int(kd_val_adjust, TINT16);
+    const float pos_raw = pos_float2int(pos_turns, TINT16);
+    const float vel_raw = vel_float2int(vel_turns, TINT16);
+    const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
+    const float kp_raw = pid_float2int(kp_val_adjust, TINT16);
+    const float kd_raw = pid_float2int(kd_val_adjust, TINT16);
 
     const uint16_t index = id - 1;
 
@@ -378,11 +378,11 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
         }
     }
 
-    p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_int16;
-    p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_int16;
+    p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_raw;
+    p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_raw;
+    p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_raw;
+    p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_raw;
+    p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_raw;
 }
 
 
