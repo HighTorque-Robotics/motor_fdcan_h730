@@ -345,7 +345,7 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 
 
 /**
- * @brief 运控模式2 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
+ * @brief 运控模式2(MIT模式) (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
