@@ -224,12 +224,14 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         float pos = 0;
         float vel = 0;
         float tqe = 0;
+		float mode = 0;
 
         my_memcpy((uint8_t *)&pos, p_data + 7, sizeof(float));
         my_memcpy((uint8_t *)&vel, p_data + 11, sizeof(float));
         my_memcpy((uint8_t *)&tqe, p_data + 15, sizeof(float));
+		my_memcpy((uint8_t *)&mode, p_data + 3, sizeof(float));
 
-        p_motor_state[id_index].mode = p_data[3];
+        p_motor_state[id_index].mode = mode;
         p_motor_state[id_index].position = pos_int2float(pos, TFLOAT);
         p_motor_state[id_index].velocity = vel_int2float(vel, TFLOAT);
         const float tqe_temp = tqe_int2float(tqe, TFLOAT);
