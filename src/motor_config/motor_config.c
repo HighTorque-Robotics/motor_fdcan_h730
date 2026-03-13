@@ -11,7 +11,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
     for (int i = 0; i < 10; i++)
     {
         action(fdcanHandle, id);
-        HAL_Delay(100);
+        HAL_Delay(50);
         motor_process_state_all();
         if (p_motor_state[id_index].ack != 0)
         {
@@ -35,8 +35,6 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
     set_motor_reset_int8(fdcanHandle, id);
-    set_motor_reset_int8(fdcanHandle, id);
-    set_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     if (motor_config_closed_loop(set_pos_rezero, fdcanHandle, id) != 0)
@@ -49,8 +47,6 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
         return 2;
     }
 
-    set_motor_reset_int8(fdcanHandle, id);
-    set_motor_reset_int8(fdcanHandle, id);
     set_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
