@@ -80,9 +80,9 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     // case TINT8:
     //     return data_limit(in_data * rint8, 127.0f, -128.0f);
     case TINT16:
-        return data_limit(in_data * rint16 + 0.5, 32767.0f, -32768.0f);
+        return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT32:
-        return data_limit(in_data * rint32 + 0.5, 2147483647.0f, -2147483648.0f);
+        return data_limit(in_data * rint32, 2147483647.0f, -2147483648.0f);
     case TFLOAT:
         return in_data;
     default:
