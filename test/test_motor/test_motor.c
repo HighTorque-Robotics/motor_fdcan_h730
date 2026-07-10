@@ -6,35 +6,35 @@
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 3;
-    const data_type_t type = TFLOAT;
+    const uint8_t mode = 10;
+    const data_type_t type = TINT32;
     const port_t portx = PORT1;
 
     switch (mode)
     {
     case 0:
-        motor_set_dq_vlot(portx, type, id, 1.5);
+        motor_set_dq_vlot(portx, type, id, 2.5);
         break;
     case 1:
-        motor_set_dq_current(portx, type, id, 0.2);
+        motor_set_dq_current(portx, type, id, 1.5);
         break;
     case 2:
-        motor_set_pos(portx, type, id, 0.1);
+        motor_set_pos(portx, type, id, 5.0);
         break;
     case 3:
-        motor_set_vel(portx, type, id, 0.1f);
+        motor_set_vel(portx, type, id, 0.5f);
         break;
     case 4:
-        motor_set_tqe(portx, type, id, 0.5f);
+        motor_set_tqe(portx, type, id, 0.3f);
         break;
     case 5:
-        motor_set_pos_vel(portx, type, id, 0.1, 0.1);
+        motor_set_pos_vel(portx, type, id, 0.1, 0.5);
         break;
     case 6:
         motor_set_pos_vel_MAXtqe(portx, type, id, 0.2, 0.1, NAN);
         break;
     case 7:
-        motor_set_pos_velmax_acc(portx, type, id, 0.1, 0.5, 0.1);
+        motor_set_pos_velmax_acc(portx, type, id, 5.0, 0.5, 0.1);
         break;
     case 8:
         motor_set_pos_vel_tqe_kp_kd_2(portx, type, id, 2, 0.1, 1, 1, 1);
