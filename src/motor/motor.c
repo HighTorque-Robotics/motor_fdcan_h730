@@ -11,12 +11,8 @@ static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下�
         {
             // ID = 1
             .model = M4438_30,
-        },
-
-        {
-            // ID = 2
-            .model = M5047_36,
         }
+
     },
 
     {
@@ -24,11 +20,6 @@ static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下�
         {
             // ID = 1
             .model = M4438_30,
-        },
-
-        {
-            // ID = 2
-            .model = M5047_36,
         }
     },
 };
@@ -177,68 +168,68 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
  * @param p_data fdcan 帧数据指针
  * @param len fdcan 数据长度
  */
-static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint8_t *p_data, const uint8_t len)
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint32_t id_title, const uint8_t *p_data, const uint8_t len)
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
 
-    if (p_data[0] == 0x24 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT16 解析
-            && p_data[11] == 0x21 && p_data[12] == 0x0F)
+    // ===================== 新协议：QUERY_MODE_FAULT_POS_VEL_TQE (0x0B) 响应 =====================
+    if (p_data[0] == 0x0B)
     {
-        int16_t pos = 0;
-        int16_t vel = 0;
-        int16_t tqe = 0;
+        // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01, 帧长 >=9 字节 ---------
+        if (id_title == 0x10000UL && len >= 9)
+        {
+            int16_t pos = 0, vel = 0, tqe = 0;
 
-        my_memcpy((uint8_t *)&pos, p_data + 5, sizeof(int16_t));
-        my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int16_t));
-        my_memcpy((uint8_t *)&tqe, p_data + 9, sizeof(int16_t));
+            my_memcpy((uint8_t *)&pos, p_data + 3, sizeof(int16_t));
+            my_memcpy((uint8_t *)&vel, p_data + 5, sizeof(int16_t));
+            my_memcpy((uint8_t *)&tqe, p_data + 7, sizeof(int16_t));
 
-        p_motor_state[id_index].mode = p_data[3];
-        p_motor_state[id_index].position = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].velocity = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
-        const float tqe_temp = tqe_int2float(tqe, TINT16);
-        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
-        p_motor_state[id_index].fault = (uint8_t)p_data[13];
+            p_motor_state[id_index].query     = p_data[0];
+            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].fault     = p_data[2];
+            p_motor_state[id_index].recv_type = TINT16;
+            p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].torque    = tqe_restore(tqe_int2float(tqe, TINT16), motor_get_model1(fdcanHandle, id));
+        }
+        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10, 帧长 >=15 字节 ---------
+        else if (id_title == 0x20000UL && len >= 15)
+        {
+            int32_t pos = 0, vel = 0, tqe = 0;
+
+            my_memcpy((uint8_t *)&pos, p_data + 3, sizeof(int32_t));
+            my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int32_t));
+            my_memcpy((uint8_t *)&tqe, p_data + 11, sizeof(int32_t));
+
+            p_motor_state[id_index].query     = p_data[0];
+            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].fault     = p_data[2];
+            p_motor_state[id_index].recv_type = TINT32;
+            p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].torque    = tqe_restore(tqe_int2float(tqe, TINT32), motor_get_model1(fdcanHandle, id));
+        }
+        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11, 帧长 >=15 字节 ---------
+        else if (id_title == 0x30000UL && len >= 15)
+        {
+            float pos = 0, vel = 0, tqe = 0;
+
+            my_memcpy((uint8_t *)&pos, p_data + 3, sizeof(float));
+            my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(float));
+            my_memcpy((uint8_t *)&tqe, p_data + 11, sizeof(float));
+
+            p_motor_state[id_index].query     = p_data[0];
+            p_motor_state[id_index].mode      = (uint8_t)p_data[1];
+            p_motor_state[id_index].fault     = p_data[2];
+            p_motor_state[id_index].recv_type = TFLOAT;
+            p_motor_state[id_index].position  = conv_from_turns(pos, MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].velocity  = conv_from_turns(vel, MOTOR_DATA_TYPE_FLAG);
+            p_motor_state[id_index].torque    = tqe_restore(tqe, motor_get_model1(fdcanHandle, id));
+        }
     }
-    else if (p_data[0] == 0x28 && p_data[1] == 0x04 && p_data[2] == 0x00  // TINT32 解析
-             && p_data[19] == 0x21 && p_data[20] == 0x0F)
-    {
-        int32_t pos = 0;
-        int32_t vel = 0;
-        int32_t tqe = 0;
-
-        my_memcpy((uint8_t *)&pos, p_data + 7, sizeof(int32_t));
-        my_memcpy((uint8_t *)&vel, p_data + 11, sizeof(int32_t));
-        my_memcpy((uint8_t *)&tqe, p_data + 15, sizeof(int32_t));
-
-        p_motor_state[id_index].mode = p_data[3];
-        p_motor_state[id_index].position = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].velocity = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
-        const float tqe_temp = tqe_int2float(tqe, TINT32);
-        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
-        p_motor_state[id_index].fault = (uint8_t)p_data[21];
-    }
-    else if (p_data[0] == 0x2C && p_data[1] == 0x04 && p_data[2] == 0x00  // TFLOAT 解析
-             && p_data[19] == 0x21 && p_data[20] == 0x0F)
-    {
-        float pos = 0;
-        float vel = 0;
-        float tqe = 0;
-		float mode = 0;
-
-        my_memcpy((uint8_t *)&pos, p_data + 7, sizeof(float));
-        my_memcpy((uint8_t *)&vel, p_data + 11, sizeof(float));
-        my_memcpy((uint8_t *)&tqe, p_data + 15, sizeof(float));
-		my_memcpy((uint8_t *)&mode, p_data + 3, sizeof(float));
-
-        p_motor_state[id_index].mode = mode;
-        p_motor_state[id_index].position = conv_from_turns(pos_int2float(pos, TFLOAT), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].velocity = conv_from_turns(vel_int2float(vel, TFLOAT), MOTOR_DATA_TYPE_FLAG);
-        const float tqe_temp = tqe_int2float(tqe, TFLOAT);
-        p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
-        p_motor_state[id_index].fault = (uint8_t)p_data[21];
-    }
-    else if (id_index < MOTOR_MAX_NUM && len == 8)   // 一拖多模式解析
+    // ===================== 一拖多模式解析 =====================
+    else if (id_index < MOTOR_MAX_NUM && len == 8)
     {
         int16_t pos = 0;
         int16_t vel = 0;
@@ -267,12 +258,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         const float tqe_temp = tqe_int2float(tqe, TINT16);
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
     }
-    else if (len == 7 && p_data[0] == 0x41 && p_data[1] == 0x01 && p_data[2] == 0x04  // 设置信息解析
-             && p_data[3] == 0x4F && p_data[4] == 0x4B && p_data[5] == 0x0D && p_data[6] == 0x0A)
-    {
-        p_motor_state[id_index].ack = 1;
-    }
-    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)  // 电机固件版本
+    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)  // 电机固件版本（不变）
     {
         if (len == 5)
         {
@@ -285,6 +271,39 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].version.major = 3;
             p_motor_state[id_index].version.minor = 9;
             p_motor_state[id_index].version.patch = 1;
+        }
+    }
+    // ===================== 电机型号查询响应 =====================
+    else if (p_data[0] == 0x07)
+    {
+        const uint8_t model_len = p_data[1];
+
+        if (model_len > 0 && model_len <= 15 && len >= model_len + 2)
+        {
+            char model_str[16] = {0};
+
+            // 每字节取低 4 位，转为十六进制字符
+            for (uint8_t i = 0; i < model_len; i++)
+            {
+                const uint8_t nibble = p_data[2 + i] & 0x0F;
+                model_str[i] = (nibble < 10) ? ('0' + nibble) : ('A' + (nibble - 10));
+            }
+
+            // 查找当前 fdcanHandle 对应的端口号
+            uint8_t port_num = 0;
+            for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
+            {
+                if (fdcanHandle->Instance == port_maping[i].fdcan->Instance)
+                {
+                    port_num = port_maping[i].port;
+                    break;
+                }
+            }
+
+            // 型号格式：前 4 个字符 + "_" + 剩余字符  (如: 5036_02)
+            // model_len 个十六进制字符中，第 5 个字符(下标4)为空字符/分隔符，此处用 "_" 替代
+            printf("PORT: %d, ID: %d, model = %.4s_%.*s\r\n",
+                   port_num, id, model_str, model_len - 5, model_str + 5);
         }
     }
 }
@@ -309,7 +328,14 @@ void motor_process_state_all()
             {
                 const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-                motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
+                const uint32_t id_title = fdcan_rx_header.Identifier & 0x00030000UL;  // 提取 bits[17:16] 数据类型
+                const uint8_t  motor_id = fdcan_rx_header.Identifier & 0x0000007FUL;   // 提取 bits[6:0] 从ID (1~127)
+
+
+                if (motor_id > 0 && motor_id <= MOTOR_MAX_NUM)
+                {
+                    motor_process_state(port_maping[i].fdcan, motor_id, id_title, fdcan_rdata, len);
+                }
             }
         }
     }

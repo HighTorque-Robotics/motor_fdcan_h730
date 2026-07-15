@@ -25,14 +25,12 @@
 #define  MODE_CURRENT               0X84
 #define  MODE_TIME_OUT              0x85
 
-#define  MODE_POS_VEL_TQE           0X90
-#define  MODE_POS_VEL_TQE_KP_KD     0X93
-// #define  MODE_POS_VEL_TQE_KP_KI_KD  0X98  // 弃用
+#define  MODE_VEL_ACC               0X90   // 块 0x90~0x91 (2帧)
+#define  MODE_POS_VEL_TQE           0X92   // 块 0x92~0x94 (3帧)
+#define  MODE_POS_VEL_ACC           0X95   // 块 0x95~0x97 (3帧)
+
 #define  MODE_POS_VEL_KP_KD         0X9E
-// #define  MODE_POS_VEL_TQE_RKP_RKD   0XA3  // 弃用
-// #define  MODE_POS_VEL_RKP_RKD       0XA8  // 弃用
-#define  MODE_POS_VEL_ACC           0XAD
-#define  MODE_POS_VEL_TQE_KP_KD_2   0XB0
+#define  MODE_POS_VEL_TQE_KP_KD_2   0X98
 
 
 
@@ -43,6 +41,12 @@ typedef struct
     int16_t vel;
     int16_t tqe;
 } many_pos_vel_tqe_s;
+
+typedef struct
+{
+    int16_t vel;
+    int16_t acc;
+} many_vel_acc_s;
 
 typedef struct
 {
@@ -81,6 +85,7 @@ typedef struct
         int16_t voltage[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
         int16_t current[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
         int16_t timeout[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
+        many_vel_acc_s vel_acc[MANY_DATA_BUF_MAX_LEN / sizeof(many_vel_acc_s)];
         many_pos_vel_tqe_s pos_vel_tqe[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_s)];
         many_pos_vel_acc_s pos_vel_acc[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_acc_s)];
         many_pos_vel_tqe_kp_kd_s pos_vel_tqe_kp_kd[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_kd_s)];
@@ -102,6 +107,7 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe);
 void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms);
 void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel);
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe);
+void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const float acc);
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
 

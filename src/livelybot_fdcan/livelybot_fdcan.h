@@ -11,10 +11,10 @@
 #define  NAN_INT32  0x80000000
 #define  NAN_INT16  0x8000
 #define  NAN_INT8   0x80
-/* 各个数据类型的ID */
-#define  id_title_int32  0x10000
-#define  id_title_int16  0x08000
-#define  id_title_float  0x18000
+/* 各个数据类型的ID (bits 17:16: 01=TINT16, 10=TINT32, 11=TFLOAT) */
+#define  id_title_int16  0x10000
+#define  id_title_int32  0x20000
+#define  id_title_float  0x30000
 /* dq 电压模式 */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt);
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt);
@@ -89,6 +89,9 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 /* 重启电机 */
 void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
+/* 更改电机ID */
+void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id);
+
 /* 电机停止 */
 void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
@@ -106,6 +109,12 @@ void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 查询电机固件版本 */
 void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+
+/* 查询电机型号 */
+void read_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+
+/* 查询电机硬件版本号 */
+void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 
 #endif

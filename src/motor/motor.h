@@ -4,8 +4,8 @@
 
 
 
-#define  MOTOR_PORT_NUM  2  // 使用 CAN 通道数量  
-#define  MOTOR_MAX_NUM   2  // 单个 CAN 通道所连接的最大电机数量
+#define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
+#define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
 
 
 
@@ -34,13 +34,15 @@ typedef struct
 
 typedef struct
 {
+    uint8_t mode;      // 模式（对应 motor_mode_t 枚举）
+    uint8_t fault;     // 错误码
     float position;  // 位置
     float velocity;  // 速度
     float torque;    // 力矩
-    uint8_t mode;    // 模式
-    int8_t  temp;    // 温度（单位：摄氏度，分辨率：1度）
-    uint8_t fault;   // 错误码，可在《寄存器功能、电机运行模式、报错代码、一托多模式说明.xlsx》中查询
+    int8_t  temp;      // 温度（单位：摄氏度，分辨率：1度）
+    uint8_t query;     // 最后响应的查询码（对应 prot_query_t 枚举）
     uint8_t ack;     // 应答，用于电机设置相关的应答
+    data_type_t recv_type;  // 本次响应帧的数据类型
     const motor_type_t model;  // 电机型号（这个参数由用户自定义，此程序根据这个变量进行电机力矩修正）
     version_s version;  // 电机固件版本号
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
@@ -56,9 +58,8 @@ typedef struct
 
 typedef enum
 {
-    MANY_GET_MODE_FLAUT_POS_VEL_TQE = 0,  // 模式、错误码、位置、速度、力矩 (电机从 v4.2.3 开始支持)
-    MANY_GET_TEMP_FLAUT_POS_VEL_TQE,      // 温度、错误码、位置、速度、力矩（电机从 v4.5.0 开始支持）
-    MANY_GET_POS_VEL_TQE,                 // 位置、速度、力矩 （所有版本都支持）
+    MANY_GET_MODE_FLAUT_POS_VEL_TQE = 0,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MANY_GET_TEMP_FLAUT_POS_VEL_TQE,      // 温度、错误码、位置、速度、力矩（查询指令 0x07）
     MANY_GET_MAX_NUM,
 } many_request_type_t;
 

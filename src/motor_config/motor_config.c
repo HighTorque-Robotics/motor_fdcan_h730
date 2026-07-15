@@ -76,3 +76,17 @@ uint8_t motor_conf_write(port_t portx, const uint8_t id)
     return 0;
 }
 
+/**
+ * @brief 更改电机ID，立刻生效
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
+ * @param old_id 当前电机 ID
+ * @param new_id 新电机 ID
+ */
+void motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
+    set_motor_id(fdcanHandle, old_id, new_id);
+}
+
+

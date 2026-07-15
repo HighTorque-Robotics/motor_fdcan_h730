@@ -21,14 +21,8 @@
  */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt)
 {
-    //                          dq电压模式    2个float      d                        q
-    // static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x0E, 0x1a, 0x00, 0x00, 0x00, 0x00,  0x00, 0x00, 0x00, 0x00,
-    //                         //  查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         //  占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x18, 0x06, 0x00, 0x00, 0x00, 0x00};
+//                     dq电压模式  query  dq电压
+    static uint8_t cmd[] = {0x18, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &volt, sizeof(volt));
 
@@ -44,14 +38,8 @@ void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float volt)
  */
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t volt)
 {
-    //                   		 dq电压模式   2个32位      d                        q
-    // static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x0A, 0x1a, 0x00, 0x00, 0x00, 0x00,  0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         //  占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x18, 0x06, 0x00, 0x00, 0x00, 0x00};
+//                    dq电压模式  query dq电压
+    static uint8_t cmd[] = {0x18, 0x0B, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &volt, sizeof(volt));
 
     fdcan_send(fdcanHandle, id_title_int32 | id, cmd, sizeof(cmd));
@@ -66,14 +54,8 @@ void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vol
  */
 void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t volt)
 {
-    //                   		dq电压模式   2个16位       d           q
-    // static uint8_t cmd[] = {0x01, 0x00, 0x08, 0x06, 0x1a, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x18, 0x06, 0x00, 0x00};
+//                     dq电压模式  query dq电压
+    static uint8_t cmd[] = {0x18, 0x0B, 0x00, 0x00};
     my_memcpy(&cmd[2], &volt, sizeof(volt));
 
     fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
@@ -88,14 +70,8 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol
  */
 void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float current)
 {
-    //                   		dq电流模式   2个32位       q电流       			  d电流
-    // static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x0E, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x19, 0x06, 0x00, 0x00, 0x00, 0x00};
+//                      dq电流模式  query dq电流
+    static uint8_t cmd[] = {0x19, 0x0B, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &current, sizeof(current));
 
     fdcan_send(fdcanHandle, id_title_float | id, cmd, sizeof(cmd));
@@ -110,14 +86,8 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float cu
  */
 void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t current)
 {
-    //                   		 dq电流模式   2个32位      q电流       			   d电流
-    // static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x0A, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x19, 0x06, 0x00, 0x00, 0x00, 0x00};
+//                     dq电流模式  query dq电流
+    static uint8_t cmd[] = {0x19, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &current, sizeof(current));
 
@@ -133,14 +103,8 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
  */
 void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t current)
 {
-    //                   		dq电流模式   2个16位      q电流       d电流       占位（fdcan）
-    // static uint8_t cmd[] = {0x01, 0x00, 0x09, 0x06, 0x1C, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x19, 0x06, 0x00, 0x00};
+//                     dq电流模式 query  dq电流
+    static uint8_t cmd[] = {0x19, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &current, sizeof(current));
 
@@ -156,20 +120,8 @@ void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
  */
 void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
 {
-    //                     		  位置模式    float  6个        位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0c, 0x06, 0x20, 0x00, 0x00,
-    //                         // 			速度                 	力矩
-    //                         0xc0, 0x7f, 0x00, 0x00, 0x00, 0x00, 0xcd, 0xcc,
-    //                         //			kp                	    kd
-    //                         0xcc, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         //			最大力矩
-    //                         0x00, 0x00, 0x00, 0x00, 0xc0, 0x7f,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1A, 0x06, 0x00, 0x00, 0x00, 0x00};
+//                          Mode  query  位置
+    static uint8_t cmd[] = {0x1A, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -185,20 +137,8 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque
  */
 void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
 {
-    //                     位置模式    		 int32  6个    	    位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x08, 0x06, 0x20, 0x00, 0x00,
-    //                         //          速度                    力矩
-    //                         0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         //          kp  					kd
-    //                         0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         //          最大力矩
-    //                         0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1A, 0x06, 0x00, 0x00, 0x00, 0x00};
+ //                      力矩模式  query  力矩
+    static uint8_t cmd[] = {0x1A, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -214,16 +154,8 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torq
  */
 void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
 {
-    //                     		位置模式     int16   6个        位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x04, 0x06, 0x20, 0x00, 0x80,
-    //                         //速度      力矩        kp          kd          最大力矩
-    //                         0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50,
-    //                        };
-    static uint8_t cmd[] = {0x1A, 0x06, 0x00, 0x00};
+ //                      力矩模式  query  力矩
+    static uint8_t cmd[] = {0x1A, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -241,14 +173,8 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torq
  */
 void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
 {
-    //                           位置模式     int32        位置                    速度                    			  力矩                    停止位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0e, 0x20, 0x00, 0x00, 0xc0, 0x7f, 0xcd, 0xcc, 0xcc, 0x3d, 0x0e, 0x25, 0x00, 0x00, 0x80, 0x3f, 0x9a, 0x99, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1E, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+ //           位置速度最大力矩模式  query  位置                   速度                     力矩  
+    static uint8_t cmd[] = {0x1E, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -268,14 +194,9 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float p
  */
 void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
 {
-    //                           位置模式     int32       位置                    速度                    			  力矩                    停止位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x0a, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1E, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+ //           位置速度最大力矩模式  query  位置                   速度                     力矩  
+    static uint8_t cmd[] = {0x1E, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -295,12 +216,9 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
  */
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
-    //                            位置模式   2个int16      位置        速度		 2个int16	    力矩
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0a, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x06, 0x25, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
-    static uint8_t cmd[] = {0x1E, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+ //           位置速度最大力矩模式  query  位置       速度        力矩  
+    static uint8_t cmd[] = {0x1E, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -318,14 +236,8 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t
  */
 void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 {
-    //                           位置模式   1个float      位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1C, 0x06, 0x00, 0x00, 0x00, 0x00};
+ //                      位置模式  query  位置      
+    static uint8_t cmd[] = {0x1C, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -341,14 +253,8 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
  */
 void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 {
-    //                           位置模式   1个int32      位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50,
-    //                        };
-    static uint8_t cmd[] = {0x1C, 0x06, 0x00, 0x00, 0x00, 0x00};
+ //                      位置模式  query  位置   
+    static uint8_t cmd[] = {0x1C, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -364,12 +270,8 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
  */
 void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 {
-    //                          位置模式     1个int16     位置
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
-    static uint8_t cmd[] = {0x1C, 0x06, 0x00, 0x00};
+ //                      位置模式  query 位置   
+    static uint8_t cmd[] = {0x1C, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -385,14 +287,8 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
  */
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
-    //							  位置模式     2个float 	位置					速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0E, 0x20, 0x00, 0x00, 0xc0, 0x7f, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50,
-    //                        };
-    static uint8_t cmd[] = {0x1B, 0x06, 0x00, 0x00, 0x00, 0x00};
+ //                      速度模式  query 速度 
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -408,14 +304,8 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
  */
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
-    //							  位置模式     2个int32 	位置					速度					占位（fdcan）
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0A, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50,
-    //                        };
-    static uint8_t cmd[] = {0x1B, 0x06, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -431,14 +321,8 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
  */
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
-    //							位置模式     2个int16 	  位置		  速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1B, 0x06, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -458,15 +342,7 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
  */
 void set_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x0A,
-    //     0x0f, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x0e, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x1C, 0x04, 0x00, 0x11, 0x0f,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -490,15 +366,8 @@ void set_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, f
  */
 void set_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x0A,
-    //     0x0B, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x0A, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x18, 0x04, 0x00, 0x11, 0x0f,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -522,17 +391,8 @@ void set_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, i
  */
 void set_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x0A,
-    //     0x07, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x06, 0x2b, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x14, 0x04, 0x00, 0x11, 0x0f,
-    //     // 占位（fdcan）
-    //     0x50, 0x50,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -556,15 +416,8 @@ void set_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, i
  */
 void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x15,
-    //     0x0f, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x0e, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x1C, 0x04, 0x00, 0x11, 0x0f,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 
+
+    static uint8_t cmd[] = {0x20, 0x0B, 
                             0x00, 0x00, 0x00, 0x00, 
                             0x00, 0x00, 0x00, 0x00, 
                             0x00, 0x00, 0x00, 0x00, 
@@ -593,15 +446,8 @@ void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  */
 void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x15,
-    //     0x0B, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x0A, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x18, 0x04, 0x00, 0x11, 0x0f,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 
+
+    static uint8_t cmd[] = {0x20, 0x0B, 
                             0x00, 0x00, 0x00, 0x00, 
                             0x00, 0x00, 0x00, 0x00, 
                             0x00, 0x00, 0x00, 0x00, 
@@ -630,17 +476,8 @@ void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  */
 void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
-    // static uint8_t cmd[] =
-    // {
-    //     0x01, 0x00, 0x15,
-    //     0x07, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //     0x06, 0x2b, 0x00, 0x00, 0x00, 0x00,
-    //     // 查询指令
-    //     0x14, 0x04, 0x00, 0x11, 0x0f,
-    //     // 占位（fdcan）
-    //     0x50, 0x50,
-    // };
-    static uint8_t cmd[] = {0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -661,14 +498,8 @@ void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  */
 void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max)
 {
-    //							位置模式				  位置        速度		  			  速度限制
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x28, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
-    static uint8_t cmd[] = {0x1B, 0x06, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
@@ -687,12 +518,8 @@ void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
  */
 void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc)
 {
-    // 							位置模式				  位置		  						  速度限制
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0D, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0E, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
-    static uint8_t cmd[] = {0x1F, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    static uint8_t cmd[] = {0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -717,7 +544,7 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
     //                         // 查询指令
     //                         0x18, 0x04, 0x00, 0x11, 0x0f,
     //                        };
-    static uint8_t cmd[] = {0x1F, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -738,13 +565,13 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
     // 							位置模式				  位置		  速度限制
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x06, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x0B, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     //                         // 查询指令
     //                         0x14, 0x04, 0x00, 0x11, 0x0f,
     //                         // 占位（fdcan）
     //                         0x50, 0x50, 0x50
     //                        };
-    static uint8_t cmd[] = {0x1F, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
@@ -768,7 +595,7 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
     //                         // 查询指令
     //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
     //                        };
-    static uint8_t cmd[] = {0x1D, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -791,7 +618,7 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
     //                         // 查询指令
     //                         0x18, 0x04, 0x00, 0x11, 0x0f,
     //                        };
-    static uint8_t cmd[] = {0x1D, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -810,13 +637,13 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
 {
     //							位置模式				  位置		  速度					  加速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x06, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00,
+    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0B, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00,
     //                         // 查询指令
     //                         0x14, 0x04, 0x00, 0x11, 0x0f,
     //                         // 占位（fdcan）
     //                         0x50, 0x50
     //                        };
-    static uint8_t cmd[] = {0x1D, 0x06, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
@@ -839,7 +666,7 @@ void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t v
     //                         // 占位（fdcan）
     //                         0x50, 0x50, 0x50, 0x50
     //                        };
-    static uint8_t cmd[] = {0x18, 0x06, 0x00, 0x00};
+    static uint8_t cmd[] = {0x18, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vol, sizeof(vol));
 
@@ -890,7 +717,7 @@ void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
  */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x40, 0x01, 0x15, 0x64, 0x20, 0x63, 0x66, 0x67, 0x2d, 0x73, 0x65, 0x74, 0x2d, 0x6f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x20, 0x30, 0x2e, 0x30, 0x0a};
+    static uint8_t cmd[] = {0x03, 0x03, 0x03};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }
@@ -903,7 +730,7 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x40, 0x01, 0x0B, 0x63, 0x6F, 0x6E, 0x66, 0x20, 0x77, 0x72, 0x69, 0x74, 0x65, 0x0A, 0x50, 0x50};
+    static uint8_t cmd[] = {0x03, 0x03, 0x02};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
 }
@@ -916,9 +743,25 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x40, 0x01, 0x08, 0x64, 0x20, 0x72, 0x65, 0x73, 0x65, 0x74, 0x0A, 0x50};
+    static uint8_t cmd[] = {0x03, 0x03, 0x01};
 
     fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+}
+
+
+/**
+ * @brief 更改电机ID
+ * @param fdcanHandle &hfdcanx
+ * @param old_id 当前电机ID
+ * @param new_id 新电机ID
+ */
+void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id)
+{
+    static uint8_t cmd[] = {0x03, 0x03, 0x04, 0x00};
+
+    cmd[3] = new_id;
+
+    fdcan_send(fdcanHandle, 0x8000 | old_id, cmd, sizeof(cmd));
 }
 
 
@@ -929,10 +772,7 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x00, 
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x01, 0x06};
+    static uint8_t cmd[] = {0x01, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_float | id, cmd, sizeof(cmd));
 }
@@ -945,10 +785,8 @@ void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x00, 
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x01, 0x06};
+
+    static uint8_t cmd[] = {0x01, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_int32 | id, cmd, sizeof(cmd));
 }
@@ -961,10 +799,8 @@ void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x00, 
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x01, 0x06};
+
+    static uint8_t cmd[] = {0x01, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
@@ -977,10 +813,8 @@ void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x17, 0x06};
+
+    static uint8_t cmd[] = {0x17, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_float | id, cmd, sizeof(cmd));
 }
@@ -993,10 +827,8 @@ void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x17, 0x06};
+
+    static uint8_t cmd[] = {0x17, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_int32 | id, cmd, sizeof(cmd));
 }
@@ -1009,10 +841,8 @@ void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0f, 
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f};
-    static uint8_t cmd[] = {0x17, 0x06};
+
+    static uint8_t cmd[] = {0x17, 0x0B};
 
     fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
@@ -1025,9 +855,8 @@ void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x1C, 0x04, 0x00, 0x11, 0x0f};
-
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    const uint8_t cmd[] = {0x00, 0x0B};
+    fdcan_send(fdcanHandle, id_title_float | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -1038,9 +867,8 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x18, 0x04, 0x00, 0x11, 0x0f};
-
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    const uint8_t cmd[] = {0x00, 0x0B};
+    fdcan_send(fdcanHandle, id_title_int32 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -1051,9 +879,8 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x14, 0x04, 0x00, 0x11, 0x0f};
-
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    const uint8_t cmd[] = {0x00, 0x0B};
+    fdcan_send(fdcanHandle, id_title_int16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -1064,7 +891,35 @@ void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x15, 0xB5, 0x02};
+    const uint8_t cmd[] = {0x00, 0x04};
 
     fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
 }
+
+
+/**
+ * @brief 获取电机硬件版本
+ * @param fdcanHandle &hfdcanx
+ * @param id id 电机ID
+ */
+void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    const uint8_t cmd[] = {0x00, 0x05};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+}
+
+
+
+/**
+ * @brief 查询电机型号
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机ID
+ */
+void read_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+{
+    const uint8_t cmd[] = {0x00, 0x07};
+
+    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+}
+

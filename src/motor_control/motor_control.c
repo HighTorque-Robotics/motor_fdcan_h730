@@ -440,6 +440,32 @@ void motor_get_version(port_t portx, const uint8_t id)
 
 
 /**
+ * @brief 发送查询电机型号指令（在 motor_process_state 中解析并打印）
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
+ * @param id 电机 ID
+ */
+void motor_get_model(port_t portx, const uint8_t id)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
+    read_motor_model(fdcanHandle, id);
+}
+
+
+/**
+ * @brief 发送查询电机硬件版本号指令（cmd: 0x00 0x05，在 motor_process_state 中解析并打印）
+ * @param portx CAN 通道选择，用于指定通信的 CAN 端口
+ * @param id 电机 ID
+ */
+void motor_get_hardware_version(port_t portx, const uint8_t id)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+
+    read_motor_hardware_int16(fdcanHandle, id);
+}
+
+
+/**
  * @brief 停止模式，电机三相都断开（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
