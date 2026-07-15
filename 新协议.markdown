@@ -205,10 +205,10 @@ ID为3的电机，用MIT 一拖多模式，int16
 
 # FDCAN 电机控制系统架构文档
 
-> **SDK 版本**: 3.3.6
+> **SDK 版本**: 1.0.0
 > **MCU**: STM32H730
 > **通信协议**: FDCAN FD (CAN FD, BRS ON, Extended ID)
-> **数据类型**: TINT16 (`0x10000`) / TINT32 (`0x10000`) / TFLOAT (`0x11000`)
+> **数据类型**: TINT16 (`0x10000`) / TINT32 (`0x20000`) / TFLOAT (`0x30000`)
 
 ---
 

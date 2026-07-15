@@ -10,18 +10,18 @@ static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下�
         // CAN 通道 PORT1
         {
             // ID = 1
-            .model = M4438_30,
+            .model = MNONE,
         }
 
     },
 
-    {
-        // CAN 通道 PORT2
-        {
-            // ID = 1
-            .model = M4438_30,
-        }
-    },
+    // {
+    //     // CAN 通道 PORT2
+    //     {
+    //         // ID = 1
+    //         .model = MNONE,
+    //     }
+    // },
 };
 
 
@@ -33,11 +33,11 @@ const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
         .state = motor_state_port[0],
     },
 
-    {
-        .port = PORT2,
-        .fdcan = &hfdcan2,
-        .state = motor_state_port[1],
-    },
+    // {
+    //     .port = PORT2,
+    //     .fdcan = &hfdcan2,
+    //     .state = motor_state_port[1],
+    // },
 };
 
 /*******************************************END***************************************************/
