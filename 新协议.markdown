@@ -1,11 +1,15 @@
-#define  TINT32  0x10000
-#define  TINT16  0x08000
-#define  TFLOAT  0x18000
+bits:  17 16  | 15 14 13 12 11 10 9 8 | 7 | 6 5 4 3 2 1 0
+      数据类型  |  主机ID (电机返回ID)   |模式|  从机ID (发送给电机)
+
+
+#define  id_title_int16  0x10000  // TINT16, bits[17:16]=01
+#define  id_title_int32  0x20000  // TINT32, bits[17:16]=10
+#define  id_title_float  0x30000  // TFLOAT, bits[17:16]=11
 通过更改发送指令的ID来决定发送以及接收的数据类型，
 示例：
-id为1：0X08001，cmd={ 0x18, 0x06, 0x00, 0x00 }为int16_t的电压模式下控制方式
-id为1：0X10001，cmd={ 0x18, 0x06, 0x00, 0x00, 0x00, 0x00 }为int32_t的电压模式下控制方式
-id为1：0X18001，cmd={ 0x18, 0x06, 0x00, 0x00, 0x00, 0x00 }为float_t的电压模式下控制方式
+id为1：0X10001，cmd={ 0x18, 0x0B, 0x00, 0x00 }为int16_t的电压模式下控制方式
+id为1：0X20001，cmd={ 0x18, 0x0B, 0x00, 0x00, 0x00, 0x00 }为int32_t的电压模式下控制方式
+id为1：0X30001，cmd={ 0x18, 0x0B, 0x00, 0x00, 0x00, 0x00 }为float_t的电压模式下控制方式
 
 
 发送协议：uint8_t cmd[] = { mode, query, a1, a2, b1, b2...};
@@ -16,9 +20,9 @@ id为1：0X18001，cmd={ 0x18, 0x06, 0x00, 0x00, 0x00, 0x00 }为float_t的电压
 4. b1, b2...：数据2，向寄存器中写入的数据。
    示例：
    使用速度模式，需要返回模式、错误、位置、速度、力矩，使用的是int16_t的数据类型大小
-   static uint8_t cmd[] = { 0x1B, 0x06, 0x00, 0x00 };
+   static uint8_t cmd[] = { 0x1B, 0x0B, 0x00, 0x00 };
    0x1B：在枚举类型中该模式为27，转换为十六进制为1b。
-   0x06：返回的数据在枚举中对应的值为06。
+   0x0B：返回的数据在枚举中对应的值为0B（QUERY_MODE_FAULT_POS_VEL_TQE）。
    0x00, 0x00：发送的数据数值，小端模式。
 
 
@@ -58,8 +62,7 @@ typedef enum __PACKED
 typedef enum __PACKED
 {
     QUERY_NULL = 0,
-    QUEUY_SCAN,
-    //返回空数据
+    QUERY_SCAN,          // 返回空数据
     QUERY_CMD,
     QUERY_SYSTEM,
     QUERY_FW_VERSION,
@@ -74,77 +77,77 @@ typedef enum __PACKED
 
 一、电压控制
 示例：
-static uint8_t cmd[] = { 0x18, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x18, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x18：电压模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值。
 
 二、电流控制
 示例：
-static uint8_t cmd[] = { 0x19, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x19, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x19：电流模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（电流）。
 
 三、力矩控制
 示例：
-static uint8_t cmd[] = { 0x1A, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1A, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x1A：力矩模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（力矩）。
 
 四、速度控制
 示例（仅速度）：
-static uint8_t cmd[] = { 0x1B, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x1B：速度模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（速度）。
 
 速度+速度限幅控制（int16）：
-static uint8_t cmd[] = { 0x1B, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x1B：速度模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00：小端模式，写入寄存器的值（速度）。
 0x00, 0x00：小端模式，写入寄存器的值（速度限幅）。
 
 五、位置控制
 示例：
-static uint8_t cmd[] = { 0x1C, 0x06, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1C, 0x0B, 0x00, 0x00, 0x00, 0x00 };
 0x1C：位置模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（位置）。
 
 六、速度+加速度控制
 示例：
-static uint8_t cmd[] = { 0x1D, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 0x1D：速度+加速度模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（速度）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（加速度）。
 
 七、位置+速度+力矩控制
 示例：
-static uint8_t cmd[] = { 0x1E, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1E, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 0x1E：位置+速度+力矩模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（位置）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（速度）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（力矩）。
 
 八、位置+速度+加速度（梯形控制）
 示例：
-static uint8_t cmd[] = { 0x1F, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 0x1F：位置+速度+加速度模式（梯形控制）。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（位置）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（速度限制）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（加速度）。
 
 九、运控模式（位置+速度+力矩+kp+kd）
 示例：
-static uint8_t cmd[] = { 0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 0x20：运控模式（输出力矩 = 位置偏差*Mkp + 速度偏差*Mkd + 前馈力矩）。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（位置）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（速度）。
 0x00, 0x00, 0x00, 0x00：小端模式，写入寄存器的值（前馈力矩）。
@@ -153,21 +156,21 @@ static uint8_t cmd[] = { 0x20, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0
 
 十、停止
 示例：
-static uint8_t cmd[] = { 0x01, 0x06 };
+static uint8_t cmd[] = { 0x01, 0x0B };
 0x01：停止模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 
 十一、刹车
 示例：
-static uint8_t cmd[] = { 0x17, 0x06 };
+static uint8_t cmd[] = { 0x17, 0x0B };
 0x17：刹车模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 
 十二、电压锁（电机固定）
 示例：
-static uint8_t cmd[] = { 0x18, 0x06, 0x00, 0x00 };
+static uint8_t cmd[] = { 0x18, 0x0B, 0x00, 0x00 };
 0x18：电压模式。
-0x06：返回模式、错误、位置、速度、力矩。
+0x0B：返回模式、错误、位置、速度、力矩。
 0x00, 0x00：小端模式，写入寄存器的值（d相电压）。
 说明：使用电压将电机固定，电机不会转动，用于减少电机停止时的噪音，但电流会增大。
 
@@ -180,21 +183,59 @@ static uint8_t cmd[] = { 0x18, 0x06, 0x00, 0x00 };
 
 
 一拖多
-MODE_VEL_ACC        		0x90\0x91
-MODE_POS_VEL_TQE    		0x92\0x93\0x94
-MODE_POS_VEL_ACC    		0x95\0x96\0x97
-MODE_POS_VEL_TQE_KP_KD		0x98\0x99\0x9A\0x9B\0x9C
+一拖多通过 CAN ID 的 bit7=1 标识，bits[6:0] 为模式块编号（非电机 ID）。
+所有一拖多模式固定使用 TINT16 数据类型 (id_title_int16 = 0x10000)。
 
-CAN ID：
-数据类型，是否启用CANMIT，主ID，是否启用一拖多模式，  从ID
-01/10/11  ， 1/0 ，    000 0000， 1/0            , 000 0000(二进制的低7位)  所以，ID最大为127
-比如：
-ID为3的电机，不起用MIT 普通模式，int16
-二进制：0001 0000 0000 0000 0011   16进制则为10003
-ID为3的电机，不起用MIT 一拖多模式，int16
-二进制：0001 0000 0000 1000 0011   16进制则为10003
-ID为3的电机，用MIT 一拖多模式，int16
-二进制：0001 1000 0000 1000 0011   16进制则为10003
+单帧模式 (每帧2字节/电机, 最多30电机/帧):
+MODE_POSITION              0x80  → CAN ID = 0x10080 (位置跟随)
+MODE_VELOCITY              0x81  → CAN ID = 0x10081 (速度跟随)
+MODE_TORQUE                0x82  → CAN ID = 0x10082 (力矩)
+MODE_VOLTAGE               0x83  → CAN ID = 0x10083 (DQ电压)
+MODE_CURRENT               0x84  → CAN ID = 0x10084 (DQ电流)
+MODE_TIME_OUT              0x85  → CAN ID = 0x10085 (超时)
+
+多帧模式 (每帧>2字节/电机, 单帧放不下时 mode 递增):
+MODE_VEL_ACC               0x90\0x91         (4字节/电机, 最多2帧)
+MODE_POS_VEL_TQE           0x92\0x93\0x94    (6字节/电机, 最多3帧)
+MODE_POS_VEL_ACC           0x95\0x96\0x97    (6字节/电机, 最多3帧)
+MODE_POS_VEL_TQE_KP_KD_2   0x98\0x99\0x9A\0x9B\0x9C  (10字节/电机, 最多5帧)
+
+CAN ID 位布局 (29位扩展帧, 实际用低18位):
+┌────────────┬───────────────────┬──────┬──────────────────────┐
+│ bits[17:16]│ bits[15:8]         │bit[7]│ bits[6:0]            │
+│ 数据类型    │ 主机ID (电机返回ID) │模式   │ 从机ID (发送给电机ID) │
+└────────────┴───────────────────┴──────┴──────────────────────┘
+  bits[17:16] = 01: TINT16 (十进制 1)
+                10: TINT32 (十进制 2)
+                11: TFLOAT (十进制 3)
+  bits[15:8]  = 主机ID: bits[14:8] 低7位为电机返回时的电机ID (1~127)
+  bit[7]      = 0: 普通单机模式,  1: 一拖多模式
+  bits[6:0]   = 从机ID: 普通模式下为发送目标电机ID (1~127)
+                一拖多模式下为模式块编号 (0x00~0x9C)
+
+发送帧 CAN ID 编码:
+  - 普通单机模式 (bit7=0): ID = 0xTT000 | 从机ID
+    例: 0x10001 → 数据类型=TINT16, 从机ID=1 (发送给电机1)
+    例: 0x20001 → 数据类型=TINT32, 从机ID=1
+  - 一拖多模式 (bit7=1):   ID = 0x10080 | 模式块编号
+    例: 0x10081 → 速度模式 (0x80 | 0x01), 模式块编号=1
+
+接收帧 CAN ID 编码:
+  - 普通单机模式 (bit7=0): ID = 0xTT000 | (主机ID << 8)
+    例: 0x10100 → 数据类型=TINT16, 主机ID=1 (电机1返回)
+    例: 0x10200 → 数据类型=TINT16, 主机ID=2 (电机2返回)
+  - 一拖多模式 (bit7=1):   同发送帧 ID 格式
+
+示例：
+id_title_int16 = 0x10000
+速度模式 (一拖多, TINT16):     CAN ID = 0x10081 = 0x10000 | 0x81
+位置模式 (一拖多, TINT16):     CAN ID = 0x10080 = 0x10000 | 0x80
+力矩模式 (一拖多, TINT16):     CAN ID = 0x10082 = 0x10000 | 0x82
+
+注意：
+- 普通单机模式发送: bits[6:0]=从机ID(1~30), 发送给指定电机
+- 普通单机模式接收: bits[14:8]=主机ID(1~30), 标识响应来源电机
+- 一拖多模式:   bit7=1, bits[6:0]=模式块编号(0x00~0x9C)
 
 
 
@@ -242,7 +283,7 @@ fdcan_h730 电机控制系统
 │   │   └── set_pos_vel_tqe_kp_kd_*_2() MIT运控模式 (0x20)
 │   │
 │   ├── 🔹 查询命令
-│   │   ├── read_motor_state_*()         查询状态 (cmd: {0x02, 0x06})
+│   │   ├── read_motor_state_*()         查询状态 (cmd: {0x00, 0x0B})
 │   │   ├── read_motor_version_int16()   查询固件版本 (cmd: {0x15, 0xB5, 0x02})
 │   │   └── read_motor_model()           查询电机型号 (cmd: {0x00, 0x07})
 │   │
@@ -258,8 +299,9 @@ fdcan_h730 电机控制系统
 │   │   └── timed_return_motor_status_int16()  周期自动返回状态
 │   │
 │   └── CAN ID 编码规则
-│       ├── 控制/查询 (有返回值): ID = 0xTT000 | motor_id
-│       │   TT = 0x08 (TINT16), 0x10 (TINT32), 0x18 (TFLOAT)
+│       ├── 发送: ID = 0xTT000 | motor_id  (bits[6:0]=从机ID)
+│       │   TT = 0x10 (TINT16), 0x20 (TINT32), 0x30 (TFLOAT)
+│       ├── 接收: ID = 0xTT000 | (motor_id << 8)  (bits[14:8]=主机ID)
 │       └── 特殊命令 (无返回值/特殊响应): ID = 0x8000 | motor_id
 │
 ├── 📁 src/convert/  ──────────────────── 第4层: 数据转换与力矩修正层
@@ -306,8 +348,8 @@ fdcan_h730 电机控制系统
 │   │   │   └── state           电机状态数组指针
 │   │   │
 │   │   └── many_request_type_t 一拖多查询类型枚举
-│   │       ├── MANY_GET_MODE_FLAUT_POS_VEL_TQE (查询码 0x11)
-│   │       └── MANY_GET_TEMP_FLAUT_POS_VEL_TQE (查询码 0x12)
+│   │       ├── MANY_GET_MODE_FLAUT_POS_VEL_TQE (查询码 0x0B)
+│   │       └── MANY_GET_TEMP_FLAUT_POS_VEL_TQE (查询码 0x0C)x
 │   │
 │   ├── 用户配置区 (motor.c 开头)
 │   │   ├── motor_state_port[PORT_NUM][MAX_NUM]  状态数组初始化
@@ -321,15 +363,15 @@ fdcan_h730 电机控制系统
 │   │   └── motor_get_model2()            获取电机型号
 │   │
 │   ├── 响应解析 (motor_process_state)  ← 核心分发逻辑
-│   │   ├── 普通模式 QUERY_0x06 响应
-│   │   │   ├── TINT16 分支: ID=0x08xxx, len≥9  → 解析 pos/vel/tqe (int16_t)
-│   │   │   ├── TINT32 分支: ID=0x10xxx, len≥15 → 解析 pos/vel/tqe (int32_t)
-│   │   │   └── TFLOAT 分支: ID=0x18xxx, len≥15 → 解析 pos/vel/tqe (float)
+│   │   ├── 普通模式 QUERY_0x0B 响应
+│   │   │   ├── TINT16 分支: ID=0x10xxx, len≥9  → 解析 pos/vel/tqe (int16_t)
+│   │   │   ├── TINT32 分支: ID=0x20xxx, len≥15 → 解析 pos/vel/tqe (int32_t)
+│   │   │   └── TFLOAT 分支: ID=0x30xxx, len≥15 → 解析 pos/vel/tqe (float)
 │   │   │
 │   │   ├── 一拖多模式响应
 │   │   │   id_index<MAX && len==8
-│   │   │   ├── type=0 (0x11): 提取 mode/fault/pos/vel/tqe
-│   │   │   └── type=1 (0x12): 提取 temp/fault/pos/vel/tqe
+│   │   │   ├── type=0 (0x0B): 提取 mode/fault/pos/vel/tqe
+│   │   │   └── type=1 (0x0C): 提取 temp/fault/pos/vel/tqe
 │   │   │
 │   │   ├── 固件版本响应: p_data[1]==0xB5 && p_data[2]==0x02
 │   │   │   提取 major.minor.patch
@@ -390,7 +432,6 @@ fdcan_h730 电机控制系统
 │   │   ├── motor_many_vel()                  速度
 │   │   ├── motor_many_tqe()                  力矩
 │   │   ├── motor_many_time_out()             超时时间
-│   │   ├── motor_many_pos_vel()              位置+速度
 │   │   ├── motor_many_pos_vel_MAXtqe()       位置+速度+力矩限制
 │   │   ├── motor_many_vel_acc()              速度+加速度
 │   │   ├── motor_many_pos_vel_acc()          梯形控制
@@ -401,7 +442,8 @@ fdcan_h730 电机控制系统
 │   │       按 get_mode_data_len() 分帧
 │   │       自适应 DLC (8/12/16/20/24/32/48/64 字节)
 │   │
-│   └── 模式ID块映射 (CAN ID = 0x8000 | mode_block_id)
+│   └── 模式ID块映射 (CAN ID = id_title_int16 | mode = 0x10000 | mode)
+│       ├── MODE_POSITION/VELOCITY/TORQUE... 0x80~0x85 (单帧, 每帧2字节/电机)
 │       ├── MODE_VEL_ACC            0x90~0x91  (2帧, 每帧4字节/电机)
 │       ├── MODE_POS_VEL_TQE        0x92~0x94  (3帧, 每帧6字节/电机)
 │       ├── MODE_POS_VEL_ACC        0x95~0x97  (3帧, 每帧6字节/电机)
@@ -522,17 +564,16 @@ motor_process_state_all();                 // 解析响应帧 → 写入 motor_s
 
 | 序号 | 模式 | 模式码 | 写缓存函数 | 参数 | 每电机字节数 | ID块 |
 |------|------|--------|-----------|------|------------|------|
-| 1 | VOLTAGE | `0x80`/`0x83` | `motor_many_dq_volt()` | vol (V) | 2 | `0x80+id-1` |
-| 2 | CURRENT | `0x84` | `motor_many_dq_current()` | cur (A) | 2 | `0x84+id-1` |
-| 3 | TORQUE | `0x82` | `motor_many_tqe()` | tqe (Nm) | 2 | `0x82+id-1` |
-| 4 | POSITION | `0x80` | `motor_many_pos()` | pos | 2 | `0x80+id-1` |
-| 5 | VELOCITY | `0x81` | `motor_many_vel()` | vel | 2 | `0x81+id-1` |
-| 6 | TIME_OUT | `0x85` | `motor_many_time_out()` | t_ms | 2 | `0x85+id-1` |
-| 7 | VEL_ACC | `0x90` | `motor_many_vel_acc()` | vel, acc | 4 | `0x90`~`0x91` |
-| 8 | POS_VEL_TQE | `0x92` | `motor_many_pos_vel()` | pos, vel | 6 | `0x92`~`0x94` |
-|  |  |  | `motor_many_pos_vel_MAXtqe()` | pos, vel, tqe_max | 6 | `0x92`~`0x94` |
-| 9 | POS_VEL_ACC | `0x95` | `motor_many_pos_vel_acc()` | pos, vel, acc | 6 | `0x95`~`0x97` |
-| 10 | POS_VEL_TQE_KP_KD_2 | `0x98` | `motor_many_pos_vel_tqe_kp_kd_2()` | pos, vel, tqe, kp, kd | 10 | `0x98`~`0x9C` |
+| 1 | VOLTAGE | `0x83` | `motor_many_dq_volt()` | vol (V) | 2 | 0x10083 |
+| 2 | CURRENT | `0x84` | `motor_many_dq_current()` | cur (A) | 2 | 0x10084 |
+| 3 | TORQUE | `0x82` | `motor_many_tqe()` | tqe (Nm) | 2 | 0x10082 |
+| 4 | POSITION | `0x80` | `motor_many_pos()` | pos | 2 | 0x10080 |
+| 5 | VELOCITY | `0x81` | `motor_many_vel()` | vel | 2 | 0x10081 |
+| 6 | TIME_OUT | `0x85` | `motor_many_time_out()` | t_ms | 2 | 0x10085 |
+| 7 | VEL_ACC | `0x90` | `motor_many_vel_acc()` | vel, acc | 4 | 0x10090~0x10091 |
+| 8 | POS_VEL_TQE | `0x92` | `motor_many_pos_vel_MAXtqe()` | pos, vel, tqe_max | 6 | 0x10092~0x10094 |
+| 9 | POS_VEL_ACC | `0x95` | `motor_many_pos_vel_acc()` | pos, vel, acc | 6 | 0x10095~0x10097 |
+| 10 | POS_VEL_TQE_KP_KD_2 | `0x98` | `motor_many_pos_vel_tqe_kp_kd_2()` | pos, vel, tqe, kp, kd | 10 | 0x10098~0x1009C |
 
 **调用示例 (一拖多并联模式):**
 ```c
@@ -553,7 +594,7 @@ motor_process_state_all();
 
 | 功能 | API | CAN ID | 命令帧 | 响应解析位置 |
 |------|-----|--------|--------|-------------|
-| 查询状态 | `motor_get_state_send()` | `0xTT000\|id` | `{0x02, 0x06}` | motor_process_state (0x06分支) |
+| 查询状态 | `motor_get_state_send()` | `0xTT000\|id` | `{0x00, 0x0B}` | motor_process_state (0x0B分支) |
 | 查询固件版本 | `motor_get_version()` | `0x8000\|id` | `{0x15, 0xB5, 0x02}` | motor_process_state (0xB5分支) |
 | 查询电机型号 | `motor_get_model()` | `0x8000\|id` | `{0x00, 0x07}` | motor_process_state (0x07分支) |
 | 软重启 | `motor_set_reset()` | `0x8000\|id` | `{0x03, 0x03, 0x01}` | 无返回值 |
@@ -562,7 +603,7 @@ motor_process_state_all();
 | 修改电机ID | `set_motor_id()` | `0x8000\|old_id` | `{0x03, 0x03, 0x04, new_id}` | 无返回值 |
 | 超时设置 | `set_out_time_int16()` | `0x8000\|id` | `{0x05, 0x1f, t_lo, t_hi}` | 无返回值 |
 | 周期返回状态 | `timed_return_motor_status_int16()` | `0x8000\|id` | `{0x05, 0xB4, 0x02, t_lo, t_hi}` | — |
-| 电压锁(电机固定) | `set_vfoc_lock_int16()` | `0x08000\|id` | `{0x18, 0x06, vol_lo, vol_hi}` | — |
+| 电压锁(电机固定) | `set_vfoc_lock_int16()` | `0x10000\|id` | `{0x18, 0x0B, vol_lo, vol_hi}` | — |
 
 ---
 
@@ -571,33 +612,36 @@ motor_process_state_all();
 ### 4.1 发送帧通用格式
 
 ```
-┌──────────────┬────────────────────────────────┐
-│ CAN ID       │ 0xTT000 | motor_id              │
-│              │   TT: 08=TINT16, 10=TINT32, 18=TFLOAT │
-│              │   或 0x8000|id (系统/查询命令)    │
-├──────────────┼────────────────────────────────┤
-│ Data[0]      │ mode (电机模式码)               │
-│ Data[1]      │ query (查询码, 通常 0x06)       │
-│ Data[2..N]   │ payload (小端序)                │
-└──────────────┴────────────────────────────────┘
+┌──────────────┬──────────────────────────────────────┐
+│ CAN ID       │ 0xTT000 | motor_id                    │
+│              │   TT: 10=TINT16, 20=TINT32, 30=TFLOAT │
+│              │   motor_id 写入 bits[6:0] (从机ID)     │
+├──────────────┼──────────────────────────────────────┤
+│ Data[0]      │ mode (电机模式码)                      │
+│ Data[1]      │ query (查询码, 通常 0x0B)              │
+│ Data[2..N]   │ payload (小端序)                       │
+└──────────────┴──────────────────────────────────────┘
 ```
 
 ### 4.2 响应帧格式
 
-#### 普通模式响应 (query 0x06)
+#### 普通模式响应 (query 0x0B)
 
 | 数据类型 | CAN ID | 帧长 | Data[0] | Data[1] | Data[2] | Data[3..4/5] | Data[5..6/9] | Data[7..10/13] |
 |---------|--------|------|---------|---------|---------|-------------|-------------|---------------|
-| TINT16 | 0x08xxx | ≥9 | query | mode | fault | pos (int16) | vel (int16) | tqe (int16) |
-| TINT32 | 0x10xxx | ≥15 | query | mode | fault | pos (int32) | vel (int32) | tqe (int32) |
-| TFLOAT | 0x18xxx | ≥15 | query | mode | fault | pos (float) | vel (float) | tqe (float) |
+| TINT16 | 0x10x00 (x=主机ID) | ≥9 | query | mode | fault | pos (int16) | vel (int16) | tqe (int16) |
+| TINT32 | 0x20x00 (x=主机ID) | ≥15 | query | mode | fault | pos (int32) | vel (int32) | tqe (int32) |
+| TFLOAT | 0x30x00 (x=主机ID) | ≥15 | query | mode | fault | pos (float) | vel (float) | tqe (float) |
+
+> 响应帧 CAN ID = 0xTT000 | (主机ID << 8), 主机ID 位于 bits[14:8]
+> 例: 电机1 以 TINT16 响应 → CAN ID = 0x10000 | (1 << 8) = 0x10100
 
 #### 一拖多模式响应
 
 | 查询类型 | 帧长 | Data[0] | Data[1] | Data[2..3] | Data[4..5] | Data[6..7] |
 |---------|------|---------|---------|-----------|-----------|-----------|
-| 0x11 (模式/错误/位置/速度/力矩) | 8 | mode | fault\|type | pos (int16) | vel (int16) | tqe (int16) |
-| 0x12 (温度/错误/位置/速度/力矩) | 8 | temp | fault\|type | pos (int16) | vel (int16) | tqe (int16) |
+| 0x0B (模式/错误/位置/速度/力矩) | 8 | mode | fault\|type | pos (int16) | vel (int16) | tqe (int16) |
+| 0x0C (温度/错误/位置/速度/力矩) | 8 | temp | fault\|type | pos (int16) | vel (int16) | tqe (int16) |
 
 > type = Data[1] >> 6，用于区分返回类型
 > fault = Data[1] & 0x3F
@@ -668,7 +712,7 @@ motor_process_state_all();
 | `MANY_PORT_SIZE` | `MOTOR_PORT_NUM` | 一拖多通道数 |
 | `MANY_MOTOR_SIZE` | `MOTOR_MAX_NUM` | 一拖多单通道电机数 (取值范围 (0, 30]) |
 | `MOTOR_DATA_TYPE_FLAG` | `TURNS` | 用户单位制 (TURNS/RADIAN_2PI/ANGLE_360) |
-| `id_title_int16` | `0x08000` | TINT16 CAN ID 标题 |
-| `id_title_int32` | `0x10000` | TINT32 CAN ID 标题 |
-| `id_title_float` | `0x18000` | TFLOAT CAN ID 标题 |
+| `id_title_int16` | `0x10000` | TINT16 CAN ID 标题 (bits[17:16]=01) |
+| `id_title_int32` | `0x20000` | TINT32 CAN ID 标题 (bits[17:16]=10) |
+| `id_title_float` | `0x30000` | TFLOAT CAN ID 标题 (bits[17:16]=11) |
 | `NAN_FLOAT / NAN_INT32 / NAN_INT16` | `NAN / 0x80000000 / 0x8000` | 各类型的"无效值"标志 |

@@ -29,7 +29,7 @@
 #define  MODE_POS_VEL_TQE           0X92   // 块 0x92~0x94 (3帧)
 #define  MODE_POS_VEL_ACC           0X95   // 块 0x95~0x97 (3帧)
 
-#define  MODE_POS_VEL_KP_KD         0X9E
+//#define  MODE_POS_VEL_KP_KD         0X9E
 #define  MODE_POS_VEL_TQE_KP_KD_2   0X98
 
 
@@ -105,7 +105,6 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos);
 void motor_many_vel(port_t portx, const uint8_t id, const float vel);
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe);
 void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms);
-void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel);
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe);
 void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const float acc);
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);

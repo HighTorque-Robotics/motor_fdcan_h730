@@ -127,7 +127,7 @@ int main(void)
 
             /* 速度模式: PORT1 的 1 号电机, 0.5 转/秒, float 类型 */
             //test_motor_many();
-            test_motor_many();
+            test_motor_control(1);
             /* FireWater 协议: USART2, 1字节帧头 + 3*float + 4字节帧尾(INF) */
             motor_state_s *p_state = motor_get_state(PORT1, 1);
             uint8_t vofa_buf[17];
@@ -139,11 +139,11 @@ int main(void)
             vofa_buf[13] = 0x00; vofa_buf[14] = 0x00;            // 帧尾: float INF
             vofa_buf[15] = 0x80; vofa_buf[16] = 0x7F;            // (0x7F800000)
 
-            HAL_UART_Transmit(&huart2, vofa_buf, sizeof(vofa_buf), 20);
+            //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
         }
 
         /* ---- 1000ms: LED 闪烁 + 串口打印状态 ---- */
-        if (HAL_GetTick() - tick_1000ms >= 1000)
+        if (HAL_GetTick() - tick_1000ms >= 50)
         {
             tick_1000ms = HAL_GetTick();
             led_toggle();

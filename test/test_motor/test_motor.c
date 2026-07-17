@@ -6,7 +6,7 @@
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 11;
+    const uint8_t mode = 2;
     const data_type_t type = TINT16;
     const port_t portx = PORT1;
 
@@ -19,7 +19,7 @@ void test_motor_control(const uint8_t id)
         motor_set_dq_current(portx, type, id, 1.0);
         break;
     case 2:
-        motor_set_pos(portx, type, id, 5.0);
+        motor_set_pos(portx, type, id, 0.0);
         break;
     case 3:
         motor_set_vel(portx, type, id, 0.1f);

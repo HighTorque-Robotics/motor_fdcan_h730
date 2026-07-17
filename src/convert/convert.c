@@ -34,8 +34,8 @@ const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
     // [M4530_02_8353] = {0.64f, 0.0f},
     // [M5036_02_8353] = {0.70f, 0.0f},
 
-    // [MGENERAL] = {0.65f, 0.0f},
-    // [MNONE] = {1.0f, 0.0f},
+    [MGENERAL] = {0.65f, 0.0f},
+    [MNONE] = {1.0f, 0.0f},
 };
 
 

@@ -5,8 +5,8 @@ many_data_s many_data_port[MANY_PORT_SIZE][MANY_DATA_BUF_MAX_LEN];
 
 const uint8_t many_get_cmd[MANY_GET_MAX_NUM][2] =
 {
-    {0x11},  // QUERY_MODE_FAULT_POS_VEL_TQE: 返回模式、错误码、位置、速度、力矩
-    {0x12},  // QUERY_MODE_FAULT_TEMP_POS_VEL_TQE: 返回模式、错误码、温度、位置、速度、力矩
+    {0x0B},  // QUERY_MODE_FAULT_POS_VEL_TQE: 返回模式、错误码、位置、速度、力矩
+    {0x0C},  // QUERY_MODE_FAULT_TEMP_POS_VEL_TQE: 返回模式、错误码、温度、位置、速度、力矩
 };
 
 
@@ -174,37 +174,7 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
 }
 
 
-/**
- * @brief 一拖多 位置速度模式，以目标速度运动到目标位置，不限制加速度和最大输出力矩
- * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
- * @param id 电机 ID
- * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- */
-void motor_many_pos_vel(port_t portx, const uint8_t id, const float pos, const float vel)
-{
-    p_many_data_s p_many_data = motor_get_many_pointer(portx);
 
-    const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-    const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-
-    const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
-    const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
-    const uint16_t index = id - 1;
-
-    if (p_many_data->mode != MODE_POS_VEL_TQE)
-    {
-        p_many_data->mode = MODE_POS_VEL_TQE;
-        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
-        {
-            p_many_data->data16[i] = NAN_INT16;
-        }
-    }
-
-    p_many_data->pos_vel_tqe[index].pos = pos_raw;
-    p_many_data->pos_vel_tqe[index].vel = vel_raw;
-    p_many_data->pos_vel_tqe[index].tqe = NAN_INT16;
-}
 
 
 /**
@@ -481,8 +451,8 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_POS_VEL_TQE:
     case MODE_POS_VEL_ACC:
         return 6;
-    case MODE_POS_VEL_KP_KD:
-        return 8;
+    // case MODE_POS_VEL_KP_KD:
+    //     return 8;
 //    case MODE_POS_VEL_TQE_KP_KD:
     case MODE_POS_VEL_TQE_KP_KD_2:
         return 10;

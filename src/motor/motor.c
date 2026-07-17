@@ -329,7 +329,7 @@ void motor_process_state_all()
                 const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
                 const uint32_t id_title = fdcan_rx_header.Identifier & 0x00030000UL;  // 提取 bits[17:16] 数据类型
-                const uint8_t  motor_id = fdcan_rx_header.Identifier & 0x0000007FUL;   // 提取 bits[6:0] 从ID (1~127)
+                const uint8_t  motor_id = (fdcan_rx_header.Identifier >> 8) & 0x0000007FUL;  // 提取 bits[14:8] 主机ID (电机返回ID, 1~127)
 
 
                 if (motor_id > 0 && motor_id <= MOTOR_MAX_NUM)
