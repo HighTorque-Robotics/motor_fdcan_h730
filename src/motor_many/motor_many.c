@@ -480,6 +480,10 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     uint8_t data_len_max = get_data_max(id);
     uint8_t *data = p_many_data->data;
 
+    /* MIT 运控模式 (0x98~0x9C) 使用 MIT id_title (bit15=1), 其余模式使用普通 id_title */
+    const uint32_t base_id = (p_many_data->mode >= MODE_POS_VEL_TQE_KP_KD_2 && p_many_data->mode <= 0x9C)
+                             ? id_title_int16_mit : id_title_int16;
+
     while (remaining_len > 0)
     {
         const uint8_t current_data_len = (remaining_len > data_len_max) ? data_len_max : remaining_len;
@@ -489,7 +493,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         data += current_data_len;
         remaining_len -= current_data_len;
         my_memcpy(cmd + cmd_len - 1, p_get_cmd, 1);
-        fdcan_send(fdcanHandle, id_title_int16 | id, cmd, cmd_len);  // TINT16[17:16]=01 | 一拖多[7]=1 | mode_blk_id[6:0]
+        fdcan_send(fdcanHandle, base_id | id, cmd, cmd_len);
         ++id;
     }
 }

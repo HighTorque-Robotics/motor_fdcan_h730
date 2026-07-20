@@ -75,7 +75,7 @@ int main(void)
 {
     /* USER CODE BEGIN 1 */
     uint32_t tick_100ms = 0;
-    uint32_t tick_1000ms = 0;
+    uint32_t tick_500ms = 0;
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -113,45 +113,56 @@ int main(void)
     printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
 
     motor_set_stop(PORT1, TFLOAT,1);
+    motor_set_stop(PORT1, TFLOAT,2);
+
     HAL_Delay(1000);
     while (1)
     {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-
-        /* ---- 100ms: 发送速度指令 + 打印 VOFA+ 数据 ---- */
-        if (HAL_GetTick() - tick_100ms >= 100)
+        uint8_t vofa_buf[20];
+        /* ---- 100ms: 发送速度指令 + VOFA+ JustFloat 波形数据 ---- */
+        if (HAL_GetTick() - tick_100ms >= 1)
         {
             tick_100ms = HAL_GetTick();
 
-            /* 速度模式: PORT1 的 1 号电机, 0.5 转/秒, float 类型 */
-            //test_motor_many();
-            test_motor_control(1);
-            /* FireWater 协议: USART2, 1字节帧头 + 3*float + 4字节帧尾(INF) */
-            motor_state_s *p_state = motor_get_state(PORT1, 1);
-            uint8_t vofa_buf[17];
+            /* 发送电机控制指令 (速度模式: 0.1 转/秒) */
+            test_motor_many();
 
-            vofa_buf[0] = 0x00;                                   // 帧头
-            memcpy(vofa_buf + 1,  &p_state->position,  4);        // CH1: 位置
-            memcpy(vofa_buf + 5,  &p_state->velocity,  4);        // CH2: 速度
-            memcpy(vofa_buf + 9,  &p_state->torque,    4);        // CH3: 力矩
-            vofa_buf[13] = 0x00; vofa_buf[14] = 0x00;            // 帧尾: float INF
-            vofa_buf[15] = 0x80; vofa_buf[16] = 0x7F;            // (0x7F800000)
+            /* 构建 VOFA+ JustFloat 数据帧, 通过 USART1 发送
+             * 帧格式: N*4字节float(小端) + 4字节帧尾(0x7F800000), 共 (N+1)*4 字节
+             * CH1=位置(圈), CH2=速度(圈/秒), CH3=力矩(Nm), CH4=模式 */
+            motor_state_s *p_state = motor_get_state(PORT1, 2);
+            
 
-            //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
+            float ch1 = p_state->position;
+            float ch2 = p_state->velocity;
+            float ch3 = p_state->torque;
+            float ch4 = (float)p_state->mode;
+
+            memcpy(vofa_buf + 0,  &ch1, sizeof(float));   // CH1: 位置
+            memcpy(vofa_buf + 4,  &ch2, sizeof(float));   // CH2: 速度
+            memcpy(vofa_buf + 8,  &ch3, sizeof(float));   // CH3: 力矩
+            memcpy(vofa_buf + 12, &ch4, sizeof(float));   // CH4: 模式
+            vofa_buf[16] = 0x00; vofa_buf[17] = 0x00;     // 帧尾: float +Inf
+            vofa_buf[18] = 0x80; vofa_buf[19] = 0x7F;     // (0x7F800000)
+
+            
         }
 
-        /* ---- 1000ms: LED 闪烁 + 串口打印状态 ---- */
-        if (HAL_GetTick() - tick_1000ms >= 50)
-        {
-            tick_1000ms = HAL_GetTick();
-            led_toggle();
-            motor_print_state();
-        }
+        /* ---- 500ms: LED 闪烁 ---- */
+        // if (HAL_GetTick() - tick_500ms >= 500)
+        // {
+        //     tick_500ms = HAL_GetTick();
+        //     led_toggle();
+        //     //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
 
-        /* 持续解析电机返回的 FDCAN 数据 */
-        motor_process_state_all();
+        //     motor_print_state();
+        // }
+
+        // /* 持续解析电机返回的 FDCAN 数据 */
+        // motor_process_state_all();
     }
     /* USER CODE END 3 */
 }

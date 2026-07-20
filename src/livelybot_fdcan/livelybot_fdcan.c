@@ -288,7 +288,7 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
  //                      速度模式  query 速度 
-    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -305,7 +305,7 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
 
-    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -322,7 +322,7 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
 
-    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -564,13 +564,6 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
  */
 void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
-    // 							位置模式				  位置		  速度限制
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x05, 0x20, 0x00, 0x80, 0x0B, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50
-    //                        };
     static uint8_t cmd[] = {0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));

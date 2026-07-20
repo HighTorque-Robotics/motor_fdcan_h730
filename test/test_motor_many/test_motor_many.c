@@ -16,7 +16,7 @@ void test_time_out(int16_t t_ms)
 
 void test_motor_many()
 {
-    const uint8_t mode = 5;
+    const uint8_t mode = 7;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
@@ -44,7 +44,7 @@ void test_motor_many()
             motor_many_pos_vel_acc(PORT1, id, 0, 1, 0.1);
             break;
         case 7:
-            motor_many_pos_vel_tqe_kp_kd_2(PORT1, id, 0, 0, 0, 1, 1);
+            motor_many_pos_vel_tqe_kp_kd_2(PORT1, id, 0, 0, 0, 10, 1);
             break;
         case 8:
             motor_many_vel_acc(PORT1, id, 1.0, 0.2);
