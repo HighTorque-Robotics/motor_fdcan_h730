@@ -128,7 +128,7 @@ int main(void)
             tick_100ms = HAL_GetTick();
 
             /* 发送电机控制指令 (速度模式: 0.1 转/秒) */
-            test_motor_many();
+            test_motor_control(1);
 
             /* 构建 VOFA+ JustFloat 数据帧, 通过 USART1 发送
              * 帧格式: N*4字节float(小端) + 4字节帧尾(0x7F800000), 共 (N+1)*4 字节
@@ -152,17 +152,17 @@ int main(void)
         }
 
         /* ---- 500ms: LED 闪烁 ---- */
-        // if (HAL_GetTick() - tick_500ms >= 500)
-        // {
-        //     tick_500ms = HAL_GetTick();
-        //     led_toggle();
-        //     //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
+        if (HAL_GetTick() - tick_500ms >= 500)
+        {
+            tick_500ms = HAL_GetTick();
+            led_toggle();
+            //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
 
-        //     motor_print_state();
-        // }
+            motor_print_state();
+        }
 
-        // /* 持续解析电机返回的 FDCAN 数据 */
-        // motor_process_state_all();
+        /* 持续解析电机返回的 FDCAN 数据 */
+        motor_process_state_all();
     }
     /* USER CODE END 3 */
 }

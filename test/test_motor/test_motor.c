@@ -6,8 +6,8 @@
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 2;
-    const data_type_t type = TINT32;
+    const uint8_t mode = 5;
+    const data_type_t type = TFLOAT;
     const port_t portx = PORT1;
 
     switch (mode)
@@ -25,7 +25,7 @@ void test_motor_control(const uint8_t id)
         motor_set_vel(portx, type, id, 0.1f);
         break;
     case 4:
-        motor_set_tqe(portx, type, id, 0.05f);
+        motor_set_tqe(portx, type, id, 0.5f);
         break;
     case 5:
         motor_set_pos_vel(portx, type, id, 0.1, 0.5);

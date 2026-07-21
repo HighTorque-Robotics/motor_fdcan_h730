@@ -574,3 +574,48 @@ motor_process_state_all();
 | `id_title_float` | `0x30000` | TFLOAT CAN ID 标题 (MIT=0, bits[17:16]=11) |
 | `id_title_int16_mit` | `0x18000` | TINT16 MIT CAN ID 标题 (MIT=1, bit15=1, 仅一拖多模式) |
 | `NAN_FLOAT / NAN_INT32 / NAN_INT16` | `NAN / 0x80000000 / 0x8000` | 各类型的"无效值"标志 |
+
+---
+
+## 七、数据类型分辨率与换算因子
+
+### 7.1 接收方向 (int → float, 电机报文解析)
+
+`*_int2float(in_data, type, rfloat, rint16, rint32)` 含义：`result = raw / rint` (TFLOAT 直接取原值，`rfloat` 为备用占位)。
+
+| 字段 | TFLOAT | TINT16 (LSB) | TINT32 (LSB) |
+|------|--------|-------------|-------------|
+| 温度 temp | 1.0 | 0.1 °C/LSB (rint16=10) | 0.001 °C/LSB (rint32=1000) |
+| 位置 pos | 1.0 | 0.0001 turns/LSB (rint16=10000) | 0.00001 turns/LSB (rint32=100000) |
+| 速度 vel | 1.0 | 0.00025 turns/s/LSB (rint16=4000) | 0.00001 turns/s/LSB (rint32=100000) |
+| **力矩 tqe** | **1.0** | **0.1 Nm/LSB (rint16=10)** | **0.01 Nm/LSB (rint32=100)** |
+| 电流 cur | 1.0 | 0.01 A/LSB (rint16=100) | 0.001 A/LSB (rint32=1000) |
+| 电压 vol | 1.0 | 0.01 V/LSB (rint16=100) | 0.001 V/LSB (rint32=1000) |
+| 加速度 acc | 1.0 | 0.01 turns/s²/LSB (rint16=100) | 0.001 turns/s²/LSB (rint32=1000) |
+| PID kp/kd | 1.0 | 0.01 (rint16=100) | 0.001 (rint32=1000) |
+
+### 7.2 发送方向 (float → int, 控制命令组包)
+
+`*_float2int(in_data, type, rfloat, rint16, rint32)` 含义：`result = value * rint`。
+
+| 字段 | TFLOAT | TINT16 (LSB) | TINT32 (LSB) |
+|------|--------|-------------|-------------|
+| 位置 pos | 1.0 | 10000 | 100000 |
+| 速度 vel | 1.0 | 4000 | 100000 |
+| **力矩 tqe** | **1.0** | **10** | **100** |
+| 电流 cur | 1.0 | 100 | 1000 |
+| 电压 vol | 1.0 | 100 | 1000 |
+| 加速度 acc | 1.0 | 100 | 1000 |
+| PID kp/kd | 1.0 | 100 | 1000 |
+
+### 7.3 示例校验
+
+以 0.1 turns/s 转速下返回力矩 ≈ 0.388 Nm (TFLOAT 真值) 为例：
+
+| 类型 | raw | 换算 | 结果 | 误差 |
+|------|-----|------|------|------|
+| TFLOAT | — | 直接 float | 0.388 Nm | 基准 |
+| TINT16 | 3 | 3 / 10 = 0.3 Nm | 0.3 Nm | ±0.09 |
+| TINT32 | 41 | 41 / 100 = 0.41 Nm | 0.41 Nm | ±0.02 |
+
+> TINT16 分辨率 0.1 Nm/LSB，量化误差 ±0.05 Nm，正常波动范围内一致。

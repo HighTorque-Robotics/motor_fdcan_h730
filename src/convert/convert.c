@@ -285,13 +285,13 @@ float vel_int2float(const float in_data, const data_type_t type)
 
 float tqe_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 2.0f, 100.0f, 1000.0f);
+    return data_float2int(in_data, type, 2.0f, 10.0f, 100.0f);
 }
 
 
 float tqe_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 2.0f, 100.0f, 1000.0f);
+    return data_int2float(in_data, type, 2.0f, 10.0f, 100.0f);
 }
 
 

@@ -16,7 +16,7 @@ void test_time_out(int16_t t_ms)
 
 void test_motor_many()
 {
-    const uint8_t mode = 7;
+    const uint8_t mode = 3;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
