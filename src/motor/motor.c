@@ -13,15 +13,15 @@ static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下�
             .model = MNONE,
         },
         
-        {
-            // ID = 2
-            .model = MNONE,
-        },
+        // {
+        //     // ID = 2
+        //     .model = MNONE,
+        // },
 
-        {
-            // ID = 3
-            .model = MNONE,
-        },
+        // {
+        //     // ID = 3
+        //     .model = MNONE,
+        // },
     },
 
     // {
@@ -238,7 +238,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
     }
     
-    // ===================== 新协议：QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
+    // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
     else if (p_data[0] == 0x0C)
     {
         // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01, 帧长 >=11 字节 ---------
@@ -300,29 +300,41 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
     }
 
-    // ===================== 一拖多模式解析 =====================
-    else if (id_index < MOTOR_MAX_NUM && len == 8)
+    // ===================== 一拖多模式解析 (格式与普通模式 TINT16 一致) =====================
+    else if (id_index < MOTOR_MAX_NUM)
     {
-        int16_t pos = 0;
-        int16_t vel = 0;
-        int16_t tqe = 0;
+        int16_t pos = 0, vel = 0, tqe = 0;
 
-        my_memcpy((uint8_t *)&pos, p_data + 2, sizeof(int16_t));
-        my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
-        my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
-
-        p_motor_state[id_index].fault = p_data[1] & 0x3F;
-        const uint8_t type = p_data[1] >> 6;
-
-        switch (type)
+        // query=0x0C: 返回温度+模式+错误+位置+速度+力矩, 帧长 >=11 字节 (CAN FD 补齐后实际 >=12)
+        if (p_data[0] == 0x0C && len >= 11)
         {
-        case MANY_GET_MODE_FLAUT_POS_VEL_TQE:
-            p_motor_state[id_index].mode = p_data[0];
-            break;
+            int16_t temp_raw = 0;
+            my_memcpy((uint8_t *)&temp_raw, p_data + 3, sizeof(int16_t));
+            my_memcpy((uint8_t *)&pos,     p_data + 5, sizeof(int16_t));
+            my_memcpy((uint8_t *)&vel,     p_data + 7, sizeof(int16_t));
+            my_memcpy((uint8_t *)&tqe,     p_data + 9, sizeof(int16_t));
 
-        case MANY_GET_TEMP_FLAUT_POS_VEL_TQE:
-            p_motor_state[id_index].temp = p_data[0];
-            break;
+            p_motor_state[id_index].query     = p_data[0];
+            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].fault     = p_data[2];
+            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C/LSB
+            p_motor_state[id_index].recv_type = TINT16;
+        }
+        // query=0x0B: 返回模式+错误+位置+速度+力矩, 帧长 >=9 字节 (CAN FD 补齐后实际 >=12)
+        else if (p_data[0] == 0x0B && len >= 9)
+        {
+            my_memcpy((uint8_t *)&pos, p_data + 3, sizeof(int16_t));
+            my_memcpy((uint8_t *)&vel, p_data + 5, sizeof(int16_t));
+            my_memcpy((uint8_t *)&tqe, p_data + 7, sizeof(int16_t));
+
+            p_motor_state[id_index].query     = p_data[0];
+            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].fault     = p_data[2];
+            p_motor_state[id_index].recv_type = TINT16;
+        }
+        else
+        {
+            return;
         }
 
         p_motor_state[id_index].position = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);

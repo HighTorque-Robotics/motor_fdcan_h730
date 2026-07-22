@@ -5,7 +5,7 @@
 
 
 #define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
-#define  MOTOR_MAX_NUM   3// 单个 CAN 通道所连接的最大电机数量
+#define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
 
 
 
@@ -59,7 +59,7 @@ typedef struct
 typedef enum
 {
     MANY_GET_MODE_FLAUT_POS_VEL_TQE = 0,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MANY_GET_TEMP_FLAUT_POS_VEL_TQE,      // 温度、错误码、位置、速度、力矩（查询指令 0x07）
+    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE,      // 温度、错误码、位置、速度、力矩（查询指令 0x0C）
     MANY_GET_MAX_NUM,
 } many_request_type_t;
 

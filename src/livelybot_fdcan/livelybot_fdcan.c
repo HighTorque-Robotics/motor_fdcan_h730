@@ -288,7 +288,7 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
  //                      速度模式  query 速度 
-    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -305,7 +305,7 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
 
-    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -322,7 +322,7 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
 
-    static uint8_t cmd[] = {0x1B, 0x0C, 0x00, 0x00};
+    static uint8_t cmd[] = {0x1B, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -330,78 +330,78 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 }
 
 
-/**
- * @brief 运控模式 float (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
- * @param fdcanHandle &hfdcanx
- * @param id 电机ID
- * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
- * @param vel 速度：单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
- * @param tqe 前馈力矩：（单位见文档）
- * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kp * 1 (Mkd 表示电机内部 kd)
- */
-void set_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
-{
-    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+// /**
+//  * @brief 运控模式 float (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+//  * @param fdcanHandle &hfdcanx
+//  * @param id 电机ID
+//  * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
+//  * @param vel 速度：单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
+//  * @param tqe 前馈力矩：（单位见文档）
+//  * @param kp Mkp = kp * 1 (Mkp 表示电机内部 kp)
+//  * @param kd Mkd = kp * 1 (Mkd 表示电机内部 kd)
+//  */
+// void set_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
+// {
+//     static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    my_memcpy(&cmd[2], &pos, sizeof(pos));
-    my_memcpy(&cmd[6], &vel, sizeof(vel));
-    my_memcpy(&cmd[10], &tqe, sizeof(tqe));
-    my_memcpy(&cmd[14], &kp, sizeof(kp));
-    my_memcpy(&cmd[18], &kd, sizeof(kd));
+//     my_memcpy(&cmd[2], &pos, sizeof(pos));
+//     my_memcpy(&cmd[6], &vel, sizeof(vel));
+//     my_memcpy(&cmd[10], &tqe, sizeof(tqe));
+//     my_memcpy(&cmd[14], &kp, sizeof(kp));
+//     my_memcpy(&cmd[18], &kd, sizeof(kd));
 
-    fdcan_send(fdcanHandle, id_title_float | id, cmd, sizeof(cmd));
-}
-
-
-/**
- * @brief 运控模式 int32 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
- * @param fdcanHandle &hfdcanx
- * @param id 电机ID
- * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
- * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
- * @param tqe 前馈力矩（单位见文档）
- * @param kp Mkp = kp * 0.001 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kp * 0.001 (Mkd 表示电机内部 kd)
- */
-void set_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
-{
-
-    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-    my_memcpy(&cmd[2], &pos, sizeof(pos));
-    my_memcpy(&cmd[6], &vel, sizeof(vel));
-    my_memcpy(&cmd[10], &tqe, sizeof(tqe));
-    my_memcpy(&cmd[14], &kp, sizeof(kp));
-    my_memcpy(&cmd[18], &kd, sizeof(kd));
-
-    fdcan_send(fdcanHandle, id_title_int32 | id, cmd, sizeof(cmd));
-}
+//     fdcan_send(fdcanHandle, id_title_float | id, cmd, sizeof(cmd));
+// }
 
 
-/**
- * @brief 运控模式 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
- * @param fdcanHandle &hfdcanx
- * @param id 电机ID
- * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
- * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
- * @param tqe 前馈力矩（单位见文档）
- * @param kp Mkp = kp * 0.1 (Mkp 表示电机内部 kp)
- * @param kd Mkd = kp * 0.1 (Mkd 表示电机内部 kd)
- */
-void set_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
-{
+// /**
+//  * @brief 运控模式 int32 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+//  * @param fdcanHandle &hfdcanx
+//  * @param id 电机ID
+//  * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置
+//  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
+//  * @param tqe 前馈力矩（单位见文档）
+//  * @param kp Mkp = kp * 0.001 (Mkp 表示电机内部 kp)
+//  * @param kd Mkd = kp * 0.001 (Mkd 表示电机内部 kd)
+//  */
+// void set_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
+// {
 
-    static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+//     static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    my_memcpy(&cmd[2], &pos, sizeof(pos));
-    my_memcpy(&cmd[4], &vel, sizeof(vel));
-    my_memcpy(&cmd[6], &tqe, sizeof(tqe));
-    my_memcpy(&cmd[8], &kp, sizeof(kp));
-    my_memcpy(&cmd[10], &kd, sizeof(kd));
+//     my_memcpy(&cmd[2], &pos, sizeof(pos));
+//     my_memcpy(&cmd[6], &vel, sizeof(vel));
+//     my_memcpy(&cmd[10], &tqe, sizeof(tqe));
+//     my_memcpy(&cmd[14], &kp, sizeof(kp));
+//     my_memcpy(&cmd[18], &kd, sizeof(kd));
 
-    fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
-}
+//     fdcan_send(fdcanHandle, id_title_int32 | id, cmd, sizeof(cmd));
+// }
+
+
+// /**
+//  * @brief 运控模式 int16 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩) (Mkp 表示电机内部 kp, Mkd 表示电机内部 kd)
+//  * @param fdcanHandle &hfdcanx
+//  * @param id 电机ID
+//  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
+//  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
+//  * @param tqe 前馈力矩（单位见文档）
+//  * @param kp Mkp = kp * 0.1 (Mkp 表示电机内部 kp)
+//  * @param kd Mkd = kp * 0.1 (Mkd 表示电机内部 kd)
+//  */
+// void set_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
+// {
+
+//     static uint8_t cmd[] = {0x20, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+//     my_memcpy(&cmd[2], &pos, sizeof(pos));
+//     my_memcpy(&cmd[4], &vel, sizeof(vel));
+//     my_memcpy(&cmd[6], &tqe, sizeof(tqe));
+//     my_memcpy(&cmd[8], &kp, sizeof(kp));
+//     my_memcpy(&cmd[10], &kd, sizeof(kd));
+
+//     fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
+// }
 
 
 /**
@@ -539,11 +539,7 @@ void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
  */
 void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc)
 {
-    // 							位置模式				  位置		  						  速度限制
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x09, 0x20, 0x00, 0x00, 0x00, 0x80, 0x0A, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
+
     static uint8_t cmd[] = {0x1F, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -583,11 +579,7 @@ void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
  */
 void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc)
 {
-    //							位置模式				  位置					  速度								  加速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0E, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x0D, 0x29, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x1C, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
+
     static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
@@ -606,11 +598,7 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
  */
 void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
 {
-    //							位置模式				  位置					  速度								  加速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0A, 0x20, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x18, 0x04, 0x00, 0x11, 0x0f,
-    //                        };
+
     static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
@@ -629,13 +617,7 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
  */
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
 {
-    //							位置模式				  位置		  速度					  加速度
-    // static uint8_t cmd[] = {0x01, 0x00, 0x0A, 0x0B, 0x20, 0x00, 0x80, 0x00, 0x00, 0x05, 0x29, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50
-    //                        };
+
     static uint8_t cmd[] = {0x1D, 0x0B, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
@@ -650,15 +632,11 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param vol d相电压
+ * @param 此函数暂未开放使用
  */
 void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol)
 {
-    // static uint8_t cmd[] = {0x01, 0x00, 0x12, 0x05, 0x19, 0x00, 0x00,
-    //                         // 查询指令
-    //                         0x14, 0x04, 0x00, 0x11, 0x0f,
-    //                         // 占位（fdcan）
-    //                         0x50, 0x50, 0x50, 0x50
-    //                        };
+
     static uint8_t cmd[] = {0x18, 0x0B, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vol, sizeof(vol));
@@ -675,11 +653,11 @@ void set_vfoc_lock_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t v
  */
 void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 {
-    static uint8_t cmd[] = {0x05, 0x1f, 0x00, 0x00};
+    static uint8_t cmd[] = {0x05, 0x1F, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &t, sizeof(int16_t));
 
-    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
 
 
@@ -692,6 +670,7 @@ void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
  *          5. 如需停止周期返回数据，将周期给 0 即可，或者给电机断电。
  * @param id 电机ID
  * @param t 返回周期（单位：ms）
+ * @param 此函数暂未开放使用
  */
 void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms)
 {
@@ -699,7 +678,7 @@ void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t i
 
     *(int16_t *)&tdata[3] = t_ms;
 
-    fdcan_send(fdcanHandle, 0x8000 | id, tdata, sizeof(tdata));
+    fdcan_send(fdcanHandle, id_title_int16 | id, tdata, sizeof(tdata));
 }
 
 
@@ -712,7 +691,7 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x03};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
 
 
@@ -725,7 +704,7 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x02};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
 
 
@@ -738,7 +717,7 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x01};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, cmd, sizeof(cmd));
 }
 
 
@@ -754,7 +733,7 @@ void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_
 
     cmd[3] = new_id;
 
-    fdcan_send(fdcanHandle, 0x8000 | old_id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | old_id, cmd, sizeof(cmd));
 }
 
 
@@ -886,7 +865,7 @@ void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x04};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -899,7 +878,7 @@ void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x05};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -913,6 +892,6 @@ void read_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x07};
 
-    fdcan_send(fdcanHandle, 0x8000 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, id_title_int16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 

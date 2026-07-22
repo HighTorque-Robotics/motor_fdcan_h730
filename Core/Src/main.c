@@ -128,7 +128,7 @@ int main(void)
             tick_100ms = HAL_GetTick();
 
             /* 发送电机控制指令 (速度模式: 0.1 转/秒) */
-            test_motor_control(1);
+            test_motor_many();
 
             /* 构建 VOFA+ JustFloat 数据帧, 通过 USART1 发送
              * 帧格式: N*4字节float(小端) + 4字节帧尾(0x7F800000), 共 (N+1)*4 字节
