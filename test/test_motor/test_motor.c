@@ -6,7 +6,7 @@
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 1;
+    const uint8_t mode = 13;
     const data_type_t type = TINT16;
     const port_t portx = PORT1;
 
