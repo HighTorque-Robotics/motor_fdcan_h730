@@ -300,8 +300,60 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
     }
 
-    // ===================== 一拖多模式解析 (格式与普通模式 TINT16 一致) =====================
-    else if (id_index < MOTOR_MAX_NUM)
+    // ===================== 电机固件版本（不变） =====================
+    // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
+    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)
+    {
+        if (len == 5)
+        {
+            p_motor_state[id_index].version.major = p_data[4] >> 4;
+            p_motor_state[id_index].version.minor = p_data[4] & 0x0F | p_data[3] >> 4;
+            p_motor_state[id_index].version.patch = p_data[3] & 0x0F;
+        }
+        else
+        {
+            p_motor_state[id_index].version.major = 3;
+            p_motor_state[id_index].version.minor = 9;
+            p_motor_state[id_index].version.patch = 1;
+        }
+    }
+    // ===================== 电机型号查询响应 =====================
+    // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
+    else if (p_data[0] == 0x07)
+    {
+        const uint8_t model_len = p_data[1];
+
+        if (model_len > 0 && model_len <= 15 && len >= model_len + 2)
+        {
+            char model_str[16] = {0};
+
+            // 每字节取低 4 位，转为十六进制字符
+            for (uint8_t i = 0; i < model_len; i++)
+            {
+                const uint8_t nibble = p_data[2 + i] & 0x0F;
+                model_str[i] = (nibble < 10) ? ('0' + nibble) : ('A' + (nibble - 10));
+            }
+
+            // 查找当前 fdcanHandle 对应的端口号
+            uint8_t port_num = 0;
+            for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
+            {
+                if (fdcanHandle->Instance == port_maping[i].fdcan->Instance)
+                {
+                    port_num = port_maping[i].port;
+                    break;
+                }
+            }
+
+            // 型号格式：前 4 个字符 + "_" + 剩余字符  (如: 5036_02)
+            // model_len 个十六进制字符中，第 5 个字符(下标4)为空字符/分隔符，此处用 "_" 替代
+            printf("PORT: %d, ID: %d, model = %.4s_%.*s\r\n",
+                   port_num, id, model_str, model_len - 5, model_str + 5);
+        }
+    }
+    // ===================== 一拖多模式解析 (仅处理 0x0B/0x0C 帧, 格式与普通模式 TINT16 一致) =====================
+    // 注意: 必须显式限定帧头, 否则 id_index < MOTOR_MAX_NUM 会吞掉所有合法 ID 的响应 (型号 0x07、版本 0xB5 等)
+    else if (id_index < MOTOR_MAX_NUM && (p_data[0] == 0x0B || p_data[0] == 0x0C))
     {
         int16_t pos = 0, vel = 0, tqe = 0;
 
@@ -341,54 +393,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         p_motor_state[id_index].velocity = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
         const float tqe_temp = tqe_int2float(tqe, TINT16);
         p_motor_state[id_index].torque = tqe_restore(tqe_temp, motor_get_model1(fdcanHandle, id));
-    }
-    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)  // 电机固件版本（不变）
-    {
-        if (len == 5)
-        {
-            p_motor_state[id_index].version.major = p_data[4] >> 4;
-            p_motor_state[id_index].version.minor = p_data[4] & 0x0F | p_data[3] >> 4;
-            p_motor_state[id_index].version.patch = p_data[3] & 0x0F;
-        }
-        else
-        {
-            p_motor_state[id_index].version.major = 3;
-            p_motor_state[id_index].version.minor = 9;
-            p_motor_state[id_index].version.patch = 1;
-        }
-    }
-    // ===================== 电机型号查询响应 =====================
-    else if (p_data[0] == 0x07)
-    {
-        const uint8_t model_len = p_data[1];
-
-        if (model_len > 0 && model_len <= 15 && len >= model_len + 2)
-        {
-            char model_str[16] = {0};
-
-            // 每字节取低 4 位，转为十六进制字符
-            for (uint8_t i = 0; i < model_len; i++)
-            {
-                const uint8_t nibble = p_data[2 + i] & 0x0F;
-                model_str[i] = (nibble < 10) ? ('0' + nibble) : ('A' + (nibble - 10));
-            }
-
-            // 查找当前 fdcanHandle 对应的端口号
-            uint8_t port_num = 0;
-            for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
-            {
-                if (fdcanHandle->Instance == port_maping[i].fdcan->Instance)
-                {
-                    port_num = port_maping[i].port;
-                    break;
-                }
-            }
-
-            // 型号格式：前 4 个字符 + "_" + 剩余字符  (如: 5036_02)
-            // model_len 个十六进制字符中，第 5 个字符(下标4)为空字符/分隔符，此处用 "_" 替代
-            printf("PORT: %d, ID: %d, model = %.4s_%.*s\r\n",
-                   port_num, id, model_str, model_len - 5, model_str + 5);
-        }
     }
 }
 

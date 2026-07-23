@@ -6,14 +6,14 @@
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 4;
-    const data_type_t type = TINT32;
+    const uint8_t mode = 1;
+    const data_type_t type = TINT16;
     const port_t portx = PORT1;
 
     switch (mode)
     {
     case 0:
-        motor_set_dq_vlot(portx, type, id, 1.5);
+        motor_set_dq_vlot(portx, type, id, 1.0);
         break;
     case 1:
         motor_set_dq_current(portx, type, id, 1.0);
@@ -34,13 +34,13 @@ void test_motor_control(const uint8_t id)
         motor_set_pos_vel_MAXtqe(portx, type, id, 0.2, 0.1, 0.5);
         break;
     case 7:
-        motor_set_pos_velmax_acc(portx, type, id, -10, 1.0, 0.05);
+        motor_set_pos_velmax_acc(portx, type, id, 3, 1.0, 0.05);
         break;
     case 8:
-        motor_set_pos_vel_tqe_kp_kd_2(portx, type, id, 1, 0, 0, 1, 1);
+        motor_set_pos_vel_tqe_kp_kd_2(portx, type, id, 1, 0, 0, 10, 1);
         break;
     case 9:
-        motor_set_brake(portx, type, id);
+        motor_set_vel_acc(portx, type, id, 0.5, 0.1);
         break;
     case 10:
         motor_set_stop(portx, type, id);
@@ -52,7 +52,10 @@ void test_motor_control(const uint8_t id)
         motor_get_version(portx, id);
         break;
     case 13:
-        motor_set_vel_acc(portx, type, id, 0.5, 0.1);
+        motor_set_brake(portx, type, id);
+        break;
+    case 14:
+        motor_get_model(portx, id);
         break;
     default:
         break;

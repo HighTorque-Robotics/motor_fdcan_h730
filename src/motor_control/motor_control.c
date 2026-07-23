@@ -4,11 +4,11 @@
 
 
 /**
- * @brief DQ 电压模式（并让电机返回状态信息）
+ * @brief DQ 电压模式（并让电机返回状态信息）— d轴=0, q轴=实际电压
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
- * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V
+ * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V（D 轴固定为 0）
  */
 void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, const float volt)
 {
@@ -18,13 +18,13 @@ void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, c
     switch(type)
     {
     case TFLOAT:
-        set_dq_volt_float(fdcanHandle, id, volt_raw);
+        set_dq_volt_float(fdcanHandle, id, 0.0f, volt_raw);
         break;
     case TINT32:
-        set_dq_volt_int32(fdcanHandle, id, volt_raw);
+        set_dq_volt_int32(fdcanHandle, id, 0, volt_raw);
         break;
     case TINT16:
-        set_dq_volt_int16(fdcanHandle, id, volt_raw);
+        set_dq_volt_int16(fdcanHandle, id, 0, volt_raw);
         break;
     default:
         break;
@@ -33,11 +33,11 @@ void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, c
 
 
 /**
- * @brief DQ 电流模式（并让电机返回状态信息）
+ * @brief DQ 电流模式（并让电机返回状态信息）— d轴=0, q轴=实际电流
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
- * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A
+ * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A（D 轴固定为 0）
  */
 void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id, const float cur)
 {
@@ -47,13 +47,13 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
     switch(type)
     {
     case TFLOAT:
-        set_dq_current_float(fdcanHandle, id, cur_raw);
+        set_dq_current_float(fdcanHandle, id, 0.0f, cur_raw);
         break;
     case TINT32:
-        set_dq_current_int32(fdcanHandle, id, cur_raw);
+        set_dq_current_int32(fdcanHandle, id, 0, cur_raw);
         break;
     case TINT16:
-        set_dq_current_int16(fdcanHandle, id, cur_raw);
+        set_dq_current_int16(fdcanHandle, id, 0, cur_raw);
         break;
     default:
         break;
