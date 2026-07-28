@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H730xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/led;../App/my_fdcan;../src/livelybot_fdcan;../src/convert;../src/motor_control;../src/motor;../src/motor_many;../test/test_motor;../test/test_motor_many;../src/motor_config</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/led;../App/my_fdcan;../App/debug_print;../src/livelybot_fdcan;../src/convert;../src/motor_control;../src/motor;../src/motor_many;../test/test_motor;../test/test_motor_many;../src/motor_config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,6 +405,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\led\led.c</FilePath>
             </File>
+            <File>
+              <FileName>debug_print.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\debug_print\debug_print.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -449,6 +454,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Core/Src/dma.c</FilePath>
             </File>
             <File>
               <FileName>gpio.c</FileName>

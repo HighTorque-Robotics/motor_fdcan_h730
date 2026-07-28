@@ -438,9 +438,9 @@ def build_sys_cmd(cmd_type: str, motor_id: int = 1, **kwargs) -> Tuple[int, byte
     elif cmd_type == "read_model":
         return can_id, bytes([0x00, 0x07])
     elif cmd_type == "stop":
-        return can_id, bytes([0x01, 0x0B])
+        return can_id, bytes([Mode.STOP, QUERY_STANDARD])
     elif cmd_type == "brake":
-        return can_id, bytes([0x18, 0x0B])
+        return can_id, bytes([Mode.BRAKE, QUERY_STANDARD])
     elif cmd_type == "soft_reset":
         return can_id, bytes([0x03, 0x03, 0x01])
     elif cmd_type == "save_config":

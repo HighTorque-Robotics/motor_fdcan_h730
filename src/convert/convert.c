@@ -6,37 +6,7 @@
 
 
 
-const motor_tqe_adj_t motor_tqe_adj[MOTOR_TYPE_COUNT] =
-{
-    [MNULL] = {0.0f, 0.0f},
 
-    /* 旧名称 */
-    // [M3536_32] = {0.35f, 0.0f},
-    // [M4438_30] = {0.64f, 0.0f},
-    // [M4438_32] = {0.64f, 0.0f},
-    // [M5043_20] = {0.96f, 0.0f},
-    // [M5047_36] = {0.64f, 0.0f},
-    // [M6056_36] = {0.66f, 0.0f},
-    // [M7256_35] = {0.66f, 0.0f},  
-    // [M60BM_35] = {0.64f, 0.0f}, 
-    
-    // /* 新名称 */
-    // [M3508_02] = {0.37f, 0.0f},
-    // [M3516_02] = {0.37f, 0.0f},
-    // [M3532_02] = {0.37f, 0.0f},
-    // [M4530_02] = {0.62f, 0.0f},
-    // [M5009_02] = {0.71f, 0.0f},
-    // [M5036_02] = {0.67f, 0.0f},
-    // [M6036_02] = {0.66f, 0.0f},
-    // [M7033_04] = {0.84f, 0.0f},
-    // [M7535_02] = {0.73f, 0.0f},
-    // [M3532_02_8353] = {0.61f, 0.0f},
-    // [M4530_02_8353] = {0.64f, 0.0f},
-    // [M5036_02_8353] = {0.70f, 0.0f},
-
-    [MGENERAL] = {0.65f, 0.0f},
-    [MNONE] = {1.0f, 0.0f},
-};
 
 
 
@@ -61,8 +31,7 @@ static float data_float2int(const float in_data, const data_type_t type, const f
     {
         switch (type)
         {
-        // case TINT8:
-        //     return NAN_INT8;
+
         case TINT16:
             return NAN_INT16;
         case TINT32:
@@ -77,8 +46,6 @@ static float data_float2int(const float in_data, const data_type_t type, const f
 
     switch (type)
     {
-    // case TINT8:
-    //     return data_limit(in_data * rint8, 127.0f, -128.0f);
     case TINT16:
         return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT32:
@@ -96,8 +63,7 @@ static float data_int2float(const float in_data, const data_type_t type, const f
 {
     switch (type)
     {
-    // case (TINT8):
-    //     return in_data / rint8;
+
     case (TINT16):
         return in_data / rint16;
     case (TINT32):
@@ -162,76 +128,7 @@ float conv_from_turns(const float in_data, const pos_vel_type_t type)
 }
 
 
-/**
- * @brief 力矩补偿，写力矩时用
- * @param in_data 真实力矩数据
- * @param motor_type 电机型号
- * @return 给定力矩数据
- */
-float tqe_adjust(const float in_data, const motor_type_t motor_type)
-{
-    if (isnan(in_data))
-    {
-        return NAN_FLOAT;
-    }
 
-    if (motor_type >= MOTOR_TYPE_COUNT)
-    {
-        MOTOR_ERR();
-        return 0;
-    }
-
-    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
-    return ((in_data - p_motor_tqe_adj->d) / p_motor_tqe_adj->k);
-}
-
-
-/**
- * @brief 力矩补偿，读力矩时用
- * @param in_data 读力矩数据
- * @param motor_type 电机型号
- * @return 真实力矩数据
- */
-float tqe_restore(const float in_data, const motor_type_t motor_type)
-{
-    if (isnan(in_data))
-    {
-        return NAN_FLOAT;
-    }
-
-    if (motor_type >= MOTOR_TYPE_COUNT)
-    {
-        MOTOR_ERR();
-        return 0;
-    }
-
-    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
-    return (in_data * p_motor_tqe_adj->k + p_motor_tqe_adj->d);
-}
-
-
-/**
- * @brief PID 补偿
- * @param id_data PID 数据
- * @param motor_type 电机型号
- * @return 补偿的 PID 数据
- */
-float pid_adjust(const float in_data, const motor_type_t motor_type)
-{
-    if (isnan(in_data))
-    {
-        return NAN_FLOAT;
-    }
-
-    if (motor_type >= MOTOR_TYPE_COUNT)
-    {
-        MOTOR_ERR();
-        return 0;
-    }
-
-    const motor_tqe_adj_t *p_motor_tqe_adj = &motor_tqe_adj[motor_type];
-    return (in_data / p_motor_tqe_adj->k);
-}
 
 
 float cur_float2int(const float in_data, const data_type_t type)

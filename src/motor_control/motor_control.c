@@ -126,13 +126,12 @@ void motor_set_vel(port_t portx, const data_type_t type, const uint8_t id, const
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
- * @param tqe 目标力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 目标力矩，单位牛米（Nm）
  */
 void motor_set_tqe(port_t portx, const data_type_t type, const uint8_t id, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
-    const float tqe_raw = tqe_float2int(tqe_val_adjust, type);
+    const float tqe_raw = tqe_float2int(tqe, type);
 
     switch(type)
     {
@@ -191,7 +190,7 @@ void motor_set_pos_vel(port_t portx, const data_type_t type, const uint8_t id, c
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm）
  */
 void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id,
                               const float pos, const float vel, const float tqe)
@@ -199,10 +198,9 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
     const float pos_raw = pos_float2int(pos_turns, type);
     const float vel_raw = vel_float2int(vel_turns, type);
-    const float tqe_raw = tqe_float2int(tqe_val_adjust, type);
+    const float tqe_raw = tqe_float2int(tqe, type);
 
 
     switch(type)
@@ -292,58 +290,6 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 }
 
 
-// /**
-//  * @brief 运控模式 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息） 弃用，建议使用 motor_set_pos_vel_tqe_kp_kd_2
-//  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
-//  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
-//  * @param id 电机 ID
-//  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
-//  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  */
-// void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
-//                                  const float pos, const float vel, const float tqe, const float kp, const float kd)
-// {
-//     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-//     const motor_type_t model = motor_get_model2(portx, id);
-
-//     /* 单位转换成转 */
-//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-//     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
-//     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
-
-//     /* 力矩修正 */
-//     const float tqe_val_adjust = tqe_adjust(tqe, model);
-//     const float kp_val_adjust = pid_adjust(kp_turns, model);
-//     const float kd_val_adjust = pid_adjust(kd_turns, model);
-
-//     /* float -> int */
-//     const float pos_raw = pos_float2int(pos_turns, type);
-//     const float vel_raw = vel_float2int(vel_turns, type);
-//     const float tqe_raw = tqe_float2int(tqe_val_adjust, type);
-//     const float kp_raw = pid_float2int(kp_val_adjust, type);
-//     const float kd_raw = pid_float2int(kd_val_adjust, type);
-
-//     switch(type)
-//     {
-//     case TFLOAT:
-//         set_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
-//         break;
-//     case TINT32:
-//         set_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
-//         break;
-//     case TINT16:
-//         set_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
-//         break;
-//     default:
-//         break;
-//     }
-// }
-
-
 /**
  * @brief 运控模式2(MIT模式) (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
@@ -351,7 +297,7 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
  * @param id 电机 ID
  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 力矩，单位牛米（Nm）
  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
@@ -359,7 +305,6 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
                                    const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const motor_type_t model = motor_get_model2(portx, id);
 
     /* 单位转换成转 */
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -367,17 +312,12 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    /* 力矩修正 */
-    const float tqe_val_adjust = tqe_adjust(tqe, model);
-    const float kp_val_adjust = pid_adjust(kp_turns, model);
-    const float kd_val_adjust = pid_adjust(kd_turns, model);
-
     /* float -> int */
     const float pos_raw = pos_float2int(pos_turns, type);
     const float vel_raw = vel_float2int(vel_turns, type);
-    const float tqe_raw = tqe_float2int(tqe_val_adjust, type);
-    const float kp_raw = pid_float2int(kp_val_adjust, type);
-    const float kd_raw = pid_float2int(kd_val_adjust, type);
+    const float tqe_raw = tqe_float2int(tqe, type);
+    const float kp_raw = pid_float2int(kp_turns, type);
+    const float kd_raw = pid_float2int(kd_turns, type);
 
     switch(type)
     {

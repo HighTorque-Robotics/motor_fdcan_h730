@@ -29,7 +29,7 @@
 #include "motor_control.h"
 #include "motor_config.h"
 #include "motor.h"
-#include <string.h>
+#include "debug_print.h"
 
 #include "test_motor.h"
 #include "test_motor_many.h"
@@ -74,8 +74,15 @@ void SystemClock_Config(void);
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-    uint32_t tick_100ms = 0;
-    uint32_t tick_500ms = 0;
+    uint32_t tick_ctrl  = 0;   /* 1kHz MIT 控制 */
+    uint32_t tick_vofa  = 0;   /* 5ms (200Hz) VOFA 发送 */
+    uint32_t tick_print = 0;   /* 500ms 终端打印 */
+
+    /* 正弦波 MIT 参数 */
+    const float amplitude = 0.5f;      /* 幅值 0.5 圈 */
+    const float freq_hz   = 0.25f;     /* 频率 0.25 Hz (4s 一周期) */
+    const float dt        = 0.001f;    /* 控制周期 1ms */
+    float time = 0.0f;                 /* 时间累加器 (秒) */
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -96,6 +103,7 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_FDCAN1_Init();
     MX_USART1_UART_Init();
     MX_USART2_UART_Init();
@@ -112,8 +120,8 @@ int main(void)
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
     printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
 
-    motor_set_stop(PORT1, TFLOAT,1);
-    motor_set_stop(PORT1, TFLOAT,2);
+    motor_set_stop(PORT1, TFLOAT, 1);
+    motor_set_stop(PORT1, TFLOAT, 2);
 
     HAL_Delay(1000);
     while (1)
@@ -121,50 +129,52 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        uint8_t vofa_buf[20];
-        /* ---- 100ms: 发送速度指令 + VOFA+ JustFloat 波形数据 ---- */
-        if (HAL_GetTick() - tick_100ms >= 1)
+        /* ---- 1kHz: MIT 正弦波位置控制 ---- */
+        if (HAL_GetTick() - tick_ctrl >= 1)
         {
-            tick_100ms = HAL_GetTick();
+            tick_ctrl = HAL_GetTick();
 
-            /* 发送电机控制指令 (速度模式: 0.1 转/秒) */
-            test_motor_control(1);
-
-            /* 构建 VOFA+ JustFloat 数据帧, 通过 USART1 发送
-             * 帧格式: N*4字节float(小端) + 4字节帧尾(0x7F800000), 共 (N+1)*4 字节
-             * CH1=位置(圈), CH2=速度(圈/秒), CH3=力矩(Nm), CH4=模式 */
-            motor_state_s *p_state = motor_get_state(PORT1, 2);
-            
-
-            float ch1 = p_state->position;
-            float ch2 = p_state->velocity;
-            float ch3 = p_state->torque;
-            float ch4 = (float)p_state->mode;
-
-            memcpy(vofa_buf + 0,  &ch1, sizeof(float));   // CH1: 位置
-            memcpy(vofa_buf + 4,  &ch2, sizeof(float));   // CH2: 速度
-            memcpy(vofa_buf + 8,  &ch3, sizeof(float));   // CH3: 力矩
-            memcpy(vofa_buf + 12, &ch4, sizeof(float));   // CH4: 模式
-            vofa_buf[16] = 0x00; vofa_buf[17] = 0x00;     // 帧尾: float +Inf
-            vofa_buf[18] = 0x80; vofa_buf[19] = 0x7F;     // (0x7F800000)
-
-            
+            /* 正弦波目标位置 (圈, MOTOR_DATA_TYPE_FLAG=TURNS) */
+            float pos_target = amplitude * sinf(MY_2PI * freq_hz * time);
+            time += dt;
+            test_motor_many();
+            // /* MIT 模式: pos=正弦波, vel=0, tqe=0, KP=100, KD=3 */
+            // motor_set_pos_vel_tqe_kp_kd_2(PORT1, TFLOAT, 1,
+            //                               pos_target, 0, 0, 100, 30);
         }
 
-        /* ---- 500ms: LED 闪烁 ---- */
-        if (HAL_GetTick() - tick_500ms >= 500)
+        /* ---- 5ms (200Hz): VOFA+ JustFloat 波形 (DMA 发送) ---- */
+        if (HAL_GetTick() - tick_vofa >= 5)
         {
-            tick_500ms = HAL_GetTick();
-            led_toggle();
-            //HAL_UART_Transmit(&huart1, vofa_buf, sizeof(vofa_buf), 20);
+            tick_vofa = HAL_GetTick();
 
+            motor_state_s *p_state = motor_get_state(PORT1, 1);
+
+            /* CH1=目标位置(圈), CH2=实际位置(圈), CH3=速度(圈/s), CH4=力矩(Nm)
+             * CH5=模式,          CH6=温度(°C),    CH7=故障码,     CH8=时间(s) */
+            // debug_print(8,
+            //     amplitude * sinf(MY_2PI * freq_hz * time),  /* CH1 */
+            //     p_state->position,                           /* CH2 */
+            //     p_state->velocity,                           /* CH3 */
+            //     p_state->torque,                             /* CH4 */
+            //     (double)p_state->mode,                       /* CH5 */
+            //     (double)p_state->temp,                       /* CH6 */
+            //     (double)p_state->fault,                      /* CH7 */
+            //     (double)time);                               /* CH8 */
+        }
+
+        /* ---- 500ms: 终端打印 + LED ---- */
+        if (HAL_GetTick() - tick_print >= 500)
+        {
+            tick_print = HAL_GetTick();
+            led_toggle();
             motor_print_state();
         }
 
         /* 持续解析电机返回的 FDCAN 数据 */
         motor_process_state_all();
+        /* USER CODE END 3 */
     }
-    /* USER CODE END 3 */
 }
 
 /**

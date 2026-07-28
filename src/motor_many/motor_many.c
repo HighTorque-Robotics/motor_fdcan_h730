@@ -3,11 +3,7 @@
 
 many_data_s many_data_port[MANY_PORT_SIZE][MANY_DATA_BUF_MAX_LEN];
 
-const uint8_t many_get_cmd[MANY_GET_MAX_NUM][2] =
-{
-    {0x0B},  // QUERY_MODE_FAULT_POS_VEL_TQE: 返回模式、错误码、位置、速度、力矩
-    {0x0C},  // QUERY_MODE_FAULT_TEMP_POS_VEL_TQE: 返回模式、错误码、温度、位置、速度、力矩
-};
+
 
 
 p_many_data_s motor_get_many_pointer(port_t portx)
@@ -128,13 +124,12 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
  * @brief 一拖多 力矩模式
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param tqe 目标力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 目标力矩，单位牛米（Nm）
  */
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
-    const int16_t tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
+    const int16_t tqe_raw = tqe_float2int(tqe, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_TORQUE)
@@ -183,7 +178,7 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm）
  */
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe)
 {
@@ -192,11 +187,10 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
 
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-    const float tqe_val_adjust = tqe_adjust(tqe, motor_get_model2(portx, id));
 
     const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
     const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
-    const int16_t tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
+    const int16_t tqe_raw = tqe_float2int(tqe, TINT16);
     const uint16_t index = id - 1;
 
     if (p_many_data->mode != MODE_POS_VEL_TQE)
@@ -281,73 +275,19 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
     p_many_data->pos_vel_acc[index].acc = acc_raw;
 }
 
-
-// /**
-//  * @brief 运控模式 (输出力矩 = 位置偏差 * Mkp + 速度偏差 * Mkd + 前馈力矩)
-//  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
-//  * @param id 电机 ID
-//  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
-//  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
-//  */
-// void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
-// {
-//     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-//     const motor_type_t model = motor_get_model2(portx, id);
-
-//     /* 单位转换成转 */
-//     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
-//     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
-//     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
-//     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
-
-//     /* 力矩修正 */
-//     const float tqe_val_adjust = tqe_adjust(tqe, model);
-//     const float kp_val_adjust = pid_adjust(kp_turns, model);
-//     const float kd_val_adjust = pid_adjust(kd_turns, model);
-
-//     /* float -> int */
-//     const float pos_raw = pos_float2int(pos_turns, TINT16);
-//     const float vel_raw = vel_float2int(vel_turns, TINT16);
-//     const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
-//     const float kp_raw = pid_float2int(kp_val_adjust, TINT16);
-//     const float kd_raw = pid_float2int(kd_val_adjust, TINT16);
-
-//     const uint16_t index = id - 1;
-
-//     if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD)
-//     {
-//         p_many_data->mode = MODE_POS_VEL_TQE_KP_KD;
-//         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
-//         {
-//             p_many_data->data16[i] = NAN_INT16;
-//         }
-//     }
-
-//     p_many_data->pos_vel_tqe_kp_kd[index].pos = pos_raw;
-//     p_many_data->pos_vel_tqe_kp_kd[index].vel = vel_raw;
-//     p_many_data->pos_vel_tqe_kp_kd[index].tqe = tqe_raw;
-//     p_many_data->pos_vel_tqe_kp_kd[index].kp = kp_raw;
-//     p_many_data->pos_vel_tqe_kp_kd[index].kd = kd_raw;
-// }
-
-
 /**
  * @brief 运控模式(MIT模式) (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
- * @param tqe 力矩，单位牛米（Nm），注：需要在 motor.c 文件中修改电机数量和类型，以修正电机力矩
+ * @param tqe 力矩，单位牛米（Nm）
  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
-    const motor_type_t model = motor_get_model2(portx, id);
 
     /* 单位转换成转 */
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -355,17 +295,12 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
     const float kp_turns = conv_from_turns(kp, MOTOR_DATA_TYPE_FLAG);
     const float kd_turns = conv_from_turns(kd, MOTOR_DATA_TYPE_FLAG);
 
-    /* 力矩修正 */
-    const float tqe_val_adjust = tqe_adjust(tqe, model);
-    const float kp_val_adjust = pid_adjust(kp_turns, model);
-    const float kd_val_adjust = pid_adjust(kd_turns, model);
-
     /* float -> int */
     const float pos_raw = pos_float2int(pos_turns, TINT16);
     const float vel_raw = vel_float2int(vel_turns, TINT16);
-    const float tqe_raw = tqe_float2int(tqe_val_adjust, TINT16);
-    const float kp_raw = pid_float2int(kp_val_adjust, TINT16);
-    const float kd_raw = pid_float2int(kd_val_adjust, TINT16);
+    const float tqe_raw = tqe_float2int(tqe, TINT16);
+    const float kp_raw = pid_float2int(kp_turns, TINT16);
+    const float kd_raw = pid_float2int(kd_turns, TINT16);
 
     const uint16_t index = id - 1;
 
@@ -472,7 +407,6 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    uint8_t *p_get_cmd = (uint8_t *)&many_get_cmd[request_type][0];
     static uint8_t cmd[64] = {0};
     uint8_t id = p_many_data->mode;
 
@@ -480,9 +414,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     uint8_t data_len_max = get_data_max(id);
     uint8_t *data = p_many_data->data;
 
-    /* MIT 运控模式 (0x98~0x9C) 使用 MIT id_title (bit15=1), 其余模式使用普通 id_title */
-    const uint32_t base_id = (p_many_data->mode >= MODE_POS_VEL_TQE_KP_KD_2 && p_many_data->mode <= 0x9C)
-                             ? id_title_int16_mit : id_title_int16;
+    const uint32_t base_id = ID_TITLE_INT16;
 
     while (remaining_len > 0)
     {
@@ -492,7 +424,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         my_memcpy(cmd, data, current_data_len);
         data += current_data_len;
         remaining_len -= current_data_len;
-        my_memcpy(cmd + cmd_len - 1, p_get_cmd, 1);
+        cmd[cmd_len - 1] = (uint8_t)request_type;
         fdcan_send(fdcanHandle, base_id | id, cmd, cmd_len);
         ++id;
     }

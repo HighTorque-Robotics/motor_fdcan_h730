@@ -10,6 +10,7 @@
 
 void test_time_out(int16_t t_ms);
 void test_motor_many(void);
+void test_motor_many_cycle(void);
 
 
 

@@ -29,8 +29,8 @@
 #define  MODE_POS_VEL_TQE           0X92   // 块 0x92~0x94 (3帧)
 #define  MODE_POS_VEL_ACC           0X95   // 块 0x95~0x97 (3帧)
 
-//#define  MODE_POS_VEL_KP_KD         0X9E
 #define  MODE_POS_VEL_TQE_KP_KD_2   0X98
+#define  MODE_MIT_END               0x9C   /**< MIT 运控模式 CAN ID 基址上限 */
 
 
 

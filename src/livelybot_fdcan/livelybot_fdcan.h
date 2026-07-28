@@ -11,11 +11,13 @@
 #define  NAN_INT32  0x80000000
 #define  NAN_INT16  0x8000
 #define  NAN_INT8   0x80
-/* 各个数据类型的ID (bits 17:16: 01=TINT16, 10=TINT32, 11=TFLOAT) */
-#define  id_title_int16      0x10000
-#define  id_title_int32      0x20000
-#define  id_title_float      0x30000
-#define  id_title_int16_mit  0x18000  // MIT=1, bit15=1, 仅一拖多模式
+
+/* 各个数据类型的CAN ID帧头 (bits[17:16]: 01=TINT16, 10=TINT32, 11=TFLOAT) */
+#define  ID_TITLE_INT16      0x10000
+#define  ID_TITLE_INT32      0x20000
+#define  ID_TITLE_FLOAT      0x30000
+#define  ID_TITLE_INT16_MIT  0x18000  // MIT=1, bit15=1, 仅can下使用
+
 /* dq 电压模式 (d=0, q=实际电压) */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q);
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q);

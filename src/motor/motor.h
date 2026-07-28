@@ -15,6 +15,25 @@
 #include "livelybot_fdcan.h"
 
 
+/* ============================================================
+ *  电机控制模式码 (控制帧)
+ * ============================================================ */
+typedef enum
+{
+    MOTOR_MODE_STOP        = 0x01,  /**< 停止 (惯性停止)            */
+    MOTOR_MODE_BRAKE       = 0x18,  /**< 刹车 (主动制动)            */
+    MOTOR_MODE_VOLT        = 0x19,  /**< DQ 电压控制                */
+    MOTOR_MODE_CUR         = 0x1A,  /**< DQ 电流控制                */
+    MOTOR_MODE_TQE         = 0x1B,  /**< 力矩控制                   */
+    MOTOR_MODE_VEL         = 0x1C,  /**< 速度控制                   */
+    MOTOR_MODE_POS         = 0x1D,  /**< 位置控制                   */
+    MOTOR_MODE_VEL_ACC     = 0x1E,  /**< 速度 + 加速度             */
+    MOTOR_MODE_POS_VEL_TQE = 0x1F,  /**< 位置 + 速度 + 前馈力矩    */
+    MOTOR_MODE_POS_VEL_ACC = 0x20,  /**< 位置 + 速度 + 加速度(梯形) */
+    MOTOR_MODE_MIT         = 0x21,  /**< MIT 运控 (位置+速度+力矩+Kp+Kd) */
+} motor_mode_t;
+
+
 typedef enum
 {
     PNULL = 0,
@@ -42,8 +61,6 @@ typedef struct
     int8_t  temp;      // 温度（单位：摄氏度，分辨率：1度）
     uint8_t query;     // 最后响应的查询码（对应 prot_query_t 枚举）
     uint8_t ack;     // 应答，用于电机设置相关的应答
-    data_type_t recv_type;  // 本次响应帧的数据类型
-    const motor_type_t model;  // 电机型号（这个参数由用户自定义，此程序根据这个变量进行电机力矩修正）
     version_s version;  // 电机固件版本号
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
@@ -58,9 +75,8 @@ typedef struct
 
 typedef enum
 {
-    MANY_GET_MODE_FLAUT_POS_VEL_TQE = 0,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE,      // 温度、错误码、位置、速度、力矩（查询指令 0x0C）
-    MANY_GET_MAX_NUM,
+    MANY_GET_MODE_FLAUT_POS_VEL_TQE      = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE = 0x0C,  // 温度、错误码、位置、速度、力矩（查询指令 0x0C）
 } many_request_type_t;
 
 
@@ -73,8 +89,6 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx);
 p_motor_state_s motor_get_state_pointer1(FDCAN_HandleTypeDef *fdcanHandle);
 p_motor_state_s motor_get_state_pointer2(port_t portx);
-motor_type_t motor_get_model2(port_t portx, uint8_t id);
-
 void motor_process_state_all(void);
 
 
