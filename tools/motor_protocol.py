@@ -83,7 +83,7 @@ QUERY_MODEL    = 0x07
 # 发送方向: raw = 物理值 × 系数
 SCALE_SEND: Dict[DataType, Dict[str, float]] = {
     DataType.TINT16: {"pos": 10000, "vel": 4000, "tqe": 100,
-                      "cur": 10, "vol": 10, "acc": 1000, "pid": 100},
+                      "cur": 10, "vol": 10, "acc": 1000, "pid": 10},
     DataType.TINT32: {"pos": 100000, "vel": 100000, "tqe": 1000,
                       "cur": 1000, "vol": 1000, "acc": 100000, "pid": 1000},
     DataType.TFLOAT: {"pos": 1, "vel": 1, "tqe": 1,
@@ -299,6 +299,8 @@ def phys_to_raw(value: float, data_type: DataType, field: str) -> int:
             return -2147483648   # NAN_INT32 = 0x80000000
         else:
             return -32768         # NAN_INT16 = 0x8000
+    if data_type == DataType.TFLOAT:
+        return value  # TFLOAT 不经 round/缩放, 直接传浮点给 pack_value 做 IEEE754
     scale = SCALE_SEND[data_type][field]
     raw = round(value * scale)
     _check_range(raw, data_type, field, value)
