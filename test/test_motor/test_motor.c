@@ -53,7 +53,7 @@ void test_motor_cycle(port_t portx, data_type_t type, uint8_t id)
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 9;
+    const uint8_t mode = 3;
     const data_type_t type = TINT16;
     const port_t portx = PORT1;
 

@@ -29,7 +29,7 @@ void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, fl
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -47,7 +47,7 @@ void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -65,7 +65,7 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -83,7 +83,7 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d,
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -102,7 +102,7 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -121,7 +121,7 @@ void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -138,7 +138,7 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -155,7 +155,7 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torq
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -172,7 +172,7 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torq
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -193,7 +193,7 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float p
     my_memcpy(&cmd[6], &vel, sizeof(vel));
     my_memcpy(&cmd[10], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -215,7 +215,7 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
     my_memcpy(&cmd[6], &vel, sizeof(vel));
     my_memcpy(&cmd[10], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -237,7 +237,7 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t
     my_memcpy(&cmd[4], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &torque, sizeof(torque));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -254,7 +254,7 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -271,7 +271,7 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -288,7 +288,7 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -305,7 +305,7 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -322,7 +322,7 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -339,7 +339,7 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -369,7 +369,7 @@ void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
     my_memcpy(&cmd[14], &kp, sizeof(kp));
     my_memcpy(&cmd[18], &kd, sizeof(kd));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -399,7 +399,7 @@ void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
     my_memcpy(&cmd[14], &kp, sizeof(kp));
     my_memcpy(&cmd[18], &kd, sizeof(kd));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -424,7 +424,7 @@ void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
     my_memcpy(&cmd[8], &kp, sizeof(kp));
     my_memcpy(&cmd[10], &kd, sizeof(kd));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -443,7 +443,7 @@ void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -464,7 +464,7 @@ void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
     my_memcpy(&cmd[10], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -485,7 +485,7 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
     my_memcpy(&cmd[10], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -505,7 +505,7 @@ void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -524,7 +524,7 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -543,7 +543,7 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -562,7 +562,7 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -578,7 +578,7 @@ void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 
     my_memcpy(&cmd[2], &t, sizeof(int16_t));
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -599,7 +599,7 @@ void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 
 //     *(int16_t *)&tdata[3] = t_ms;
 
-//     fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, tdata, sizeof(tdata));
+//     fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, tdata, sizeof(tdata));
 // }
 
 
@@ -612,7 +612,7 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x03};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -625,7 +625,7 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x02};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -638,7 +638,7 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {0x03, 0x03, 0x01};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -654,7 +654,7 @@ void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_
 
     cmd[3] = new_id;
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | old_id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | old_id, cmd, sizeof(cmd));
 }
 
 
@@ -667,7 +667,7 @@ void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {MOTOR_MODE_STOP, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -681,7 +681,7 @@ void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
     static uint8_t cmd[] = {MOTOR_MODE_STOP, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -695,7 +695,7 @@ void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
     static uint8_t cmd[] = {MOTOR_MODE_STOP, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -709,7 +709,7 @@ void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
     static uint8_t cmd[] = {MOTOR_MODE_BRAKE, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -723,7 +723,7 @@ void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
     static uint8_t cmd[] = {MOTOR_MODE_BRAKE, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -737,7 +737,7 @@ void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 
     static uint8_t cmd[] = {MOTOR_MODE_BRAKE, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, cmd, sizeof(cmd));
 }
 
 
@@ -749,7 +749,7 @@ void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
-    fdcan_send(fdcanHandle, ID_TITLE_FLOAT | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_FLOAT_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -761,7 +761,7 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
-    fdcan_send(fdcanHandle, ID_TITLE_INT32 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT32_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -773,7 +773,7 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, MANY_GET_MODE_FLAUT_POS_VEL_TQE};
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -786,7 +786,7 @@ void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x04};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -799,7 +799,7 @@ void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x05};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
 
@@ -813,6 +813,6 @@ void read_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     const uint8_t cmd[] = {0x00, 0x07};
 
-    fdcan_send(fdcanHandle, ID_TITLE_INT16 | id, (uint8_t *)cmd, sizeof(cmd));
+    fdcan_send(fdcanHandle, ID_TITLE_INT16_SEND | id, (uint8_t *)cmd, sizeof(cmd));
 }
 

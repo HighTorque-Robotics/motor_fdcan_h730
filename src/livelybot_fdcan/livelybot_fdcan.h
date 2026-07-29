@@ -12,11 +12,20 @@
 #define  NAN_INT16  0x8000
 #define  NAN_INT8   0x80
 
-/* 各个数据类型的CAN ID帧头 (bits[17:16]: 01=TINT16, 10=TINT32, 11=TFLOAT) */
-#define  ID_TITLE_INT16      0x10000
-#define  ID_TITLE_INT32      0x20000
-#define  ID_TITLE_FLOAT      0x30000
-#define  ID_TITLE_INT16_MIT  0x18000  // MIT=1, bit15=1, 仅can下使用
+/* CAN ID 帧头: bits[19]=CAN MIT, bits[17:16]=数据类型, bit[15]=控制/返回区分 */
+
+/* ---- 接收端 (bit[15]=0, 返回帧, 用于 motor.c 解析) ---- */
+#define  ID_TITLE_INT16_NOHDR   0x00000
+#define  ID_TITLE_INT16         0x10000
+#define  ID_TITLE_INT32         0x20000
+#define  ID_TITLE_FLOAT         0x30000
+
+/* ---- 发送端 (bit[15]=1, 控制帧, 用于 livelybot_fdcan.c 构造 CAN ID) ---- */
+#define  ID_TITLE_INT16_NOHDR_SEND   0x08000  // bit[15]=1, 无数据类型头, 一拖多专用
+#define  ID_TITLE_INT16_SEND         0x18000  // bit[15]=1 | bits[17:16]=01 (TINT16)
+#define  ID_TITLE_INT32_SEND         0x28000  // bit[15]=1 | bits[17:16]=10 (TINT32)
+#define  ID_TITLE_FLOAT_SEND         0x38000  // bit[15]=1 | bits[17:16]=11 (TFLOAT)
+#define  ID_TITLE_INT16_MIT_SEND     0x98000  // bit[19]=1 (CAN MIT) | bit[15]=1 | bits[17:16]=01 (TINT16)
 
 /* dq 电压模式 (d=0, q=实际电压) */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q);

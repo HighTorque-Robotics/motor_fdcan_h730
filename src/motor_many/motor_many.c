@@ -414,7 +414,10 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     uint8_t data_len_max = get_data_max(id);
     uint8_t *data = p_many_data->data;
 
-    const uint32_t base_id = ID_TITLE_INT16;
+    /* MIT 一拖多 (0x98~0x9C) 使用 ID_TITLE_INT16_SEND */
+    /* 如果需要使用CAN发送，需改成ID_TITLE_INT16_MIT_SEND */
+
+    const uint32_t base_id = ID_TITLE_INT16_SEND;
 
     while (remaining_len > 0)
     {

@@ -4,30 +4,7 @@
 
 /************************************下面为需要修改的部分*******************************************/
 
-static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM] =  // 下标 + 1 = 电机 ID
-{
-    {
-        // CAN 通道 PORT1
-        {
-            // ID = 1
-        },
-        
-        // {
-        //     // ID = 2
-        // },
-
-        // {
-        //     // ID = 3
-        // },
-    },
-
-    // {
-    //     // CAN 通道 PORT2
-    //     {
-    //         // ID = 1
-    //     }
-    // },
-};
+static motor_state_s motor_state_port[MOTOR_PORT_NUM][MOTOR_MAX_NUM];
 
 
 const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表

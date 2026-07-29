@@ -5,7 +5,7 @@
 
 
 #define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
-#define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
+#define  MOTOR_MAX_NUM   11// 单个 CAN 通道所连接的最大电机数量
 
 
 
@@ -32,6 +32,16 @@ typedef enum
     MOTOR_MODE_POS_VEL_ACC = 0x20,  /**< 位置 + 速度 + 加速度(梯形) */
     MOTOR_MODE_MIT         = 0x21,  /**< MIT 运控 (位置+速度+力矩+Kp+Kd) */
 } motor_mode_t;
+
+/* ============================================================
+ *  电机查询码 (查询帧)
+ * ============================================================ */
+typedef enum
+{
+    MANY_GET_MODE_FLAUT_NUM              = 0x0A,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MANY_GET_MODE_FLAUT_POS_VEL_TQE      = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE = 0x0C,  // 温度、错误码、位置、速度、力矩（查询指令 0x0C）
+} many_request_type_t;
 
 
 typedef enum
@@ -73,12 +83,6 @@ typedef struct
 } port_mapping_s, *p_port_mapping_s;
 
 
-typedef enum
-{
-    MANY_GET_MODE_FLAUT_POS_VEL_TQE      = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE = 0x0C,  // 温度、错误码、位置、速度、力矩（查询指令 0x0C）
-} many_request_type_t;
-
 
 
 void motor_print_state(void);
@@ -94,6 +98,6 @@ void motor_process_state_all(void);
 
 
 
-#define  MOTOR_SDK_VERSION   "3.3.6"
+#define  MOTOR_SDK_VERSION   "1.0.0"
 
 #endif
