@@ -26,14 +26,15 @@ from enum import IntEnum
 # ============================================================
 
 class DataType(IntEnum):
-    """数据类型 (CAN ID bits[17:16])"""
+    """数据类型 (CAN ID bits[17:16], 发送时 bit[15]=1 标识控制帧)"""
     TINT16 = 0
     TINT32 = 1
     TFLOAT = 2
 
     @property
     def id_title(self) -> int:
-        return (self.value + 1) << 16  # 0x10000, 0x20000, 0x30000
+        """发送端 CAN ID 标题: bit[15]=1(控制帧) | bits[17:16]=数据类型"""
+        return ((self.value + 1) << 16) | 0x8000  # 0x18000, 0x28000, 0x38000
 
     @property
     def label(self) -> str:
@@ -124,24 +125,27 @@ VAL_BYTES: Dict[DataType, int] = {DataType.TINT16: 2, DataType.TINT32: 4, DataTy
 class ManyMode:
     name: str
     label: str
-    can_id_base: int      # 起始 CAN ID (如 0x10080)
+    can_id_base: int      # 起始 CAN ID (如 0x18080)
     bytes_per_motor: int  # 每电机字节数
     motors_per_frame: int # 每帧最多电机数
     param_names: List[str]
     scales: List[str]     # scale field names for phys_to_raw
 
 MANY_MODES = {
-    "pos":         ManyMode("pos",         "位置",           0x10080, 2, 30, ["位置(圈)"],                       ["pos"]),
-    "vel":         ManyMode("vel",         "速度",           0x10081, 2, 30, ["速度(圈/s)"],                    ["vel"]),
-    "tqe":         ManyMode("tqe",         "力矩",           0x10082, 2, 30, ["力矩(Nm)"],                       ["tqe"]),
-    "volt":        ManyMode("volt",        "电压",           0x10083, 2, 30, ["电压(V)"],                        ["vol"]),
-    "cur":         ManyMode("cur",         "电流",           0x10084, 2, 30, ["电流(A)"],                        ["cur"]),
-    "timeout":     ManyMode("timeout",     "超时",           0x10085, 2, 30, ["超时(ms)"],                       ["pid"]),
-    "vel_acc":     ManyMode("vel_acc",     "速度+加速度",     0x10090, 4, 10, ["速度(圈/s)","加速度(圈/s²)"],      ["vel","acc"]),
-    "pos_vel_tqe": ManyMode("pos_vel_tqe", "位置+速度+力矩",   0x10092, 6, 10, ["位置(圈)","速度(圈/s)","力矩(Nm)"], ["pos","vel","tqe"]),
-    "pos_vel_acc": ManyMode("pos_vel_acc", "位置+速度+加速度", 0x10095, 6, 10, ["位置(圈)","速度(圈/s)","加速度(圈/s²)"],["pos","vel","acc"]),
+    "pos":         ManyMode("pos",         "位置",           0x18080, 2, 30, ["位置(圈)"],                       ["pos"]),
+    "vel":         ManyMode("vel",         "速度",           0x18081, 2, 30, ["速度(圈/s)"],                    ["vel"]),
+    "tqe":         ManyMode("tqe",         "力矩",           0x18082, 2, 30, ["力矩(Nm)"],                       ["tqe"]),
+    "volt":        ManyMode("volt",        "电压",           0x18083, 2, 30, ["电压(V)"],                        ["vol"]),
+    "cur":         ManyMode("cur",         "电流",           0x18084, 2, 30, ["电流(A)"],                        ["cur"]),
+    "timeout":     ManyMode("timeout",     "超时",           0x18085, 2, 30, ["超时(ms)"],                       ["pid"]),
+    "vel_acc":     ManyMode("vel_acc",     "速度+加速度",     0x18090, 4, 10, ["速度(圈/s)","加速度(圈/s²)"],      ["vel","acc"]),
+    "pos_vel_tqe": ManyMode("pos_vel_tqe", "位置+速度+力矩",   0x18092, 6, 10, ["位置(圈)","速度(圈/s)","力矩(Nm)"], ["pos","vel","tqe"]),
+    "pos_vel_acc": ManyMode("pos_vel_acc", "位置+速度+加速度", 0x18095, 6, 10, ["位置(圈)","速度(圈/s)","加速度(圈/s²)"],["pos","vel","acc"]),
     "mit":         ManyMode("mit",         "MIT运控",        0x18098, 10, 6, ["位置","速度","力矩","Kp","Kd"],     ["pos","vel","tqe","pid","pid"]),
 }
+
+# 一拖多模式码 → ManyMode 反向查找
+MANY_MODE_BY_CODE: Dict[int, ManyMode] = {mm.can_id_base & 0xFF: mm for mm in MANY_MODES.values()}
 
 
 # ============================================================
@@ -229,20 +233,18 @@ class MotorState:
 #  CAN ID 编解码
 # ============================================================
 
-def encode_can_id(data_type: DataType, motor_id: int, is_mit: bool = False) -> int:
-    """构造发送 CAN ID: id_title | motor_id"""
-    base = data_type.id_title
-    if is_mit and data_type == DataType.TINT16:
-        base = 0x18000
-    return base | (motor_id & 0x7F)
+def encode_can_id(data_type: DataType, motor_id: int) -> int:
+    """构造发送 CAN ID: id_title | motor_id (bit[15]=1 控制帧)"""
+    return data_type.id_title | (motor_id & 0x7F)
 
 
 def decode_can_id(can_id: int) -> Dict[str, Any]:
-    """解码 CAN ID, 返回 {type, motor_id, is_mit} 等信息"""
+    """解码 CAN ID, 返回 {type, motor_id, is_ctrl, is_can_mit} 等信息"""
     motor_id_send = can_id & 0x7F
     motor_id_recv = (can_id >> 8) & 0x7F
     bits_type = (can_id >> 16) & 3
-    is_mit = bool((can_id >> 15) & 1)
+    is_ctrl = bool((can_id >> 15) & 1)       # bit[15]=1: 控制帧, =0: 返回帧
+    is_can_mit = bool((can_id >> 19) & 1)    # bit[19]=1: CAN MIT 模式 (仅CAN通信客户专用)
 
     data_type = DataType(bits_type - 1) if bits_type in (1, 2, 3) else DataType.TINT16
 
@@ -250,7 +252,8 @@ def decode_can_id(can_id: int) -> Dict[str, Any]:
         "data_type": data_type,
         "motor_id_send": motor_id_send,
         "motor_id_recv": motor_id_recv,
-        "is_mit": is_mit,
+        "is_ctrl": is_ctrl,
+        "is_can_mit": is_can_mit,
     }
 
 
@@ -461,14 +464,50 @@ def build_sys_cmd(cmd_type: str, motor_id: int = 1, **kwargs) -> Tuple[int, byte
 #  一拖多报文生成 (固定 TINT16)
 # ============================================================
 
-def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]]) -> List[Tuple[int, bytes]]:
+# 一拖多每帧最大数据字节数 (不含末尾查询字节)
+MANY_DATA_MAX = 60
+
+# 查询码 (请求电机返回状态)
+MANY_QUERY_STANDARD = QUERY_STANDARD  # 0x0B
+
+
+def _many_frame_len(data_len: int) -> int:
+    """计算一拖多帧总长: 数据长度 + 1字节查询码, 对齐到 CAN FD DLC"""
+    size = data_len + 1  # +1 for query byte at end
+    if size <= 8:
+        return size        # ≤8 按实际长度 (CAN FD DLC=0~8)
+    elif size <= 12:
+        return 12
+    elif size <= 16:
+        return 16
+    elif size <= 20:
+        return 20
+    elif size <= 24:
+        return 24
+    elif size <= 32:
+        return 32
+    elif size <= 48:
+        return 48
+    else:
+        return 64
+
+
+def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]],
+                   query: int = 0x0B) -> List[Tuple[int, bytes]]:
     """
     生成一拖多控制报文
     参数:
       mode_name - 一拖多模式名 (MANY_MODES 的 key)
       motors    - [(motor_id, [param_values]), ...]
+      query     - 查询码 (0x0B=返回模式/错误/位置/速度/力矩, 0x0C=含温度)
     返回:
       [(can_id, cmd_bytes), ...]  多个帧 (多帧模式可能拆分)
+    
+    帧格式与固件 motor_many_send() 一致:
+      - 每帧最多 MANY_DATA_MAX=60 字节电机数据
+      - 帧长对齐到 CAN FD DLC: 8/12/16/20/24/32/48/64
+      - 最后一字节 = query (0x0B), 触发电机返回状态帧
+      - 多帧时 CAN ID 逐帧递增
     """
     if mode_name not in MANY_MODES:
         raise ValueError(f"不支持的一拖多模式: {mode_name}, 可选: {list(MANY_MODES.keys())}")
@@ -486,7 +525,7 @@ def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]]) -> Lis
                 f"提供了 {len(params)} 个"
             )
 
-    # 打包所有电机数据为 raw 字节
+    # 打包所有电机数据为 raw 字节 (TINT16 小端)
     data_type = DataType.TINT16  # 一拖多固定 TINT16
     all_data = bytearray()
     for motor_id, params in motors:
@@ -497,16 +536,25 @@ def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]]) -> Lis
             except ValueError as e:
                 raise ValueError(f"电机{motor_id} 参数{i+1}({mm.param_names[i]}): {e}") from e
 
-    # 按帧拆分 (每帧最多 motors_per_frame 个电机)
+    # 按帧拆分: 每帧最多 60 字节数据, 末尾 +1 字节查询码, 对齐到 CAN FD DLC
     frames = []
     offset = 0
-    can_id = mm.can_id_base
-    bytes_per_frame = mm.bytes_per_motor * mm.motors_per_frame
+    mode_code = mm.can_id_base & 0xFF       # 模式子码 (如 0x80=pos, 0x81=vel)
+    can_id = 0x18000 | mode_code            # 首帧 CAN ID = ID_TITLE_INT16_SEND | mode
 
     while offset < len(all_data):
-        chunk = all_data[offset:offset + bytes_per_frame]
-        frames.append((can_id, bytes(chunk)))
-        offset += bytes_per_frame
+        remaining = len(all_data) - offset
+        chunk_data_len = remaining if remaining <= MANY_DATA_MAX else MANY_DATA_MAX
+        frame_len = _many_frame_len(chunk_data_len)
+
+        frame = bytearray(frame_len)
+        # 拷贝电机数据到帧头部
+        frame[:chunk_data_len] = all_data[offset:offset + chunk_data_len]
+        # 最后一字节 = 查询码 (0x0B)
+        frame[frame_len - 1] = query
+
+        frames.append((can_id, bytes(frame)))
+        offset += chunk_data_len
         can_id += 1
 
     return frames
@@ -757,14 +805,22 @@ def _interactive_many(mode_name: str):
     print("  输入完成!\n")
 
     frames = build_many_cmd(mode_name, motors)
-    print(f"  共 {len(motors)} 台电机, {len(frames)} 帧")
+    print(f"  共 {len(motors)} 台电机, {len(frames)} 帧 (每帧末尾 0x0B 查询码)")
+
+    motors_done = 0
     for i, (can_id, data) in enumerate(frames):
-        motor_range = f"{i * mm.motors_per_frame + 1}~{min((i+1) * mm.motors_per_frame, len(motors))}"
-        print(f"  --- 帧 {i+1}: 电机 {motor_range} ---")
-        print(f"  CAN ID   = 0x{can_id:05X}")
+        # 计算本帧包含的电机数 (减去末尾1字节查询码, 除以每电机字节数)
+        data_bytes = len(data) - 1  # 扣除末尾 0x0B
+        motors_in_frame = data_bytes // mm.bytes_per_motor
+        motor_start = motors_done + 1
+        motor_end = motors_done + motors_in_frame
+        motors_done += motors_in_frame
+
+        print(f"  --- 帧 {i+1}: 电机 {motor_start}~{motor_end} ---")
+        print(f"  CAN ID   = 0x{can_id:05X}  (0x18000 | 0x{can_id & 0xFF:02X})")
         print(f"  cmd hex  = {data.hex(' ').upper()}")
         print(f"  cmd bytes= [{', '.join(f'0x{b:02X}' for b in data)}]")
-        print(f"  帧长     = {len(data)} 字节")
+        print(f"  帧长     = {len(data)} 字节 (数据{data_bytes}B + 末尾查询码 0x{data[-1]:02X})")
     print()
 
 
@@ -824,43 +880,200 @@ def _interactive_menu():
         input("  按 Enter 继续...")
 
 
+# ============================================================
+#  CAN ID 分析与控制帧解析
+# ============================================================
+
+# 控制帧每模式参数: (字段名列表, scale_fields, 每值字节数)
+CONTROL_PARAMS: Dict[int, Tuple[List[str], List[str]]] = {
+    0x01: ([], []),                          # STOP
+    0x18: ([], []),                          # BRAKE
+    0x19: (["d(V)", "q(V)"], ["vol","vol"]), # VOLT
+    0x1A: (["d(A)", "q(A)"], ["cur","cur"]), # CUR
+    0x1B: (["力矩(Nm)"], ["tqe"]),            # TQE
+    0x1C: (["速度(圈/s)"], ["vel"]),          # VEL
+    0x1D: (["位置(圈)"], ["pos"]),            # POS
+    0x1E: (["速度(圈/s)","加速度(圈/s²)"], ["vel","acc"]),       # VEL_ACC
+    0x1F: (["位置(圈)","速度(圈/s)","力矩(Nm)"], ["pos","vel","tqe"]), # POS_VEL_TQE
+    0x20: (["位置(圈)","速度(圈/s)","加速度(圈/s²)"], ["pos","vel","acc"]), # POS_VEL_ACC
+    0x21: (["位置","速度","力矩(Nm)","Kp","Kd"], ["pos","vel","tqe","pid","pid"]), # MIT
+}
+
+# 系统命令 cmd 识别: (cmd[0], cmd[1]) → 命令名
+SYS_CMD_NAMES: Dict[Tuple[int, int], str] = {
+    (0x00, 0x0B): "查询状态",
+    (0x00, 0x04): "查询固件版本",
+    (0x00, 0x05): "查询硬件版本",
+    (0x00, 0x07): "查询型号",
+    (0x01, 0x0B): "停止",
+    (0x18, 0x0B): "刹车",
+    (0x03, 0x03): "系统命令",     # 进一步看 cmd[2]: 0x01=软重启, 0x02=保存, 0x03=设零, 0x04=改ID
+    (0x05, 0x1F): "超时设置",
+}
+
+SYS_SUB_NAMES: Dict[int, str] = {
+    0x01: "软重启", 0x02: "保存设置", 0x03: "重设零位", 0x04: "修改ID",
+}
+
+
+def _analyze_can_id(can_id: int) -> Dict[str, Any]:
+    """分析 CAN ID, 返回详细诊断信息"""
+    info = decode_can_id(can_id)
+    is_many = bool((can_id >> 7) & 1)
+    many_code = can_id & 0xFF  # 一拖多模式码含 bit[7]
+    many_info = MANY_MODE_BY_CODE.get(many_code) if is_many else None
+
+    lines = [f"CAN ID = 0x{can_id:05X}"]
+
+    if is_many:
+        mod_name = many_info.label if many_info else f"未知({many_code:#04x})"
+        lines.append(f"  一拖多 | {mod_name} | {'控制帧' if info['is_ctrl'] else '返回帧'} | TINT16")
+    else:
+        dir_text = "控制帧" if info["is_ctrl"] else "返回帧"
+        mid = info["motor_id_send"] if info["is_ctrl"] else info["motor_id_recv"]
+        extra = ""
+        if info["is_can_mit"]:
+            extra = " | CAN MIT (仅CAN通信客户)"
+        lines.append(f"  普通模式 | {dir_text} | {info['data_type'].label} | 电机ID={mid}{extra}")
+
+    return {"info": info, "is_many": is_many, "many_info": many_info, "lines": lines}
+
+
+def _parse_control_payload(can_id: int, data: bytes, data_type: DataType) -> str:
+    """解析控制帧 payload, 返回可读字符串"""
+    lines = [f"CAN ID = 0x{can_id:05X}  ({data_type.label} 控制帧)"]
+
+    if len(data) < 2:
+        lines.append(f"  [数据太短: {len(data)} 字节]")
+        return "\n".join(lines)
+
+    mode_byte = data[0]
+    query_byte = data[1]
+
+    mode_name = MODE_NAMES.get(mode_byte, f"未知(0x{mode_byte:02X})")
+    lines.append(f"  mode  = 0x{mode_byte:02X} → {mode_name}")
+    lines.append(f"  query = 0x{query_byte:02X}")
+
+    # 系统命令识别
+    sys_key = (mode_byte, query_byte)
+    if sys_key in SYS_CMD_NAMES:
+        cmd_label = SYS_CMD_NAMES[sys_key]
+        if sys_key == (0x03, 0x03) and len(data) >= 3:
+            sub = data[2]
+            cmd_label = f"系统命令 → {SYS_SUB_NAMES.get(sub, f'未知子码(0x{sub:02X})')}"
+            if sub == 0x04 and len(data) >= 4:
+                cmd_label += f", 新ID={data[3]}"
+        elif sys_key == (0x05, 0x1F) and len(data) >= 4:
+            t_ms = data[2] | (data[3] << 8)
+            cmd_label += f", 超时={t_ms}ms"
+        lines.append(f"  识别: {cmd_label}")
+        return "\n".join(lines)
+
+    # 控制命令参数解析
+    if mode_byte in CONTROL_PARAMS:
+        names, scales = CONTROL_PARAMS[mode_byte]
+        offset = 2
+        params = []
+        for i, (name, sf) in enumerate(zip(names, scales)):
+            if offset + VAL_BYTES[data_type] > len(data):
+                params.append(f"{name}=? (数据不足)")
+                break
+            raw = unpack_value(data, offset, data_type)
+            offset += VAL_BYTES[data_type]
+            phys = raw_to_phys(raw, data_type, sf)
+            unit = FIELD_UNITS.get(sf, "")
+            params.append(f"{name}={phys:.4f}{unit}")
+        lines.append(f"  参数: {', '.join(params)}")
+    else:
+        lines.append(f"  payload = [{', '.join(f'0x{b:02X}' for b in data[2:])}]")
+
+    return "\n".join(lines)
+
+
+def _parse_many_payload(can_id: int, data: bytes, many_info: ManyMode) -> str:
+    """解析一拖多控制/响应帧, 返回可读字符串"""
+    lines = [f"一拖多-{many_info.label}  (TINT16)"]
+    lines.append(f"CAN ID = 0x{can_id:05X}")
+
+    bytes_per = many_info.bytes_per_motor
+    scale_names = many_info.scales
+    param_names = many_info.param_names
+    motor_count = len(data) // bytes_per
+    dt = DataType.TINT16
+
+    for midx in range(motor_count):
+        offset = midx * bytes_per
+        motor_id = midx + 1
+        params = []
+        for pi, (sf, pn) in enumerate(zip(scale_names, param_names)):
+            raw = struct.unpack_from("<h", data, offset + pi * 2)[0]
+            phys = raw_to_phys(raw, dt, sf)
+            unit = FIELD_UNITS.get(sf, "")
+            params.append(f"{pn}={phys:.4f}{unit}")
+        lines.append(f"  电机{motor_id}: {', '.join(params)}")
+
+    return "\n".join(lines)
+
+
 def _interactive_parse():
-    """交互式报文解析"""
+    """交互式报文解析: 先输入CAN ID自动分析, 再输入报文"""
     print("=" * 60)
     print("  高擎电机 FDCAN 协议工具 — 报文解析")
     print("=" * 60)
-    print("  输入十六进制电机响应数据 (可不加空格), 输入 'm' 返回菜单, 'q' 退出\n")
-
-    type_map = {"tint16": DataType.TINT16, "tint32": DataType.TINT32, "float": DataType.TFLOAT}
-    data_type = DataType.TINT16
+    print("  先输入 CAN ID (十六进制, 如 18081 或 0x18081)")
+    print("  再输入报文数据 (十六进制, 可不加空格)")
+    print("  输入 'm' 返回菜单, 'q' 退出\n")
 
     while True:
         try:
-            line = input("  报文> ").strip()
-            if not line:
+            # ---- 步骤1: 输入 CAN ID ----
+            raw_id = input("  CAN ID> ").strip()
+            if not raw_id:
                 continue
-            if line.lower() in ("q", "quit", "exit"):
+            if raw_id.lower() in ("q", "quit", "exit"):
                 break
-            if line.lower() == "m":
+            if raw_id.lower() == "m":
                 return
 
-            if line.startswith("type "):
-                t = line[5:].strip().lower()
-                if t in type_map:
-                    data_type = type_map[t]
-                    print(f"  数据类型切换为: {data_type.label}")
-                else:
-                    print("  可选: tint16 | tint32 | float")
-                continue
+            can_id = int(raw_id, 16)
+            analysis = _analyze_can_id(can_id)
+            print("\n".join(analysis["lines"]))
+            print()
 
-            state = parse_response(line, data_type)
-            print(state)
+            # ---- 步骤2: 输入报文 ----
+            raw_data = input("  报文> ").strip()
+            if not raw_data:
+                continue
+            if raw_data.lower() in ("q", "quit", "exit"):
+                break
+            if raw_data.lower() == "m":
+                return
+
+            hex_str = raw_data.replace(" ", "").replace("\n", "")
+            data = bytes.fromhex(hex_str)
+            info = analysis["info"]
+
+            # 根据 CAN ID 分析结果分派解析
+            if analysis["is_many"] and analysis["many_info"]:
+                # 一拖多帧
+                result = _parse_many_payload(can_id, data, analysis["many_info"])
+                print(result)
+            elif info["is_ctrl"]:
+                # 普通控制帧
+                result = _parse_control_payload(can_id, data, info["data_type"])
+                print(result)
+            else:
+                # 普通返回帧
+                state = parse_response(raw_data, info["data_type"])
+                state.motor_id = info["motor_id_recv"]
+                print(state)
+
             print()
 
         except (KeyboardInterrupt, EOFError):
             break
         except Exception as e:
-            print(f"  解析错误: {e}")
+            print(f"  解析错误: {e}\n")
 
     print()
 
@@ -1152,15 +1365,21 @@ def main():
             motors.append((motor_id, params))
 
         frames = build_many_cmd(mode_name, motors)
-        print(f"\n一拖多-{mm.label}: {len(motors)} 台电机, {len(frames)} 帧")
+        print(f"\n一拖多-{mm.label}: {len(motors)} 台电机, {len(frames)} 帧 (每帧末尾 0x0B 查询码)")
+
+        motors_done = 0
         for i, (can_id, data) in enumerate(frames):
-            start_motor = i * mm.motors_per_frame + 1
-            end_motor = min((i+1) * mm.motors_per_frame, len(motors))
-            print(f"--- 帧 {i+1} (电机 {start_motor}~{end_motor}) ---")
-            print(f"CAN ID   = 0x{can_id:05X}  (TINT16)")
+            data_bytes = len(data) - 1
+            motors_in_frame = data_bytes // mm.bytes_per_motor
+            motor_start = motors_done + 1
+            motor_end = motors_done + motors_in_frame
+            motors_done += motors_in_frame
+
+            print(f"--- 帧 {i+1} (电机 {motor_start}~{motor_end}) ---")
+            print(f"CAN ID   = 0x{can_id:05X}  (0x18000 | 0x{can_id & 0xFF:02X}, TINT16)")
             print(f"cmd hex  = {data.hex(' ').upper()}")
             print(f"cmd bytes= [{', '.join(f'0x{b:02X}' for b in data)}]")
-            print(f"帧长     = {len(data)} 字节\n")
+            print(f"帧长     = {len(data)} 字节 (数据{data_bytes}B + 末尾查询码 0x{data[-1]:02X})\n")
 
 
 if __name__ == "__main__":

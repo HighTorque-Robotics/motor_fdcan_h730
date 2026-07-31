@@ -30,7 +30,7 @@
 
 | 位段 | 含义 | 取值 |
 |------|------|------|
-| `bits[19]` | **can mit模式** | `1` = can的mit模式, `0` = 非can的mit模式|
+| `bits[18]` | **CAN MIT 模式** | `1` = CAN MIT 模式, `0` = 非 CAN MIT 模式 |
 | `bits[17:16]` | **数据类型** | `01` = TINT16, `10` = TINT32, `11` = TFLOAT |
 | `bit[15]` | ** 用于区分控制帧与返回帧** | `1` = 控制, `0` = 返回帧 |
 | `bits[14:8]` | **主机ID** (接收时用) | 电机在响应帧中返回自己的 ID (1~127) |
@@ -44,7 +44,7 @@
 id_title_int16_send        = 0x18000  // bit[15]=1 | bits[17:16]=01 (TINT16), 含普通MIT
 id_title_int32_send        = 0x28000  // bit[15]=1 | bits[17:16]=10 (TINT32)
 id_title_float_send        = 0x38000  // bit[15]=1 | bits[17:16]=11 (TFLOAT)
-id_title_int16_mit_send    = 0x98000  // bit[19]=1(CAN MIT) | bit[15]=1 | TINT16 (仅需使用CAN通信客户专用)
+id_title_int16_mit_send    = 0x58000  // bit[18]=1(CAN MIT) | bit[15]=1 | TINT16 (CAN 通信客户专用)
 
 // 接收端宏 (bit[15]=0 返回帧, 用于解析)
 id_title_int16_nohdr       = 0x00000
@@ -65,7 +65,7 @@ id_title_float             = 0x30000  // bits[17:16]=11, TFLOAT
 > 发送: motor_id 填入 bits[6:0] (从机ID), bit[15]=1 标识控制帧
 > 接收: motor_id 填入 bits[14:8] (主机ID)，即 `motor_id << 8`, bit[15]=0 标识返回帧
 > 一拖多 MIT: 使用 `0x18098~0x1809C`, 与其他一拖多区分 `ID_TITLE_INT16_SEND` 基址
-> `id_title_int16_mit_send` (0x98000): 仅限只能CAN通信的客户使用, 设置 bit[19]=1
+> `id_title_int16_mit_send` (0x58000): CAN 通信客户专用, 设置 bit[18]=1
 
 ## 二、数据类型与分辨率
 

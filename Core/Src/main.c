@@ -138,7 +138,8 @@ int main(void)
             /* 正弦波目标位置 (圈, MOTOR_DATA_TYPE_FLAG=TURNS) */
             float pos_target = amplitude * sinf(MY_2PI * freq_hz * time);
             time += dt;
-            test_motor_control(1);
+            test_motor_connect_test();
+            //test_motor_many_cycle();
             // /* MIT 模式: pos=正弦波, vel=0, tqe=0, KP=100, KD=3 */
             // motor_set_pos_vel_tqe_kp_kd_2(PORT1, TFLOAT, 1,
             //                               pos_target, 0, 0, 100, 30);
@@ -169,7 +170,7 @@ int main(void)
         {
             tick_print = HAL_GetTick();
             led_toggle();
-            motor_print_state();
+            //motor_print_state();
         }
 
         /* 持续解析电机返回的 FDCAN 数据 */

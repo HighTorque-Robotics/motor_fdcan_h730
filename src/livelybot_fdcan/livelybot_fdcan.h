@@ -25,7 +25,8 @@
 #define  ID_TITLE_INT16_SEND         0x18000  // bit[15]=1 | bits[17:16]=01 (TINT16)
 #define  ID_TITLE_INT32_SEND         0x28000  // bit[15]=1 | bits[17:16]=10 (TINT32)
 #define  ID_TITLE_FLOAT_SEND         0x38000  // bit[15]=1 | bits[17:16]=11 (TFLOAT)
-#define  ID_TITLE_INT16_MIT_SEND     0x98000  // bit[19]=1 (CAN MIT) | bit[15]=1 | bits[17:16]=01 (TINT16)
+//此处为CAN MIT,在只能使用CAN通信的情况下可使用此TITLE
+#define  ID_TITLE_INT16_MIT_SEND     0x58000  // bit[19]=1 (CAN MIT) | bit[15]=1 | bits[17:16]=01 (TINT16)
 
 /* dq 电压模式 (d=0, q=实际电压) */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q);
