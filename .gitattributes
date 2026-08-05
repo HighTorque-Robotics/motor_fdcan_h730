@@ -1,0 +1,39 @@
+# ==================== 行尾统一 ====================
+# 标准策略: 入库(LF), Windows 检出(CRLF), 其他系统检出(LF)
+# 避免 CubeMX/Keil 在不同平台重新生成代码时产生行尾假 diff
+
+* text=auto
+
+# C/C++ 源码
+*.c text
+*.h text
+
+# 构建 / 工程配置
+*.uvprojx text
+*.uvoptx text
+*.uvguix text
+*.ioc text
+*.mxproject text
+*.sct text
+*.ld text
+*.icf text
+
+# 脚本 / 文档
+*.py text
+*.bat text
+*.md text
+*.txt text
+*.sh text
+
+# ==================== 二进制文件（禁止行尾转换）====================
+*.o binary
+*.axf binary
+*.hex binary
+*.bin binary
+*.srec binary
+*.lnp binary
+*.png binary
+*.jpg binary
+*.bmp binary
+*.gif binary
+*.pdf binary
