@@ -321,55 +321,6 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
 }
 
 
-static uint8_t get_data_max(uint8_t mode)
-{
-    (void)mode;
-    return 60;
-}
-
-
-static uint8_t get_motor_data_len(uint16_t size)
-{
-    uint8_t data_len = 0;
-
-    size += 1;
-    if (size <= 8)
-    {
-        data_len = size;
-    }
-    else if (size <= 12)
-    {
-        data_len = 12;
-    }
-    else if (size <= 16)
-    {
-        data_len = 16;
-    }
-    else if (size <= 20)
-    {
-        data_len = 20;
-    }
-    else if (size <= 24)
-    {
-        data_len = 24;
-    }
-    else if (size <= 32)
-    {
-        data_len = 32;
-    }
-    else if (size <= 48)
-    {
-        data_len = 48;
-    }
-    else
-    {
-        data_len = 64;
-    }
-
-    return data_len;
-}
-
-
 static uint8_t get_mode_data_len(uint8_t mode)
 {
     switch(mode)
@@ -386,9 +337,6 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_POS_VEL_TQE:
     case MODE_POS_VEL_ACC:
         return 6;
-    // case MODE_POS_VEL_KP_KD:
-    //     return 8;
-//    case MODE_POS_VEL_TQE_KP_KD:
     case MODE_POS_VEL_TQE_KP_KD_2:
         return 10;
     }
@@ -398,7 +346,7 @@ static uint8_t get_mode_data_len(uint8_t mode)
 
 
 /**
- * @brief 一拖多 发送
+ * @brief 一拖多 发送 (切分成多帧, 每帧最多 60 字节, ID 递增, query 填帧尾)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param request_type 决定电机返回帧包含的信息
  */
@@ -407,28 +355,27 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    static uint8_t cmd[64] = {0};
-    uint8_t id = p_many_data->mode;
-
-    uint16_t remaining_len = get_mode_data_len(id) * MANY_MOTOR_SIZE;
-    uint8_t data_len_max = get_data_max(id);
-    uint8_t *data = p_many_data->data;
-
-    /* MIT 一拖多 (0x98~0x9C) 使用 ID_PREFIX_TINT16 (发送时 fdcan_send 自动置 bit[15]=1) */
-
+    /* 一拖多固定 TINT16, base_id = ID_PREFIX_TINT16, fdcan_send 自动置 bit[15]=1 */
     const uint32_t base_id = ID_PREFIX_TINT16;
 
-    while (remaining_len > 0)
-    {
-        const uint8_t current_data_len = (remaining_len > data_len_max) ? data_len_max : remaining_len;
-        uint8_t cmd_len = get_motor_data_len(current_data_len);
+    uint8_t id = p_many_data->mode;          /* 一拖多模式下 bits[6:0] = 模式块编号 */
+    uint8_t *p_data = p_many_data->data;     /* 当前模式打包好的连续数据 */
+    uint16_t data_len = get_mode_data_len(id) * MANY_MOTOR_SIZE;
 
-        my_memcpy(cmd, data, current_data_len);
-        data += current_data_len;
-        remaining_len -= current_data_len;
-        cmd[cmd_len - 1] = (uint8_t)request_type;
-        fdcan_send(fdcanHandle, base_id | id, cmd, cmd_len);
-        ++id;
+    static uint8_t buf[64] = {0};
+
+    while (data_len > 0)
+    {
+        const uint8_t cut_len = (data_len > 60) ? 60 : data_len;   /* 每帧最多切 60 字节 */
+        const uint8_t fdcan_len = get_fdcan_dlc(cut_len + 1);      /* +1 为末尾 query, 转 DLC (块对齐) */
+        data_len -= cut_len;
+
+        my_memcpy(buf, p_data, cut_len);
+        buf[fdcan_len - 1] = (uint8_t)request_type;                /* 查询码放帧尾 */
+        p_data += cut_len;
+
+        fdcan_send(fdcanHandle, base_id | id, buf, fdcan_len);
+        id++;                                                       /* 每帧模式块编号递增 */
     }
 }
 
