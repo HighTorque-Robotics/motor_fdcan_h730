@@ -7,12 +7,13 @@
 
 
 /* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧由 fdcan_send 自动置 bit[15]=1) */
-/* bits[19]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
+/* bits[18]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
 
 /* ---- 数据类型 ---- */
-#define  ID_PREFIX_TINT16    0x10000   // bits[17:16]=01 (TINT16)
-#define  ID_PREFIX_TINT32    0x20000   // bits[17:16]=10 (TINT32)
-#define  ID_PREFIX_TFLOAT    0x30000   // bits[17:16]=11 (TFLOAT)
+#define  ID_PREFIX_TINT16_NOHDR     0x00000   // bits[17:16]=00 (TINT16_NOHDR)
+#define  ID_PREFIX_TINT16           0x10000   // bits[17:16]=01 (TINT16)
+#define  ID_PREFIX_TINT32           0x20000   // bits[17:16]=10 (TINT32)
+#define  ID_PREFIX_TFLOAT           0x30000   // bits[17:16]=11 (TFLOAT)
 
 /* dq 电压模式 (d=0, q=实际电压) */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q);

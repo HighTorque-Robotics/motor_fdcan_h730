@@ -28,7 +28,7 @@ static uint8_t motor_config_closed_loop(void (*action)(FDCAN_HandleTypeDef *, ui
  * @brief 重置电机零位
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
- * @return 0-成功，1-重置零位失败，2-保存失败
+ * @return 0-成功，1-重置零位失败
  */
 uint8_t motor_pos_reset(port_t portx, const uint8_t id)
 {
@@ -40,11 +40,6 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
     if (motor_config_closed_loop(set_pos_rezero, fdcanHandle, id) != 0)
     {
         return 1;
-    }
-
-    if (motor_config_closed_loop(set_conf_write, fdcanHandle, id) != 0)
-    {
-        return 2;
     }
 
     set_motor_reset_int8(fdcanHandle, id);
@@ -77,16 +72,35 @@ uint8_t motor_conf_write(port_t portx, const uint8_t id)
 }
 
 /**
- * @brief 更改电机ID，立刻生效
+ * @brief 更改电机ID，并用新ID查询确认生效
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param old_id 当前电机 ID
  * @param new_id 新电机 ID
+ * @return 0-成功，1-修改ID失败
  */
-void motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
+uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+    p_motor_state_s p_motor_state = motor_get_state(portx, new_id);
 
+    /* 用旧 ID 发送修改 ID 指令 */
     set_motor_id(fdcanHandle, old_id, new_id);
+    HAL_Delay(100);
+
+    /* 用新 ID 发送查询状态指令，电机能正常返回即闭环确认修改成功 */
+    p_motor_state->query = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        read_motor_state_int16(fdcanHandle, new_id);
+        HAL_Delay(50);
+        motor_process_state_all();
+        if (p_motor_state->query == MANY_GET_MODE_FLAUT_POS_VEL_TQE)
+        {
+            return 0;   /* 新 ID 已能正常通信，修改成功 */
+        }
+    }
+
+    return 1;   /* 修改 ID 失败 */
 }
 
 

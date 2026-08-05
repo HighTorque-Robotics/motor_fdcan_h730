@@ -154,8 +154,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
         }
-        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10, 帧长 >=15 字节 ---------
-        else if (id_title == ID_PREFIX_TINT32 && len >= 15)
+        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10 ---------
+        else if (id_title == ID_PREFIX_TINT32 )
         {
             int32_t pos = 0, vel = 0, tqe = 0;
 
@@ -170,8 +170,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
         }
-        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11, 帧长 >=15 字节 ---------
-        else if (id_title == ID_PREFIX_TFLOAT && len >= 15)
+        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11 ---------
+        else if (id_title == ID_PREFIX_TFLOAT )
         {
             float pos = 0, vel = 0, tqe = 0;
 
@@ -191,8 +191,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
     else if (p_data[0] == MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE)
     {
-        // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01, 帧长 >=11 字节 ---------
-        if (id_title == ID_PREFIX_TINT16 && len >= 11)
+        // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01 ---------
+        if (id_title == ID_PREFIX_TINT16 )
         {
             int16_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -209,8 +209,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
         }
-        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10, 帧长 >=19 字节 ---------
-        else if (id_title == ID_PREFIX_TINT32 && len >= 19)
+        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10 ---------
+        else if (id_title == ID_PREFIX_TINT32 )
         {
             int32_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -227,8 +227,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
         }
-        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11, 帧长 >=19 字节 ---------
-        else if (id_title == ID_PREFIX_TFLOAT && len >= 19)
+        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11 ---------
+        else if (id_title == ID_PREFIX_TFLOAT )
         {
             float pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -303,8 +303,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     {
         int16_t pos = 0, vel = 0, tqe = 0;
 
-        // query=0x0C: 返回温度+模式+错误+位置+速度+力矩, 帧长 >=11 字节 (CAN FD 补齐后实际 >=12)
-        if (p_data[0] == MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE && len >= 11)
+        // query=0x0C: 返回温度+模式+错误+位置+速度+力矩
+        if (p_data[0] == MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE)
         {
             int16_t temp_raw = 0;
             my_memcpy((uint8_t *)&temp_raw, p_data + 3, sizeof(int16_t));
