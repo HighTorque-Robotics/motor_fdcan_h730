@@ -33,24 +33,3 @@ void debug_print(int num, ...)
 
     va_end(args);
 }
-
-
-
-// 启用 DWT 计数器（微秒级时间戳）
-void DWT_Init(void) 
-{
-    if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)) 
-	{
-        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;  // 使能 DWT
-    }
-    DWT->CYCCNT = 0;                  // 清零计数器
-    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk; // 使能 CYCCNT
-}
-
-// 获取微秒值
-uint32_t DWT_GetMicroseconds(void) 
-{
-    return DWT->CYCCNT / (SystemCoreClock / 1000000);
-}
-
-

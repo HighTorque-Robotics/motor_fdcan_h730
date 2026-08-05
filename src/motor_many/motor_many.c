@@ -35,7 +35,7 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
         p_many_data->mode = MODE_VOLTAGE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
     
@@ -60,7 +60,7 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
         p_many_data->mode = MODE_CURRENT;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -86,7 +86,7 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
         p_many_data->mode = MODE_POSITION;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -112,7 +112,7 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
         p_many_data->mode = MODE_VELOCITY;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -137,7 +137,7 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
         p_many_data->mode = MODE_TORQUE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->torque[i] = NAN_INT16;
+            p_many_data->torque[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -161,7 +161,7 @@ void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
         p_many_data->mode = MODE_TIME_OUT;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->timeout[i] = NAN_INT16;
+            p_many_data->timeout[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -198,7 +198,7 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
         p_many_data->mode = MODE_POS_VEL_TQE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -231,7 +231,7 @@ void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const f
         p_many_data->mode = MODE_VEL_ACC;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -266,7 +266,7 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
         p_many_data->mode = MODE_POS_VEL_ACC;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -309,7 +309,7 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
         p_many_data->mode = MODE_POS_VEL_TQE_KP_KD_2;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
-            p_many_data->data16[i] = NAN_INT16;
+            p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
 
@@ -414,10 +414,9 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     uint8_t data_len_max = get_data_max(id);
     uint8_t *data = p_many_data->data;
 
-    /* MIT 一拖多 (0x98~0x9C) 使用 ID_TITLE_INT16_SEND */
-    /* 如果需要使用CAN发送，需改成ID_TITLE_INT16_MIT_SEND */
+    /* MIT 一拖多 (0x98~0x9C) 使用 ID_PREFIX_TINT16 (发送时 fdcan_send 自动置 bit[15]=1) */
 
-    const uint32_t base_id = ID_TITLE_INT16_SEND;
+    const uint32_t base_id = ID_PREFIX_TINT16;
 
     while (remaining_len > 0)
     {

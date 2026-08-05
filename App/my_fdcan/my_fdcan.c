@@ -169,7 +169,7 @@ void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle)
 
 void fdcan_send(FDCAN_HandleTypeDef *fdcanHandle, uint32_t id, uint8_t *data, uint16_t size)
 {
-    TxHeader.Identifier = id;
+    TxHeader.Identifier = id | 0x8000u;  // 自动置 bit[15]=1 (发送控制帧)
 
     if(id > 0x7ff)
     {

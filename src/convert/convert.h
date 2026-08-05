@@ -22,13 +22,6 @@ static inline void MOTOR_ERR(void) {}
 #define MY_PI  (3.14159265358f)
 
 
-/* 各个数据类型的无限制 */
-#define  NAN_FLOAT  NAN
-#define  NAN_INT32  0x80000000
-#define  NAN_INT16  0x8000
-#define  NAN_INT8   0x80
-
-
 typedef enum
 {
     RADIAN_2PI = 0,  // 弧度制
@@ -37,12 +30,12 @@ typedef enum
 } pos_vel_type_t;
 
 
-typedef enum  // 数据类型
+typedef enum  // 数据类型 (枚举值 = CAN ID bits[17:16])
 {
-    TFLOAT = 0,
-    TINT32,
-    TINT16,
-    // TINT8,
+    TINT16_NOHDR = 0,   // bits[17:16]=00, 一拖多专用
+    TINT16       = 1,   // bits[17:16]=01
+    TINT32       = 2,   // bits[17:16]=10
+    TFLOAT       = 3,   // bits[17:16]=11
 } data_type_t;
 
 

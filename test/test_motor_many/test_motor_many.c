@@ -63,38 +63,38 @@ void test_time_out(int16_t t_ms)
 
 void test_motor_many()
 {
-    const uint8_t mode = 7;
+    const uint8_t mode = 3;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
         switch (mode)
         {
         case 0:
-            motor_many_dq_volt(PORT1, id, 1);
+            motor_many_dq_volt(PORT1, id, 0);
             break;
         case 1:
-            motor_many_dq_current(PORT1, id, 1);
+            motor_many_dq_current(PORT1, id, 0);
             break;
         case 2:
             motor_many_pos(PORT1, id, 0);
             break;
         case 3:
-            motor_many_vel(PORT1, id, 0.2);
+            motor_many_vel(PORT1, id, -0.1);
             break;
         case 4:
-            motor_many_tqe(PORT1, id, 0.5f);
+            motor_many_tqe(PORT1, id, 0.0f);
             break;
         case 5:
-            motor_many_pos_vel_MAXtqe(PORT1, id, 2, 0.1, 0.5);
+            motor_many_pos_vel_MAXtqe(PORT1, id, 0, 0.0, 0.0);
             break;
         case 6:
-            motor_many_pos_vel_acc(PORT1, id, 0, 1, 0.2);
+            motor_many_pos_vel_acc(PORT1, id, 0, 0, 0.0);
             break;
         case 7:
             motor_many_pos_vel_tqe_kp_kd_2(PORT1, id, 0, 0, 0, 0, 0);
             break;
         case 8:
-            motor_many_vel_acc(PORT1, id, -0.5, 0.1);
+            motor_many_vel_acc(PORT1, id, 0.0, 0.0);
             break;
         default:
             break;

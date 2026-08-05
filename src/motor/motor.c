@@ -15,11 +15,17 @@ const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
         .state = motor_state_port[0],
     },
 
-    // {
-    //     .port = PORT2,
-    //     .fdcan = &hfdcan2,
-    //     .state = motor_state_port[1],
-    // },
+    {
+        .port = PORT2,
+        .fdcan = &hfdcan2,
+        .state = motor_state_port[1],
+    },
+
+    {
+        .port = PORT3,
+        .fdcan = &hfdcan3,
+        .state = motor_state_port[2],
+    },
 };
 
 /*******************************************END***************************************************/
@@ -133,7 +139,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     if (p_data[0] == MANY_GET_MODE_FLAUT_POS_VEL_TQE)
     {
         // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01 ---------
-        if (id_title == ID_TITLE_INT16)
+        if (id_title == ID_PREFIX_TINT16)
         {
             int16_t pos = 0, vel = 0, tqe = 0;
 
@@ -149,7 +155,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
         }
         // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10, 帧长 >=15 字节 ---------
-        else if (id_title == ID_TITLE_INT32 && len >= 15)
+        else if (id_title == ID_PREFIX_TINT32 && len >= 15)
         {
             int32_t pos = 0, vel = 0, tqe = 0;
 
@@ -165,7 +171,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
         }
         // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11, 帧长 >=15 字节 ---------
-        else if (id_title == ID_TITLE_FLOAT && len >= 15)
+        else if (id_title == ID_PREFIX_TFLOAT && len >= 15)
         {
             float pos = 0, vel = 0, tqe = 0;
 
@@ -186,7 +192,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     else if (p_data[0] == MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE)
     {
         // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01, 帧长 >=11 字节 ---------
-        if (id_title == ID_TITLE_INT16 && len >= 11)
+        if (id_title == ID_PREFIX_TINT16 && len >= 11)
         {
             int16_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -204,7 +210,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
         }
         // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10, 帧长 >=19 字节 ---------
-        else if (id_title == ID_TITLE_INT32 && len >= 19)
+        else if (id_title == ID_PREFIX_TINT32 && len >= 19)
         {
             int32_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -222,7 +228,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
         }
         // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11, 帧长 >=19 字节 ---------
-        else if (id_title == ID_TITLE_FLOAT && len >= 19)
+        else if (id_title == ID_PREFIX_TFLOAT && len >= 19)
         {
             float pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 

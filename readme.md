@@ -32,26 +32,25 @@
 |------|------|------|
 | `bits[18]` | **CAN MIT 模式** | `1` = CAN MIT 模式, `0` = 非 CAN MIT 模式 |
 | `bits[17:16]` | **数据类型** | `01` = TINT16, `10` = TINT32, `11` = TFLOAT |
-| `bit[15]` | ** 用于区分控制帧与返回帧** | `1` = 控制, `0` = 返回帧 |
-| `bits[14:8]` | **主机ID** (接收时用) | 电机在响应帧中返回自己的 ID (1~127) |
+| `bit[15]` | **区分控制帧与返回帧** | `1` = 发送给电机的控制帧, `0` = 接收电机状态的返回帧 |
+| `bits[14:8]` | **电机端ID** (接收/返回帧时用) | 电机在响应帧中把自己的 ID 放在这一位段 (1~127) |
 | `bit[7]` | **一拖多标识** | `0` = 普通单机模式, `1` = 一拖多并联模式 |
-| `bits[6:0]` | **从机ID** (发送时用) | 目标电机 ID (1~127)，一拖多时为模式块编号 |
+| `bits[6:0]` | **发送端ID** (发送/控制帧时用) | 目标电机 ID (1~127)，一拖多时为模式块编号 |
 
-### 1.2 CAN ID 标题宏
+### 1.2 CAN ID 帧头常量
+
+数据类型枚举 `data_type_t` 的枚举值直接等于 CAN ID 的 bits[17:16]（`TINT16_NOHDR=0, TINT16=1, TINT32=2, TFLOAT=3`）。
 
 ```c
-// 发送端宏 (bit[15]=1 控制帧)
-id_title_int16_send        = 0x18000  // bit[15]=1 | bits[17:16]=01 (TINT16), 含普通MIT
-id_title_int32_send        = 0x28000  // bit[15]=1 | bits[17:16]=10 (TINT32)
-id_title_float_send        = 0x38000  // bit[15]=1 | bits[17:16]=11 (TFLOAT)
-id_title_int16_mit_send    = 0x58000  // bit[18]=1(CAN MIT) | bit[15]=1 | TINT16 (CAN 通信客户专用)
-
-// 接收端宏 (bit[15]=0 返回帧, 用于解析)
-id_title_int16_nohdr       = 0x00000
-id_title_int16             = 0x10000  // bits[17:16]=01, TINT16
-id_title_int32             = 0x20000  // bits[17:16]=10, TINT32
-id_title_float             = 0x30000  // bits[17:16]=11, TFLOAT
+// 纯帧头常量 (接收端 bit[15]=0, 返回帧)
+#define ID_PREFIX_TINT16    0x10000   // bits[17:16]=01 (TINT16)
+#define ID_PREFIX_TINT32    0x20000   // bits[17:16]=10 (TINT32)
+#define ID_PREFIX_TFLOAT    0x30000   // bits[17:16]=11 (TFLOAT)
 ```
+
+> 发送控制帧时，`fdcan_send()` 内部自动对传入的 CAN ID 置 bit[15]=1（`id | 0x8000`），因此发送侧直接使用上述纯帧头常量即可，无需再手动 `| 0x8000`。例如 TINT16 控制帧 = `ID_PREFIX_TINT16 | motor_id` = `0x18000 | motor_id`。
+
+> 一拖多模式固定使用 TINT16 帧头，`base_id = ID_PREFIX_TINT16`（`fdcan_send` 置 bit15 后 = `0x18000`）。CAN MIT 专用位 bit[19] 若需使用，需另行置位。
 
 ### 1.3 CAN ID 编码公式
 
@@ -62,10 +61,10 @@ id_title_float             = 0x30000  // bits[17:16]=11, TFLOAT
 | TFLOAT | `0x38000` | `0x38000 \| motor_id` | `0x30000 \| (motor_id << 8)` |
 | 一拖多 | `0x18000` | `0x18000 \| 模式块编号` | `0x00000 \| (motor_id << 8)` |
 
-> 发送: motor_id 填入 bits[6:0] (从机ID), bit[15]=1 标识控制帧
-> 接收: motor_id 填入 bits[14:8] (主机ID)，即 `motor_id << 8`, bit[15]=0 标识返回帧
-> 一拖多 MIT: 使用 `0x18098~0x1809C`, 与其他一拖多区分 `ID_TITLE_INT16_SEND` 基址
-> `id_title_int16_mit_send` (0x58000): CAN 通信客户专用, 设置 bit[18]=1
+> 发送: motor_id 填入 bits[6:0] (发送端ID), bit[15]=1 标识控制帧
+> 接收: motor_id 填入 bits[14:8] (电机端ID)，即 `motor_id << 8`, bit[15]=0 标识返回帧
+> 一拖多 MIT: 使用 `0x18098~0x1809C`, 与其他一拖多区分 `ID_PREFIX_TINT16` 基址 (发送时 fdcan_send 自动置 bit15)
+> CAN MIT 专用位 bit[19]=1 (0x58000): CAN 通信客户专用, 需在 base_id 上额外置位
 
 ## 二、数据类型与分辨率
 

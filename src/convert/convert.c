@@ -27,23 +27,6 @@ static float data_limit(const float in_data, const float max, const float min)
 
 static float data_float2int(const float in_data, const data_type_t type, const float rint8, const float rint16, const float rint32)
 {
-    if (isnan(in_data))
-    {
-        switch (type)
-        {
-
-        case TINT16:
-            return NAN_INT16;
-        case TINT32:
-            return NAN_INT32;
-        case TFLOAT:
-            return NAN_FLOAT;
-        default:
-            MOTOR_ERR();
-            return 0;
-        }
-    }
-
     switch (type)
     {
     case TINT16:
@@ -85,11 +68,6 @@ static float data_int2float(const float in_data, const data_type_t type, const f
  */
 float conv_to_turns(const float in_data, const pos_vel_type_t type)
 {
-    if (isnan(in_data))
-    {
-        return NAN_FLOAT;
-    }
-
     switch (type)
     {
     case RADIAN_2PI:

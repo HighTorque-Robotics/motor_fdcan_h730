@@ -169,13 +169,13 @@ void motor_set_pos_vel(port_t portx, const data_type_t type, const uint8_t id, c
     switch(type)
     {
     case TFLOAT:
-        set_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN_FLOAT);
+        set_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN);        // NAN_FLOAT
         break;
     case TINT32:
-        set_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, NAN_INT32);
+        set_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x80000000); // NAN_INT32
         break;
     case TINT16:
-        set_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, NAN_INT16);
+        set_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x8000);     // NAN_INT16
         break;
     default:
         break;
