@@ -247,22 +247,13 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
     }
 
-    // ===================== 电机固件版本（不变） =====================
-    // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
-    else if (p_data[1] == 0xB5 && p_data[2] == 0x02)
+    // ===================== 电机固件版本 (0x04) =====================
+    // 返回帧: 04 | patch | minor | major (各1字节)
+    else if (p_data[0] == 0x04)
     {
-        if (len == 5)
-        {
-            p_motor_state[id_index].version.major = p_data[4] >> 4;
-            p_motor_state[id_index].version.minor = p_data[4] & 0x0F | p_data[3] >> 4;
-            p_motor_state[id_index].version.patch = p_data[3] & 0x0F;
-        }
-        else
-        {
-            p_motor_state[id_index].version.major = 3;
-            p_motor_state[id_index].version.minor = 9;
-            p_motor_state[id_index].version.patch = 1;
-        }
+        p_motor_state[id_index].version.major = p_data[3];
+        p_motor_state[id_index].version.minor = p_data[2];
+        p_motor_state[id_index].version.patch = p_data[1];
     }
     // ===================== 电机型号查询响应 =====================
     // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
@@ -291,11 +282,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
                     break;
                 }
             }
-
-            // 型号格式：前 4 个字符 + "_" + 剩余字符  (如: 5036_02)
-            // model_len 个十六进制字符中，第 5 个字符(下标4)为空字符/分隔符，此处用 "_" 替代
-            printf("PORT: %d, ID: %d, model = %.4s_%.*s\r\n",
-                   port_num, id, model_str, model_len - 5, model_str + 5);
         }
     }
     // ===================== 一拖多模式解析 (仅处理 0x0B/0x0C 帧, 格式与普通模式 TINT16 一致) =====================
