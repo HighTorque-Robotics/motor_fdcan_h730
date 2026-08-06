@@ -146,26 +146,98 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 
 
 /**
- * @brief 一拖多 设置超时时间
+ * @brief 一拖多 停止模式 (CAN ID 0x8085)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
- * @param t_ms 超时时间，单位：毫秒（ms）
+ * @param enable 1-启用, 0-不启用
  */
-void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms)
+void motor_many_stop(port_t portx, const uint8_t id, const uint8_t enable)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_TIME_OUT)
+    if (p_many_data->mode != MODE_STOP)
     {
-        p_many_data->mode = MODE_TIME_OUT;
-        for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
+        p_many_data->mode = MODE_STOP;
+        for (int i = 0; i < MANY_MOTOR_SIZE; i++)
         {
-            p_many_data->timeout[i] = 0x8000;  // NAN_INT16
+            p_many_data->stop[i] = 0;
         }
     }
 
-    p_many_data->timeout[index] = t_ms;
+    p_many_data->stop[index] = enable;
+}
+
+
+/**
+ * @brief 一拖多 刹车模式 (CAN ID 0x8086)
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
+ * @param id 电机 ID
+ * @param enable 1-启用, 0-不启用
+ */
+void motor_many_brake(port_t portx, const uint8_t id, const uint8_t enable)
+{
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const uint16_t index = id - 1;
+
+    if (p_many_data->mode != MODE_BRAKE)
+    {
+        p_many_data->mode = MODE_BRAKE;
+        for (int i = 0; i < MANY_MOTOR_SIZE; i++)
+        {
+            p_many_data->brake[i] = 0;
+        }
+    }
+
+    p_many_data->brake[index] = enable;
+}
+
+
+/**
+ * @brief 一拖多 电机软重启模式 (CAN ID 0x8087)
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
+ * @param id 电机 ID
+ * @param enable 1-启用, 0-不启用
+ */
+void motor_many_reset(port_t portx, const uint8_t id, const uint8_t enable)
+{
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const uint16_t index = id - 1;
+
+    if (p_many_data->mode != MODE_RESET)
+    {
+        p_many_data->mode = MODE_RESET;
+        for (int i = 0; i < MANY_MOTOR_SIZE; i++)
+        {
+            p_many_data->reset[i] = 0;
+        }
+    }
+
+    p_many_data->reset[index] = enable;
+}
+
+
+/**
+ * @brief 一拖多 电机重置零位模式 (CAN ID 0x8088)
+ * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
+ * @param id 电机 ID
+ * @param enable 1-启用, 0-不启用
+ */
+void motor_many_rezero(port_t portx, const uint8_t id, const uint8_t enable)
+{
+    p_many_data_s p_many_data = motor_get_many_pointer(portx);
+    const uint16_t index = id - 1;
+
+    if (p_many_data->mode != MODE_REZERO)
+    {
+        p_many_data->mode = MODE_REZERO;
+        for (int i = 0; i < MANY_MOTOR_SIZE; i++)
+        {
+            p_many_data->rezero[i] = 0;
+        }
+    }
+
+    p_many_data->rezero[index] = enable;
 }
 
 
@@ -330,8 +402,12 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MODE_TORQUE:
     case MODE_VOLTAGE:
     case MODE_CURRENT:
-    case MODE_TIME_OUT:
         return 2;
+    case MODE_STOP:
+    case MODE_BRAKE:
+    case MODE_RESET:
+    case MODE_REZERO:
+        return 1;
     case MODE_VEL_ACC:
         return 4;
     case MODE_POS_VEL_TQE:
@@ -366,16 +442,20 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
 
     while (data_len > 0)
     {
-        const uint8_t cut_len = (data_len > 60) ? 60 : data_len;   /* 每帧最多切 60 字节 */
-        const uint8_t fdcan_len = get_fdcan_dlc(cut_len + 1);      /* +1 为末尾 query, 转 DLC (块对齐) */
+        const uint8_t cut_len = (data_len > 60) ? 60 : data_len;      // 每帧最多切 60 字节数据
         data_len -= cut_len;
 
+        /* 帧长 = 数据 + 1 查询码, 并做 CAN FD 块对齐 (8/12/16/20/24/32/48/64) */
+        const uint16_t byte_len = cut_len + 1;
+        const uint16_t frame_len = get_fdcan_data_size(get_fdcan_dlc(byte_len));
+
         my_memcpy(buf, p_data, cut_len);
-        buf[fdcan_len - 1] = (uint8_t)request_type;                /* 查询码放帧尾 */
+        buf[frame_len - 1] = (uint8_t)request_type;                  // 查询码放帧尾 (对齐后最后一字节)
         p_data += cut_len;
 
-        fdcan_send(fdcanHandle, base_id | id, buf, fdcan_len);
-        id++;                                                       /* 每帧模式块编号递增 */
+        /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
+        fdcan_send(fdcanHandle, base_id | id, buf, byte_len);
+        id++;                                                         // 每帧模式块编号递增
     }
 }
 

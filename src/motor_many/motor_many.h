@@ -23,7 +23,11 @@
 #define  MODE_TORQUE                0X82
 #define  MODE_VOLTAGE               0X83
 #define  MODE_CURRENT               0X84
-#define  MODE_TIME_OUT              0x85
+
+#define  MODE_STOP                  0x85   // 停止 (每电机1字节: 非0启用, 0不启用)
+#define  MODE_BRAKE                 0x86   // 刹车 (每电机1字节: 非0启用, 0不启用)
+#define  MODE_RESET                 0x87   // 电机软重启 (每电机1字节: 非0启用, 0不启用)
+#define  MODE_REZERO                0x88   // 电机重置零位 (每电机1字节: 非0启用, 0不启用)
 
 #define  MODE_VEL_ACC               0X90   // 块 0x90~0x91 (2帧)
 #define  MODE_POS_VEL_TQE           0X92   // 块 0x92~0x94 (3帧)
@@ -84,7 +88,10 @@ typedef struct
         int16_t torque[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
         int16_t voltage[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
         int16_t current[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
-        int16_t timeout[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
+        uint8_t stop[MANY_MOTOR_SIZE];        // 停止: 每电机1字节, 非0启用, 0不启用
+        uint8_t brake[MANY_MOTOR_SIZE];       // 刹车: 每电机1字节, 非0启用, 0不启用
+        uint8_t reset[MANY_MOTOR_SIZE];       // 软重启: 每电机1字节, 非0启用, 0不启用
+        uint8_t rezero[MANY_MOTOR_SIZE];      // 重置零位: 每电机1字节, 非0启用, 0不启用
         many_vel_acc_s vel_acc[MANY_DATA_BUF_MAX_LEN / sizeof(many_vel_acc_s)];
         many_pos_vel_tqe_s pos_vel_tqe[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_s)];
         many_pos_vel_acc_s pos_vel_acc[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_acc_s)];
@@ -104,7 +111,10 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur);
 void motor_many_pos(port_t portx, const uint8_t id, const float pos);
 void motor_many_vel(port_t portx, const uint8_t id, const float vel);
 void motor_many_tqe(port_t portx, const uint8_t id, const float tqe);
-void motor_many_time_out(port_t portx, const uint8_t id, const int16_t t_ms);
+void motor_many_stop(port_t portx, const uint8_t id, const uint8_t enable);
+void motor_many_brake(port_t portx, const uint8_t id, const uint8_t enable);
+void motor_many_reset(port_t portx, const uint8_t id, const uint8_t enable);
+void motor_many_rezero(port_t portx, const uint8_t id, const uint8_t enable);
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe);
 void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const float acc);
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);

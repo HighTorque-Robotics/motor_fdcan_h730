@@ -48,11 +48,11 @@ void test_motor_many_cycle(void)
            many_mode_label[mode], st->mode, st->mode);
 }
 
-void test_time_out(int16_t t_ms)
+void test_motor_many_stop(uint8_t enable)
 {
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
-        motor_many_time_out(PORT1, id, t_ms);
+        motor_many_stop(PORT1, id, enable);
     }
 
     motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
@@ -63,7 +63,7 @@ void test_time_out(int16_t t_ms)
 
 void test_motor_many()
 {
-    const uint8_t mode = 3;
+    const uint8_t mode = 9;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
@@ -96,10 +96,13 @@ void test_motor_many()
         case 8:
             motor_many_vel_acc(PORT1, id, 0.0, 0.0);
             break;
+        case 9:
+            motor_many_stop(PORT2, id, 1);
+            break;
         default:
             break;
         }
     }
 
-    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT2, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
 }
