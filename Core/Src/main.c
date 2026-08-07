@@ -134,7 +134,8 @@ int main(void)
             /* 正弦波目标位置 (圈, MOTOR_DATA_TYPE_FLAG=TURNS) */
             float pos_target = amplitude * sinf(MY_2PI * freq_hz * time);
             time += dt;
-            motor_get_version(PORT2, 2);
+            test_motor_control(2);
+            
             //test_motor_many_cycle();
             /* MIT 模式: pos=正弦波, vel=0, tqe=0, KP=100, KD=3 */
             // motor_set_pos_vel_tqe_kp_kd_2(PORT2, TINT16, 1,
@@ -146,7 +147,6 @@ int main(void)
         // {
         //     tick_vofa = HAL_GetTick();
 
-        //     motor_state_s *p_state = motor_get_state(PORT2, 1);
 
         //     /* CH1=目标位置(圈), CH2=实际位置(圈), CH3=速度(圈/s), CH4=力矩(Nm)
         //      * CH5=模式,          CH6=温度(°C),    CH7=故障码,     CH8=时间(s) */

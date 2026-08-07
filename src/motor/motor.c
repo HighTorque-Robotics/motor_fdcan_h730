@@ -187,10 +187,26 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe;
         }
     }
-    
+    // ===================== TINT16_NOHDR : 00返回帧 =====================
+    // 返回结构: 模式(1B) 错误码(1B) 位置(2B) 速度(2B) 力矩(2B)
+    else if (id_title == ID_PREFIX_TINT16_NOHDR)
+    {
+        int16_t pos = 0, vel = 0, tqe = 0;
+
+        my_memcpy((uint8_t *)&pos, p_data + 2, sizeof(int16_t));
+        my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
+        my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
+
+        p_motor_state[id_index].mode      = p_data[0];
+        p_motor_state[id_index].fault     = p_data[1];
+        p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
+        p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
+        p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
+    }
     // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
     else if (p_data[0] == MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE)
     {
+        
         // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01 ---------
         if (id_title == ID_PREFIX_TINT16 )
         {
@@ -204,11 +220,12 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C/LSB
+            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
         }
+        
         // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10 ---------
         else if (id_title == ID_PREFIX_TINT32 )
         {
@@ -222,7 +239,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 1000);  // 0.001°C/LSB
+            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 1000);  // 0.001°C
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
@@ -301,7 +318,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C/LSB
+            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C
         }
         // query=0x0B: 返回模式+错误+位置+速度+力矩
         else if (p_data[0] == MANY_GET_MODE_FLAUT_POS_VEL_TQE)

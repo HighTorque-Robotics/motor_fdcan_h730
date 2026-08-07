@@ -137,7 +137,10 @@ MANY_MODES = {
     "tqe":         ManyMode("tqe",         "力矩",           0x18082, 2, 30, ["力矩(Nm)"],                       ["tqe"]),
     "volt":        ManyMode("volt",        "电压",           0x18083, 2, 30, ["电压(V)"],                        ["vol"]),
     "cur":         ManyMode("cur",         "电流",           0x18084, 2, 30, ["电流(A)"],                        ["cur"]),
-    "timeout":     ManyMode("timeout",     "超时",           0x18085, 2, 30, ["超时(ms)"],                       ["pid"]),
+    "stop":        ManyMode("stop",        "停止",           0x18085, 1, 30, ["启用(0/1)"],                      ["enable"]),
+    "brake":       ManyMode("brake",       "刹车",           0x18086, 1, 30, ["启用(0/1)"],                      ["enable"]),
+    "reset":       ManyMode("reset",       "软重启",         0x18087, 1, 30, ["启用(0/1)"],                      ["enable"]),
+    "rezero":      ManyMode("rezero",      "重置零位",       0x18088, 1, 30, ["启用(0/1)"],                      ["enable"]),
     "vel_acc":     ManyMode("vel_acc",     "速度+加速度",     0x18090, 4, 10, ["速度(圈/s)","加速度(圈/s²)"],      ["vel","acc"]),
     "pos_vel_tqe": ManyMode("pos_vel_tqe", "位置+速度+力矩",   0x18092, 6, 10, ["位置(圈)","速度(圈/s)","力矩(Nm)"], ["pos","vel","tqe"]),
     "pos_vel_acc": ManyMode("pos_vel_acc", "位置+速度+加速度", 0x18095, 6, 10, ["位置(圈)","速度(圈/s)","加速度(圈/s²)"],["pos","vel","acc"]),
@@ -527,12 +530,18 @@ def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]],
 
     # 打包所有电机数据为 raw 字节 (TINT16 小端)
     data_type = DataType.TINT16  # 一拖多固定 TINT16
+    is_byte_mode = (mm.bytes_per_motor == 1)  # stop/brake/reset/rezero: 每电机1字节 enable
     all_data = bytearray()
     for motor_id, params in motors:
         for i, (val, scale_field) in enumerate(zip(params, mm.scales)):
             try:
-                raw = phys_to_raw(val, data_type, scale_field)
-                all_data.extend(struct.pack("<h", raw))
+                if is_byte_mode:
+                    # 1字节 enable 模式: 不换算物理量, 0=不启用 非0=启用
+                    raw = 1 if float(val) != 0 else 0
+                    all_data.append(raw & 0xFF)
+                else:
+                    raw = phys_to_raw(val, data_type, scale_field)
+                    all_data.extend(struct.pack("<h", raw))
             except ValueError as e:
                 raise ValueError(f"电机{motor_id} 参数{i+1}({mm.param_names[i]}): {e}") from e
 
@@ -674,6 +683,10 @@ MENU_ITEMS: List[MenuItem] = [
     MenuItem(19, "一拖多-位置+速度+力矩", ["位置,速度,力矩..."],  "many", "pos_vel_tqe", "多电机"),
     MenuItem(20, "一拖多-位置+速度+加速度",["位置,速度,加速度..."],"many", "pos_vel_acc", "多电机"),
     MenuItem(21, "一拖多-MIT运控",       ["位置,速度,力矩,Kp,Kd..."],"many","mit",      "多电机"),
+    MenuItem(22, "一拖多-停止",          ["启用(0/1)..."],       "many", "stop",        "多电机, 每电机1字节"),
+    MenuItem(23, "一拖多-刹车",          ["启用(0/1)..."],       "many", "brake",       "多电机, 每电机1字节"),
+    MenuItem(24, "一拖多-软重启",        ["启用(0/1)..."],       "many", "reset",       "多电机, 每电机1字节"),
+    MenuItem(25, "一拖多-重置零位",      ["启用(0/1)..."],       "many", "rezero",      "多电机, 每电机1字节"),
 ]
 
 # ============================================================
@@ -998,6 +1011,7 @@ def _parse_many_payload(can_id: int, data: bytes, many_info: ManyMode) -> str:
     bytes_per = many_info.bytes_per_motor
     scale_names = many_info.scales
     param_names = many_info.param_names
+    is_byte_mode = (bytes_per == 1)  # stop/brake/reset/rezero: 每电机1字节 enable
     motor_count = len(data) // bytes_per
     dt = DataType.TINT16
 
@@ -1006,10 +1020,14 @@ def _parse_many_payload(can_id: int, data: bytes, many_info: ManyMode) -> str:
         motor_id = midx + 1
         params = []
         for pi, (sf, pn) in enumerate(zip(scale_names, param_names)):
-            raw = struct.unpack_from("<h", data, offset + pi * 2)[0]
-            phys = raw_to_phys(raw, dt, sf)
-            unit = FIELD_UNITS.get(sf, "")
-            params.append(f"{pn}={phys:.4f}{unit}")
+            if is_byte_mode:
+                raw = data[offset + pi]
+                params.append(f"{pn}={raw} ({'启用' if raw != 0 else '不启用'})")
+            else:
+                raw = struct.unpack_from("<h", data, offset + pi * 2)[0]
+                phys = raw_to_phys(raw, dt, sf)
+                unit = FIELD_UNITS.get(sf, "")
+                params.append(f"{pn}={phys:.4f}{unit}")
         lines.append(f"  电机{motor_id}: {', '.join(params)}")
 
     return "\n".join(lines)

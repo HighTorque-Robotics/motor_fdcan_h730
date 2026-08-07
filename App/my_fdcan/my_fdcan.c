@@ -171,7 +171,7 @@ void fdcan_send(FDCAN_HandleTypeDef *fdcanHandle, uint32_t id, uint8_t *data, ui
 {
     TxHeader.Identifier = id | 0x8000u;  // 自动置 bit[15]=1 (发送控制帧)
 
-    if(id > 0x7ff)
+    if(TxHeader.Identifier > 0x7ff)  // 用置位后的值判断, 避免小ID被误判为标准帧而截断
     {
         TxHeader.IdType = FDCAN_EXTENDED_ID;
     }

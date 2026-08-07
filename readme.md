@@ -328,7 +328,10 @@ data = {0x0B, 0x1C, 0x00, 0xC8, 0x00, 0x90, 0x01, 0x03, 0x00}
 | TORQUE | `0x82` | `0x18082` | 2 | 1 | tqe |
 | VOLTAGE | `0x83` | `0x18083` | 2 | 1 | vol |
 | CURRENT | `0x84` | `0x18084` | 2 | 1 | cur |
-| TIME_OUT | `0x85` | `0x18085` | 2 | 1 | t_ms |
+| STOP | `0x85` | `0x18085` | 1 | 1 | enable (0/1) |
+| BRAKE | `0x86` | `0x18086` | 1 | 1 | enable (0/1) |
+| RESET (软重启) | `0x87` | `0x18087` | 1 | 1 | enable (0/1) |
+| REZERO (重置零位) | `0x88` | `0x18088` | 1 | 1 | enable (0/1) |
 | VEL_ACC | `0x90` | `0x18090~91` | 4 | 2 | vel, acc |
 | POS_VEL_TQE | `0x92` | `0x18092~94` | 6 | 3 | pos, vel, tqe |
 | POS_VEL_ACC | `0x95` | `0x18095~97` | 6 | 3 | pos, vel, acc |
