@@ -59,7 +59,36 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
         break;
     }
 }
+/*
+ * @brief DQ 电流模式，分别下发 D 轴和 Q 轴目标电流。
+ * @note 函数同时兼容协议支持的三种数据类型；输入单位始终为A，
+ *       发送前由 cur_float2int() 按协议量程完成换算。
+ *       该接口函数用于测试，暂不开放给客户使用，新增可变化i_d电流参数
+ * @param id 电机 ID
+ * @param d_cur D 相电流，单位：（A），例：0.1 -> 0.1A
+ * @param d_cur D 相电流，单位：（A），例：0.3 -> 0.3A
+ */
+void motor_set_dq_current_full(port_t portx, const data_type_t type,const uint8_t id, const float d_cur,const float q_cur)
+{
+    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
+    const float d_raw = cur_float2int(d_cur, type);
+    const float q_raw = cur_float2int(q_cur, type);
 
+    switch(type)
+    {
+    case TFLOAT:
+        set_dq_current_float(fdcanHandle, id, d_raw, q_raw);
+        break;
+    case TINT32:
+        set_dq_current_int32(fdcanHandle, id, (int32_t)d_raw, (int32_t)q_raw);
+        break;
+    case TINT16:
+        set_dq_current_int16(fdcanHandle, id, (int16_t)d_raw, (int16_t)q_raw);
+        break;
+    default:
+        break;
+    }
+}
 
 /**
  * @brief 位置模式，使用最大速度和加速度运动到目标位置（并让电机返回状态信息）

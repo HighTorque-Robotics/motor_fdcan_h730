@@ -79,7 +79,7 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, 
 void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
 //                      dq电流模式  query  d轴电流           q轴电流
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
@@ -97,7 +97,7 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d,
 void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
 //                     dq电流模式  query  d轴电流           q轴电流
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -116,7 +116,7 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
 void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
 //                     dq电流模式 query  d轴电流    q轴电流
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MOTOR_MODE_CUR, MANY_GET_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));

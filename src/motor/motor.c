@@ -84,7 +84,6 @@ void motor_print_state()
         for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
         {
             motor_state_s *p_motor_state = motor_get_state(portx, id);
-
             printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
                    p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
         }
@@ -92,6 +91,38 @@ void motor_print_state()
     }
 }
 
+void motor_print_test_string()//此接口测试用，不开放给用户
+{
+    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
+    {
+        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
+        {
+            motor_state_s *p_motor_state = motor_get_state(portx, id);
+            printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf, i_d: %.3f, i_q: %.3f\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
+                   p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque,p_motor_state->i_d,p_motor_state->i_q);
+				}
+        printf("\r\n");
+    }
+}
+
+void motor_print_test_vofa()
+{
+	uint16_t id = 1;
+	//使用debug_print打印反馈解析回来的mode，pos，vel，tqe
+	p_motor_state_s p_motor_state = motor_get_state(PORT1, id);
+
+	if (p_motor_state == 0)
+	{
+			return;
+	}
+	debug_print(6,
+							(float)p_motor_state->mode,
+							(double)p_motor_state->position,
+							(double)p_motor_state->velocity,
+							(double)p_motor_state->torque,
+							(double)p_motor_state->i_d,
+							(double)p_motor_state->i_q);
+}
 
 void motor_print_version()
 {
@@ -263,7 +294,53 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe;
         }
     }
+        // ===================== MANY_GET_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
+    else if (p_data[0] == MANY_GET_MODE_FLAUT_CD_CQ)
+    {
+        
+        // --------- TINT16: 响应 ID=0x10xxx, bits[17:16]=01 ---------
+        if (id_title == ID_PREFIX_TINT16 )
+        {
+            int16_t i_d = 0, i_q = 0;
 
+            my_memcpy((uint8_t *)&i_d,p_data + 3, sizeof(int16_t));
+            my_memcpy((uint8_t *)&i_q,p_data + 5, sizeof(int16_t));
+
+            p_motor_state[id_index].query   = p_data[0];
+            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+            p_motor_state[id_index].fault   = p_data[2];
+            p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT16);
+            p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT16);
+        }
+        // --------- TINT32: 响应 ID=0x20xxx, bits[17:16]=10 ---------
+        else if (id_title == ID_PREFIX_TINT32 )
+        {
+            int32_t i_d = 0, i_q = 0;
+
+            my_memcpy((uint8_t *)&i_d,p_data + 3, sizeof(int32_t));
+            my_memcpy((uint8_t *)&i_q,p_data + 7, sizeof(int32_t));
+
+            p_motor_state[id_index].query   = p_data[0];
+            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+            p_motor_state[id_index].fault   = p_data[2];
+            p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT32);
+            p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT32);
+        }   
+        // --------- TFLOAT: 响应 ID=0x30xxx, bits[17:16]=11 ---------
+        else if (id_title == ID_PREFIX_TFLOAT )
+        {
+            float i_d = 0, i_q = 0;
+
+            my_memcpy((uint8_t *)&i_d,p_data + 3, sizeof(float));
+            my_memcpy((uint8_t *)&i_q,p_data + 7, sizeof(float));
+
+            p_motor_state[id_index].query   = p_data[0];
+            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+            p_motor_state[id_index].fault   = p_data[2];
+            p_motor_state[id_index].i_d     = i_d;
+            p_motor_state[id_index].i_q     = i_q;
+        }
+    }
     // ===================== 电机固件版本 (0x04) =====================
     // 返回帧: 04 | patch | minor | major (各1字节)
     else if (p_data[0] == 0x04)

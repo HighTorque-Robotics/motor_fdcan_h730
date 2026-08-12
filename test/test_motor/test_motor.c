@@ -73,9 +73,9 @@ void test_motor_cycle(port_t portx, data_type_t type, uint8_t id)
 
 void test_motor_control(const uint8_t id)
 {
-    const uint8_t mode = 3;
-    const data_type_t type = TINT16;
-    const port_t portx = PORT2;
+    const uint8_t mode = 1;
+    const data_type_t type = TFLOAT;
+    const port_t portx = PORT1;
 
     switch (mode)
     {
@@ -83,7 +83,7 @@ void test_motor_control(const uint8_t id)
         motor_set_dq_vlot(portx, type, id, 0.0);
         break;
     case 1:
-        motor_set_dq_current(portx, type, id, 0.0);
+        motor_set_dq_current_full(portx, type, id,0.0f,0.5f);
         break;
     case 2:
         motor_set_pos(portx, type, id, 0.0);

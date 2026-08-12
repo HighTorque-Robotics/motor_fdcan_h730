@@ -135,13 +135,13 @@ float vol_int2float(const float in_data, const data_type_t type)
 
 float pos_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 100.0f, 40000.0f, 100000.0f);
+    return data_float2int(in_data, type, 100.0f, 10000.0f, 100000.0f);
 }
 
 
 float pos_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 100.0f, 40000.0f, 100000.0f);
+    return data_int2float(in_data, type, 100.0f, 10000.0f, 100000.0f);
 }
 
 

@@ -4,8 +4,8 @@
 
 
 
-#define  MOTOR_PORT_NUM  3  // 使用 CAN 通道数量  
-#define  MOTOR_MAX_NUM   2// 单个 CAN 通道所连接的最大电机数量
+#define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
+#define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
 
 
 
@@ -13,7 +13,7 @@
 #include "my_fdcan.h"
 #include "convert.h"
 #include "livelybot_fdcan.h"
-
+#include "debug_print.h"
 
 /* ============================================================
  *  电机控制模式码 (控制帧)
@@ -41,6 +41,7 @@ typedef enum
     MANY_GET_MODE_FLAUT_NUM              = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
     MANY_GET_MODE_FLAUT_POS_VEL_TQE      = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
     MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
+    MANY_GET_MODE_FLAUT_CD_CQ            = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）   
 } many_request_type_t;
 
 
@@ -71,6 +72,8 @@ typedef struct
     int8_t  temp;      // 温度（单位：摄氏度，分辨率：1度）
     uint8_t query;     // 最后响应的查询码（对应 prot_query_t 枚举）
     uint8_t ack;     // 应答，用于电机设置相关的应答
+    float i_d;       //d轴电流
+    float i_q;       //q轴电流
     version_s version;  // 电机固件版本号
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
@@ -86,6 +89,8 @@ typedef struct
 
 
 void motor_print_state(void);
+void motor_print_test_string(void);//此接口测试用，不开放给用户
+void motor_print_test_vofa(void);//此接口测试用，不开放给用户
 void motor_print_version(void);
 
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);

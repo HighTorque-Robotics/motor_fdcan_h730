@@ -9,6 +9,7 @@
 
 void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, const float volt);
 void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id, const float cur);
+void motor_set_dq_current_full(port_t portx, const data_type_t type,const uint8_t id, const float d_cur,const float q_cur);//此接口测试用，不开放给用户
 void motor_set_pos(port_t portx, const data_type_t type, const uint8_t id, const float pos);
 void motor_set_vel(port_t portx, const data_type_t type, const uint8_t id, const float vel);
 void motor_set_tqe(port_t portx, const data_type_t type, const uint8_t id, const float tqe);
