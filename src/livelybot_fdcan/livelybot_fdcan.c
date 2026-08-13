@@ -583,6 +583,23 @@ void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
 
 
 /**
+ * @brief 周期返回电机位置、速度、力矩数据 (TINT16)
+ * @param fdcanHandle &hfdcanx
+ * @param id 电机ID
+ * @param t_us 周期时间, 单位: 1us, 4字节小端; 填 0 表示停止周期返回
+ * @note 发送: 0x03 0x00 0x05 0x0B + 4字节微秒, 返回数据格式与 0x0B 指令一致
+ */
+void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
+{
+    static uint8_t cmd[] = {0x03, 0x00, 0x05, 0x0B, 0x00, 0x00, 0x00, 0x00};
+
+    my_memcpy(&cmd[4], &t_us, sizeof(uint32_t));
+
+    fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
+}
+
+
+/**
  * @brief 重设电机零位
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID

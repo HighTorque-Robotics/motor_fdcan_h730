@@ -25,6 +25,7 @@ void motor_get_state_send(port_t portx, const data_type_t type, const uint8_t id
 void motor_get_version(port_t portx, const uint8_t id);
 void motor_get_model(port_t portx, const uint8_t id);
 void motor_get_hardware_version(port_t portx, const uint8_t id);
+void motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t t_us);
 
 void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id);
 void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id);

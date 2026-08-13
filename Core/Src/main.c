@@ -134,34 +134,11 @@ int main(void)
             /* 正弦波目标位置 (圈, MOTOR_DATA_TYPE_FLAG=TURNS) */
             float pos_target = amplitude * sinf(MY_2PI * freq_hz * time);
             time += dt;
-            test_motor_control(1);
-            motor_print_test_vofa();
-            //test_motor_many_cycle();
-            /* MIT 模式: pos=正弦波, vel=0, tqe=0, KP=100, KD=3 */
-            // motor_set_pos_vel_tqe_kp_kd_2(PORT2, TINT16, 1,
-            //                               pos_target, 0, 0, 100, 30);
+            motor_timed_return_status(PORT2, 2, 90);  // 电机1 每1000us返回一次状态
+
         }
 
-        // /* ---- 5ms (200Hz): VOFA+ JustFloat 波形 (DMA 发送) ---- */
-        // if (HAL_GetTick() - tick_vofa >= 5)
-        // {
-        //     tick_vofa = HAL_GetTick();
 
-
-        //     /* CH1=目标位置(圈), CH2=实际位置(圈), CH3=速度(圈/s), CH4=力矩(Nm)
-        //      * CH5=模式,          CH6=温度(°C),    CH7=故障码,     CH8=时间(s) */
-        //     debug_print(8,
-        //         amplitude * sinf(MY_2PI * freq_hz * time),  /* CH1 */
-        //         p_state->position,                           /* CH2 */
-        //         p_state->velocity,                           /* CH3 */
-        //         p_state->torque,                             /* CH4 */
-        //         (double)p_state->mode,                       /* CH5 */
-        //         (double)p_state->temp,                       /* CH6 */
-        //         (double)p_state->fault,                      /* CH7 */
-        //         (double)time);                               /* CH8 */
-        // }
-
-        /* ---- 持续解析电机返回的 FDCAN 数据 ---- */
         motor_process_state_all();
 
         /* ---- 500ms: 终端打印 + LED ---- */
@@ -169,7 +146,7 @@ int main(void)
         {
             tick_print = HAL_GetTick();
             led_toggle();
-            
+            motor_print_state();
         }
     }
   /* USER CODE END 3 */

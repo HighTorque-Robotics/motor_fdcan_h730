@@ -24,7 +24,7 @@ from enum import IntEnum
 # ============================================================
 #  常量定义
 # ============================================================
-p
+
 class DataType(IntEnum):
     """数据类型 (CAN ID bits[17:16], 发送时 bit[15]=1 标识控制帧)"""
     TINT16 = 0
@@ -459,6 +459,12 @@ def build_sys_cmd(cmd_type: str, motor_id: int = 1, **kwargs) -> Tuple[int, byte
     elif cmd_type == "set_timeout":
         t_ms = kwargs.get("timeout_ms", 100)
         return can_id, bytes([0x05, 0x1F, t_ms & 0xFF, (t_ms >> 8) & 0xFF])
+    elif cmd_type == "timed_return":
+        t_us = kwargs.get("time_us", 0)  # 单位微秒, 4字节小端; 0=停止周期返回
+        t_us &= 0xFFFFFFFF
+        return can_id, bytes([0x03, 0x00, 0x05, 0x0B,
+                              t_us & 0xFF, (t_us >> 8) & 0xFF,
+                              (t_us >> 16) & 0xFF, (t_us >> 24) & 0xFF])
     else:
         raise ValueError(f"不支持的系统命令: {cmd_type}")
 
@@ -921,11 +927,13 @@ SYS_CMD_NAMES: Dict[Tuple[int, int], str] = {
     (0x01, 0x0B): "停止",
     (0x18, 0x0B): "刹车",
     (0x03, 0x03): "系统命令",     # 进一步看 cmd[2]: 0x01=软重启, 0x02=保存, 0x03=设零, 0x04=改ID
+    (0x03, 0x00): "系统命令",     # 进一步看 cmd[2]: 0x05=定时返回电机状态
     (0x05, 0x1F): "超时设置",
+    (0x05, 0x0B): "定时返回电机状态",  # cmd[2]=0x05, cmd[3]=0x0B, 后4字节微秒
 }
 
 SYS_SUB_NAMES: Dict[int, str] = {
-    0x01: "软重启", 0x02: "保存设置", 0x03: "重设零位", 0x04: "修改ID",
+    0x01: "软重启", 0x02: "保存设置", 0x03: "重设零位", 0x04: "修改ID", 0x05: "定时返回",
 }
 
 
@@ -1171,13 +1179,15 @@ def _print_help():
   sys <cmd> [id] [args]
     cmd: read_state | read_version | read_model | read_hardware |
          stop | brake | soft_reset | save_config | set_zero |
-         change_id <id> <new_id> | set_timeout <id> <ms>
+         change_id <id> <new_id> | set_timeout <id> <ms> |
+         timed_return <id> <us>
 
     例:
       sys read_version 2              → 查询电机2固件版本
       sys read_model 1                → 查询电机1型号
       sys change_id 1 3               → 电机1 改为 ID=3
       sys set_timeout 1 500           → 电机1 超时500ms
+      sys timed_return 1 1000         → 电机1 每1000us周期返回状态 (0=停止)
 """)
 
 
@@ -1225,7 +1235,8 @@ def _handle_sys(args):
     if len(args) < 1:
         print("用法: sys <cmd> [id] [args]")
         print(f"可选命令: read_state, read_version, read_hardware, read_model, "
-              f"stop, brake, soft_reset, save_config, set_zero, change_id, set_timeout")
+              f"stop, brake, soft_reset, save_config, set_zero, change_id, "
+              f"set_timeout, timed_return")
         return
 
     cmd_name = args[0]
@@ -1236,6 +1247,8 @@ def _handle_sys(args):
         kwargs["new_id"] = int(args[2])
     elif cmd_name == "set_timeout" and len(args) >= 3:
         kwargs["timeout_ms"] = int(args[2])
+    elif cmd_name == "timed_return" and len(args) >= 3:
+        kwargs["time_us"] = int(args[2])
 
     can_id, cmd = build_sys_cmd(cmd_name, mid, **kwargs)
     _print_result(can_id, cmd, DataType.TINT16, mid)
@@ -1360,6 +1373,8 @@ def main():
             kwargs["new_id"] = int(sub_args[1])
         elif cmd_name == "set_timeout" and len(sub_args) >= 2:
             kwargs["timeout_ms"] = int(sub_args[1])
+        elif cmd_name == "timed_return" and len(sub_args) >= 2:
+            kwargs["time_us"] = int(sub_args[1])
 
         can_id, cmd = build_sys_cmd(cmd_name, mid, **kwargs)
         _print_result(can_id, cmd, DataType.TINT16, mid)

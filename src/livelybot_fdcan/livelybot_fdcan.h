@@ -72,8 +72,8 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
 /* vfoc固定模式 */
 void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol);
 
-/* 周期返回电机位置、速度、力矩数据(返回数据格式和使用 0x17，0x01 指令获取的格式一样) */
-void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t_ms);
+/* 周期返回电机位置、速度、力矩数据 (TINT16 发送: 0x03 0x00 0x05 0x0B + 4字节微秒, t_us=0 停止周期返回) */
+void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);
 
 /* 重设零点 */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
