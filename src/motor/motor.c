@@ -366,16 +366,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
                 model_str[i] = (nibble < 10) ? ('0' + nibble) : ('A' + (nibble - 10));
             }
 
-            // 查找当前 fdcanHandle 对应的端口号
-            uint8_t port_num = 0;
-            for (uint8_t i = 0; i < MOTOR_PORT_NUM; i++)
-            {
-                if (fdcanHandle->Instance == port_maping[i].fdcan->Instance)
-                {
-                    port_num = port_maping[i].port;
-                    break;
-                }
-            }
+            // 保存电机型号到状态结构体
+            my_memcpy((uint8_t *)p_motor_state[id_index].model, (uint8_t *)model_str, sizeof(model_str));
         }
     }
     // ===================== 一拖多模式解析 (仅处理 0x0B/0x0C 帧, 格式与普通模式 TINT16 一致) =====================
