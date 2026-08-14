@@ -438,7 +438,7 @@ void motor_get_hardware_version(port_t portx, const uint8_t id)
  * @brief 周期返回电机状态 (位置/速度/力矩)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
- * @param t_us 周期时间, 单位: 1us (4字节小端); 填 0 停止周期返回
+ * @param t_us 周期时间, 单位: 1us (4字节小端); 填 0 停止周期返回;小于100us则报错03 01
  */
 void motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t t_us)
 {
