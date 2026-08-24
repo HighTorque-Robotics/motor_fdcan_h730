@@ -38,10 +38,11 @@ typedef enum
  * ============================================================ */
 typedef enum
 {
-    MANY_GET_MODE_FLAUT_NUM              = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
-    MANY_GET_MODE_FLAUT_POS_VEL_TQE      = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MANY_GET_MODE_FLAUT_TEMP_POS_VEL_TQE = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
-    MANY_GET_MODE_FLAUT_CD_CQ            = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）   
+    QUERY_MODE_FLAUT_NUM                   = 0x0A,  // 查询码、模式、错误码、NUM(查询指令 0x0A)
+    QUERY_MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 查询码、模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 查询码、模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
+    QUERY_MODE_FLAUT_CD_CQ                 = 0x0D,  // 查询码、模式、错误码、D轴、Q轴（查询指令 0x0D）
+    QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 查询码、错误码、位置、速度、力矩（查询指令 0x0E）
 } many_request_type_t;
 
 

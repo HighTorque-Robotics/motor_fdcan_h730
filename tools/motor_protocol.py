@@ -75,6 +75,8 @@ QUERY_TEMP     = 0x0C       # 返回温度+模式+错误+位置+速度+力矩
 QUERY_VERSION  = 0x04
 QUERY_HARDWARE = 0x05
 QUERY_MODEL    = 0x07
+QUERY_CD_CQ    = 0x0D       # 返回模式/错误/D轴电流/Q轴电流
+QUERY_NO_MODE  = 0x0E       # 返回错误/位置/速度/力矩 (无模式字段)
 
 
 # ============================================================
@@ -205,6 +207,8 @@ class MotorState:
     position:   float = 0.0     # 圈
     velocity:   float = 0.0     # 圈/s
     torque:     float = 0.0     # Nm
+    i_d:        float = 0.0     # D轴电流 (A)
+    i_q:        float = 0.0     # Q轴电流 (A)
     data_type:  DataType = DataType.TINT16
     motor_id:   int = 0
 
@@ -229,6 +233,9 @@ class MotorState:
             lines.append(f"  pos    = {self.position:.4f} 圈")
             lines.append(f"  vel    = {self.velocity:.4f} 圈/s")
             lines.append(f"  tqe    = {self.torque:.4f} Nm")
+            if self.query == QUERY_CD_CQ:
+                lines.append(f"  i_d    = {self.i_d:.4f} A")
+                lines.append(f"  i_q    = {self.i_q:.4f} A")
         return "\n".join(lines)
 
 
@@ -478,6 +485,7 @@ MANY_DATA_MAX = 60
 
 # 查询码 (请求电机返回状态)
 MANY_QUERY_STANDARD = QUERY_STANDARD  # 0x0B
+MANY_QUERY_NO_MODE  = QUERY_NO_MODE   # 0x0E (无模式字段)
 
 
 def _many_frame_len(data_len: int) -> int:
@@ -508,7 +516,7 @@ def build_many_cmd(mode_name: str, motors: List[Tuple[int, List[float]]],
     参数:
       mode_name - 一拖多模式名 (MANY_MODES 的 key)
       motors    - [(motor_id, [param_values]), ...]
-      query     - 查询码 (0x0B=返回模式/错误/位置/速度/力矩, 0x0C=含温度)
+      query     - 查询码 (0x0B=返回模式/错误/位置/速度/力矩, 0x0C=含温度, 0x0E=返回错误/位置/速度/力矩无模式字段)
     返回:
       [(can_id, cmd_bytes), ...]  多个帧 (多帧模式可能拆分)
     
@@ -594,18 +602,12 @@ def parse_response(hex_data: str, data_type: DataType = DataType.TINT16) -> Moto
     byte0 = data[0]
 
     # --- 型号查询响应 (0x07) ---
+    # 固件端为 ASCII 直读: data[1]=长度 L, data[2..2+L-1] 为 L 个 ASCII 字符
     if byte0 == 0x07 and len(data) >= 3:
         model_len = data[1]
         if model_len > 0 and len(data) >= model_len + 2:
-            chars = []
-            for i in range(model_len):
-                nibble = data[2 + i] & 0x0F
-                chars.append(f"{nibble:X}")
-            model_str = "".join(chars)
-            if len(model_str) > 5:
-                state.model = f"{model_str[:4]}_{model_str[5:]}"
-            else:
-                state.model = model_str
+            model_str = "".join(chr(c) for c in data[2:2 + model_len])
+            state.model = model_str
             return state
 
     # --- 版本查询响应 (0xB5 0x02) ---
@@ -617,12 +619,25 @@ def parse_response(hex_data: str, data_type: DataType = DataType.TINT16) -> Moto
             state.version = f"{major}.{minor}.{patch}"
         return state
 
-    # --- 普通响应: query 0x0B 或 0x0C ---
+    # --- 普通响应: query 0x0B / 0x0C / 0x0D / 0x0E ---
     state.query = byte0
     offset = 1
 
-    state.mode  = data[offset]; offset += 1
-    state.fault = data[offset]; offset += 1
+    if byte0 == QUERY_NO_MODE:
+        # 0x0E: 无模式字段, data[1]=fault, 之后直接是 pos/vel/tqe
+        state.fault = data[offset]; offset += 1
+    else:
+        # 0x0B / 0x0C / 0x0D: data[1]=mode, data[2]=fault
+        state.mode  = data[offset]; offset += 1
+        state.fault = data[offset]; offset += 1
+
+    if byte0 == QUERY_CD_CQ:
+        # 0x0D: 返回 D/Q 轴电流 (与 CUR 模式同系数)
+        i_d_raw = unpack_value(data, offset, data_type); offset += VAL_BYTES[data_type]
+        i_q_raw = unpack_value(data, offset, data_type)
+        state.i_d = raw_to_phys(i_d_raw, data_type, "cur")
+        state.i_q = raw_to_phys(i_q_raw, data_type, "cur")
+        return state
 
     if byte0 == 0x0C:
         # 含温度

@@ -94,7 +94,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
         read_motor_state_int16(fdcanHandle, new_id);
         HAL_Delay(50);
         motor_process_state_all();
-        if (p_motor_state->query == MANY_GET_MODE_FLAUT_POS_VEL_TQE)
+        if (p_motor_state->query == QUERY_MODE_FLAUT_POS_VEL_TQE)
         {
             return 0;   /* 新 ID 已能正常通信，修改成功 */
         }

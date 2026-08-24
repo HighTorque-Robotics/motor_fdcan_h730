@@ -32,7 +32,7 @@ void test_motor_many_cycle(void)
             default: return;
             }
         }
-        motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+        motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
     }
 
     /* ② 每 5s 切换到下一个模式并打印预告 */
@@ -55,9 +55,9 @@ void test_motor_many_stop(uint8_t enable)
         motor_many_stop(PORT1, id, enable);
     }
 
-    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
-    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
-    motor_many_send(PORT1, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
 }
 
 
@@ -104,5 +104,5 @@ void test_motor_many()
         }
     }
 
-    motor_many_send(PORT2, MANY_GET_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT2, QUERY_MODE_FLAUT_POS_VEL_TQE);
 }
