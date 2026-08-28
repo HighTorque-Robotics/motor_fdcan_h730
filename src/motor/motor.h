@@ -91,8 +91,6 @@ typedef struct
 
 
 void motor_print_state(void);
-void motor_print_test_string(void);//此接口测试用，不开放给用户
-void motor_print_test_vofa(void);//此接口测试用，不开放给用户
 void motor_print_version(void);
 
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);

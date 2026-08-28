@@ -45,19 +45,11 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel);
 void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
 void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
-/* 超时时间 */
-void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t);
-
 /* 位置、速度、力矩、PD控制（真运控模式） */
 void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
 void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
 void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 
-/* 停止位置、速度、力矩、PD控制 */
-void set_stoppos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t stop_pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
-
-/* 速度、速度限制 */
-void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max);
 
 /* 位置、速度、加速度限制（梯形控制） */
 void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc);
@@ -68,9 +60,6 @@ void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
 void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc);
 void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc);
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc);
-
-/* vfoc固定模式 */
-void set_vfoc_lock(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vol);
 
 /* 周期返回电机位置、速度、力矩数据 (TINT16 发送: 0x03 0x00 0x05 0x0B + 4字节微秒, t_us=0 停止周期返回) */
 void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);

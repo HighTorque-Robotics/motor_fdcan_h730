@@ -91,38 +91,6 @@ void motor_print_state()
     }
 }
 
-void motor_print_test_string()//此接口测试用，不开放给用户
-{
-    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
-    {
-        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
-        {
-            motor_state_s *p_motor_state = motor_get_state(portx, id);
-            printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf, i_d: %.3f, i_q: %.3f\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
-                   p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque,p_motor_state->i_d,p_motor_state->i_q);
-				}
-        printf("\r\n");
-    }
-}
-
-void motor_print_test_vofa()
-{
-	uint16_t id = 1;
-	//使用debug_print打印反馈解析回来的mode，pos，vel，tqe
-	p_motor_state_s p_motor_state = motor_get_state(PORT1, id);
-
-	if (p_motor_state == 0)
-	{
-			return;
-	}
-	debug_print(6,
-							(float)p_motor_state->mode,
-							(double)p_motor_state->position,
-							(double)p_motor_state->velocity,
-							(double)p_motor_state->torque,
-							(double)p_motor_state->i_d,
-							(double)p_motor_state->i_q);
-}
 
 void motor_print_version()
 {
@@ -531,18 +499,3 @@ void motor_process_state_all()
 }
 
 
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
-{
-    if(hfdcan->Instance == FDCAN2 || hfdcan->Instance == FDCAN3)
-    {
-        // while (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &fdcan_rx_header, fdcan_rdata) == HAL_OK)
-        // {
-        //     if (fdcan_rx_header.DataLength != 0)
-        //     {
-        //         const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
-
-        //         motor_process_state(hfdcan, fdcan_rx_header.Identifier >> 8, fdcan_rdata, len);
-        //     }
-        // }
-    }
-}

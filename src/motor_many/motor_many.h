@@ -12,7 +12,7 @@
 
 
 #if MANY_MOTOR_SIZE > 0 && MANY_MOTOR_SIZE <= 30
-#define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_ki_kd_s))
+#define  MANY_DATA_BUF_MAX_LEN   (MANY_MOTOR_SIZE * sizeof(many_pos_vel_tqe_kp_kd_s))
 #else
 #error "MANY_MOTOR_SIZE value out of range error!!!"
 #endif
@@ -70,17 +70,6 @@ typedef struct
 
 typedef struct
 {
-    int16_t pos;
-    int16_t vel;
-    int16_t tqe;
-    int16_t kp;
-    int16_t ki;
-    int16_t kd;
-} many_pos_vel_tqe_kp_ki_kd_s;
-
-
-typedef struct
-{
     union
     {
         int16_t position[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
@@ -96,7 +85,6 @@ typedef struct
         many_pos_vel_tqe_s pos_vel_tqe[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_s)];
         many_pos_vel_acc_s pos_vel_acc[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_acc_s)];
         many_pos_vel_tqe_kp_kd_s pos_vel_tqe_kp_kd[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_kd_s)];
-        many_pos_vel_tqe_kp_ki_kd_s pos_vel_tqe_kp_ki_kd[MANY_DATA_BUF_MAX_LEN / sizeof(many_pos_vel_tqe_kp_ki_kd_s)];
         uint8_t data[MANY_DATA_BUF_MAX_LEN];
         int16_t data16[MANY_DATA_BUF_MAX_LEN / sizeof(int16_t)];
     };

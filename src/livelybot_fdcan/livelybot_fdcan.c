@@ -427,26 +427,6 @@ void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
 
-
-/**
- * @brief 电机速度、速度限幅控制（如果 vel > vel_max，则用 vel_max） int16
- * @param fdcanHandle &hfdcanx
- * @param id 电机ID
- * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
- * @param vel_max 速度限幅：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
- */
-void set_vel_velmax_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t vel_max)
-{
-
-    static uint8_t cmd[] = {MOTOR_MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
-
-    my_memcpy(&cmd[2], &vel, sizeof(vel));
-    my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
-
-    fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
-}
-
-
 /**
  * @brief 位置、速度、加速度限制（梯形控制） float
  * @param fdcanHandle &hfdcanx
@@ -561,22 +541,6 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
-
-    fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
-}
-
-
-/**
- * @brief 设置电机超时时间，电机超过超时时间没接受到新指令，电机进入刹车模式
- * @param fdcanHandle &hfdcanx
- * @param id 电机ID
- * @param t 电机超时时间，单位：1ms
- */
-void set_out_time_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t t)
-{
-    static uint8_t cmd[] = {0x05, 0x1F, 0x00, 0x00};
-
-    my_memcpy(&cmd[2], &t, sizeof(int16_t));
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }

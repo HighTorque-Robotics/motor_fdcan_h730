@@ -33,7 +33,6 @@
 #include "debug_print.h"
 
 #include "test_motor.h"
-#include "test_motor_many.h"
 
 /* USER CODE END Includes */
 
@@ -75,15 +74,8 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-    uint32_t tick_ctrl  = 0;   /* 1kHz MIT 控制 */
-    uint32_t tick_vofa  = 0;   /* 5ms (200Hz) VOFA 发送 */
-    uint32_t tick_print = 0;   /* 500ms 终端打印 */
-
-    /* 正弦波 MIT 参数 */
-    const float amplitude = 0.5f;      /* 幅值 0.5 圈 */
-    const float freq_hz   = 0.25f;     /* 频率 0.25 Hz (4s 一周期) */
-    const float dt        = 0.001f;    /* 控制周期 1ms */
-    float time = 0.0f;                 /* 时间累加器 (秒) */
+    uint32_t tick_ctrl  = 0;   /* 控制周期计时 */
+    uint32_t tick_print = 0;   /* 终端打印计时 */
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -121,21 +113,18 @@ int main(void)
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
     printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
 
+    motor_timed_return_status(PORT1, 1, 90);  /* 电机1 每 90us 返回一次状态 */
+
     while (1)
     {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-        /* ---- 1kHz: MIT 正弦波位置控制 ---- */
-        if (HAL_GetTick() - tick_ctrl >= 2)
+        /* ---- 1kHz: 控制例程调用 (test_motor_control) ---- */
+        if (HAL_GetTick() - tick_ctrl >= 1)
         {
             tick_ctrl = HAL_GetTick();
-
-            /* 正弦波目标位置 (圈, MOTOR_DATA_TYPE_FLAG=TURNS) */
-            float pos_target = amplitude * sinf(MY_2PI * freq_hz * time);
-            time += dt;
-            motor_timed_return_status(PORT2, 2, 90);  // 电机1 每1000us返回一次状态
-
+            test_motor_control(1);
         }
 
 
