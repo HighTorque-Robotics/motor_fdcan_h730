@@ -112,9 +112,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
     printf("此工程引脚配置适用于高擎主控板 v1.6 及以上版本\r\n");
     printf("例程版本号："MOTOR_SDK_VERSION"\r\n");
-
-    motor_timed_return_status(PORT1, 1, 90);  /* 电机1 每 90us 返回一次状态 */
-
     while (1)
     {
     /* USER CODE END WHILE */
