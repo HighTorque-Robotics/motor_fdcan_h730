@@ -17,7 +17,7 @@ void test_motor_many_stop(uint8_t enable)
 
 void test_motor_many()
 {
-    const uint8_t mode = 9;
+    const uint8_t mode = 3;
 
     for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
     {
@@ -33,7 +33,7 @@ void test_motor_many()
             motor_many_pos(PORT1, id, 0);
             break;
         case 3:
-            motor_many_vel(PORT1, id, -0.1);
+            motor_many_vel(PORT1, id, 0.1);
             break;
         case 4:
             motor_many_tqe(PORT1, id, 0.0f);
@@ -58,5 +58,5 @@ void test_motor_many()
         }
     }
 
-    motor_many_send(PORT2, QUERY_MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
 }

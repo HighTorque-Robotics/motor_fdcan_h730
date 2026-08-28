@@ -5,11 +5,6 @@
 #endif
 
 
-
-
-
-
-
 static float data_limit(const float in_data, const float max, const float min)
 {
     if (in_data >= max)
@@ -25,10 +20,12 @@ static float data_limit(const float in_data, const float max, const float min)
 }
 
 
-static float data_float2int(const float in_data, const data_type_t type, const float rint8, const float rint16, const float rint32)
+static float data_float2int(const float in_data, const data_type_t type, const float rint16, const float rint32)
 {
     switch (type)
     {
+    case TINT16_NOHDR:
+        return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT16:
         return data_limit(in_data * rint16, 32767.0f, -32768.0f);
     case TINT32:
@@ -42,11 +39,12 @@ static float data_float2int(const float in_data, const data_type_t type, const f
 }
 
 
-static float data_int2float(const float in_data, const data_type_t type, const float rint8, const float rint16, const float rint32)
+static float data_int2float(const float in_data, const data_type_t type, const float rint16, const float rint32)
 {
     switch (type)
     {
-
+    case (TINT16_NOHDR):
+        return in_data / rint16;
     case (TINT16):
         return in_data / rint16;
     case (TINT32):
@@ -111,86 +109,86 @@ float conv_from_turns(const float in_data, const pos_vel_type_t type)
 
 float cur_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 1.0f, 10.0f, 1000.0f);
+    return data_float2int(in_data, type, 10.0f, 1000.0f);
 }
 
 
 float cur_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 1.0f, 10.0f, 1000.0f);
+    return data_int2float(in_data, type, 10.0f, 1000.0f);
 }
 
 
 float vol_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 2.0f, 10.0f, 1000.0f);
+    return data_float2int(in_data, type, 10.0f, 1000.0f);
 }
 
 
 float vol_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 2.0f, 10.0f, 1000.0f);
+    return data_int2float(in_data, type, 10.0f, 1000.0f);
 }
 
 
 float pos_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 100.0f, 10000.0f, 100000.0f);
+    return data_float2int(in_data, type, 10000.0f, 100000.0f);
 }
 
 
 float pos_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 100.0f, 10000.0f, 100000.0f);
+    return data_int2float(in_data, type, 10000.0f, 100000.0f);
 }
 
 
 float vel_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 100.0f, 4000.0f, 100000.0f);
+    return data_float2int(in_data, type, 4000.0f, 100000.0f);
 }
 
 
 float vel_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 100.0f, 4000.0f, 100000.0f);
+    return data_int2float(in_data, type, 4000.0f, 100000.0f);
 }
 
 
 
 float tqe_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 2.0f, 100.0f, 1000.0f);
+    return data_float2int(in_data, type, 100.0f, 1000.0f);
 }
 
 
 float tqe_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 2.0f, 100.0f, 1000.0f);
+    return data_int2float(in_data, type, 100.0f, 1000.0f);
 }
 
 
 float acc_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 20.0f, 1000.0f, 100000.0f);
+    return data_float2int(in_data, type, 1000.0f, 100000.0f);
 }
 
 
 float acc_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 20.0f, 1000.0f, 100000.0f);
+    return data_int2float(in_data, type, 1000.0f, 100000.0f);
 }
 
 
 float pid_float2int(const float in_data, const data_type_t type)
 {
-    return data_float2int(in_data, type, 1.0f, 10.0f, 1000.0f);
+    return data_float2int(in_data, type, 10.0f, 1000.0f);
 }
 
 
 float pid_int2float(const float in_data, const data_type_t type)
 {
-    return data_int2float(in_data, type, 1.0f, 10.0f, 1000.0f);
+    return data_int2float(in_data, type, 10.0f, 1000.0f);
 }
 
 

@@ -9,6 +9,8 @@
 
 #define  MOTOR_DATA_TYPE_FLAG  TURNS
 #define  BROADCAST_ID  0x7F
+#define  MOTOR_ID_MIN  1                    // 电机 ID 下限
+#define  MOTOR_ID_MAX  (BROADCAST_ID - 1)   // 电机 ID 上限 = 126 (127 为广播地址, 不可作为电机 ID)
 
 
 #ifdef  LED_ERR_FLAG  // 这个宏定义在 led.h 中

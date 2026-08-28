@@ -68,7 +68,7 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
  * @param d_cur D 相电流，单位：（A），例：0.1 -> 0.1A
  * @param d_cur D 相电流，单位：（A），例：0.3 -> 0.3A
  */
-void motor_set_dq_current_full(port_t portx, const data_type_t type,const uint8_t id, const float d_cur,const float q_cur)
+void motor_set_dq_current_full(port_t portx, const data_type_t type, const uint8_t id, const float d_cur, const float q_cur)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float d_raw = cur_float2int(d_cur, type);
@@ -320,7 +320,7 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
 
 
 /**
- * @brief 运控模式2(MIT模式) (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
+ * @brief MIT模式 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -431,20 +431,6 @@ void motor_get_hardware_version(port_t portx, const uint8_t id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
     read_motor_hardware_int16(fdcanHandle, id);
-}
-
-
-/**
- * @brief 周期返回电机状态 (位置/速度/力矩)
- * @param portx CAN 通道选择，用于指定通信的 CAN 端口
- * @param id 电机 ID
- * @param t_us 周期时间, 单位: 1us (4字节小端); 填 0 停止周期返回;小于100us则报错03 01
- */
-void motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t t_us)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-
-    timed_return_motor_status_int16(fdcanHandle, id, t_us);
 }
 
 

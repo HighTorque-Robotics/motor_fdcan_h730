@@ -61,8 +61,8 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
 void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc);
 void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc);
 
-/* 周期返回电机位置、速度、力矩数据 (TINT16 发送: 0x03 0x00 0x05 0x0B + 4字节微秒, t_us=0 停止周期返回) */
-void timed_return_motor_status_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);
+/* 周期请求电机状态返回 (TINT16 发送: 0x03 0x00 0x05 <查询码> + 4字节微秒, t_us=0 停止周期返回) */
+void request_motor_state(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);
 
 /* 重设零点 */
 void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);

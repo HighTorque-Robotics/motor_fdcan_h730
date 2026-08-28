@@ -134,8 +134,10 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
 
+    switch (p_data[0])
+    {
     // ===================== QUERY_MODE_FAULT_POS_VEL_TQE (0x0B) 响应 =====================
-    if (p_data[0] == QUERY_MODE_FLAUT_POS_VEL_TQE)
+    case QUERY_MODE_FLAUT_POS_VEL_TQE:
     {
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
         switch (id_title)
@@ -191,39 +193,11 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         default:
             break;
         }
+        break;
     }
-    // ===================== TINT16_NOHDR : 00返回帧 =====================
-    // 返回结构:
-    //   len==8: 模式(1B) 错误码(1B) 位置(2B) 速度(2B) 力矩(2B)   ← 0x0B 查询返回   (无查询码)
-    //   len==7: 错误码(1B) 位置(2B) 速度(2B) 力矩(2B)            ← 0x0E 查询返回 (无模式无查询码)
-    else if (id_title == ID_PREFIX_TINT16_NOHDR)
-    {
-        int16_t pos = 0, vel = 0, tqe = 0;
 
-        if (len == 7)
-        {
-            // 0x0E 查询返回: 错误码 | 位置 | 速度 | 力矩 (无模式字段, 无查询码)
-            p_motor_state[id_index].fault     = p_data[0];
-            my_memcpy((uint8_t *)&pos, p_data + 1, sizeof(int16_t));
-            my_memcpy((uint8_t *)&vel, p_data + 3, sizeof(int16_t));
-            my_memcpy((uint8_t *)&tqe, p_data + 5, sizeof(int16_t));
-        }
-        else
-        {
-            // 0x0B 查询返回: 模式 | 错误码 | 位置 | 速度 | 力矩
-            p_motor_state[id_index].mode      = p_data[0];
-            p_motor_state[id_index].fault     = p_data[1];
-            my_memcpy((uint8_t *)&pos, p_data + 2, sizeof(int16_t));
-            my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
-            my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
-        }
-
-        p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
-    }
     // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
-    else if (p_data[0] == QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE)
+    case QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE:
     {
         
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
@@ -286,9 +260,10 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         default:
             break;
         }
+        break;
     }
-        // ===================== QUERY_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
-    else if (p_data[0] == QUERY_MODE_FLAUT_CD_CQ)
+    // ===================== QUERY_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
+    case QUERY_MODE_FLAUT_CD_CQ:
     {
         
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
@@ -339,11 +314,12 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         default:
             break;
         }
+        break;
     }
     // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B, TINT32/TFLOAT=4B
-    else if (p_data[0] == QUERY_FLAUT_POS_VEL_TQE)
+    case QUERY_FLAUT_POS_VEL_TQE:
     {
         switch (id_title)
         {
@@ -395,18 +371,20 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         default:
             break;
         }
+        break;
     }
     // ===================== 电机固件版本 (0x04) =====================
     // 返回帧: 04 | patch | minor | major (各1字节)
-    else if (p_data[0] == 0x04)
+    case 0x04:
     {
         p_motor_state[id_index].version.major = p_data[3];
         p_motor_state[id_index].version.minor = p_data[2];
         p_motor_state[id_index].version.patch = p_data[1];
+        break;
     }
     // ===================== 电机型号查询响应 =====================
     // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
-    else if (p_data[0] == 0x07)
+    case 0x07:
     {
         const uint8_t model_len = p_data[1];
 
@@ -423,45 +401,30 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             // 保存电机型号到状态结构体
             my_memcpy((uint8_t *)p_motor_state[id_index].model, (uint8_t *)model_str, sizeof(model_str));
         }
+        break;
     }
-    // ===================== 一拖多模式解析 (仅处理 0x0B/0x0C 帧, 格式与普通模式 TINT16 一致) =====================
-    else if (id_index < MOTOR_MAX_NUM && (p_data[0] == QUERY_MODE_FLAUT_POS_VEL_TQE || p_data[0] == QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE))
+    // ===================== 配置命令应答帧 (0x03) =====================
+    // 返回帧: 03 | result
+    //   result = 0x00 : 配置成功
+    //   result != 0x00: 配置失败, result 为失败原因码
+    // 对应发送的系统命令: 软重启 03 03 01 / 保存设置 03 03 02 / 重设零位 03 03 03 / 改ID 03 03 04
+    case 0x03:
     {
-        int16_t pos = 0, vel = 0, tqe = 0;
-
-        // query=0x0C: 返回温度+模式+错误+位置+速度+力矩
-        if (p_data[0] == QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE)
+        if (len >= 2)
         {
-            int16_t temp_raw = 0;
-            my_memcpy((uint8_t *)&temp_raw, p_data + 3, sizeof(int16_t));
-            my_memcpy((uint8_t *)&pos,     p_data + 5, sizeof(int16_t));
-            my_memcpy((uint8_t *)&vel,     p_data + 7, sizeof(int16_t));
-            my_memcpy((uint8_t *)&tqe,     p_data + 9, sizeof(int16_t));
+            const uint8_t result = p_data[1];
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
-            p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C
-        }
-        // query=0x0B: 返回模式+错误+位置+速度+力矩
-        else if (p_data[0] == QUERY_MODE_FLAUT_POS_VEL_TQE)
-        {
-            my_memcpy((uint8_t *)&pos, p_data + 3, sizeof(int16_t));
-            my_memcpy((uint8_t *)&vel, p_data + 5, sizeof(int16_t));
-            my_memcpy((uint8_t *)&tqe, p_data + 7, sizeof(int16_t));
+            // ack: 1 = 配置成功, 0 = 配置失败
+            // (motor_config_closed_loop 以"非 0"判定确认成功, 故成功必须置非零)
+            p_motor_state[id_index].ack = (result == 0) ? 1 : 0;
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
-            p_motor_state[id_index].fault     = p_data[2];
+            // 失败原因码 fault ; 成功时清零
+            p_motor_state[id_index].fault = (result == 0) ? 0 : result;
         }
-        else
-        {
-            return;
-        }
-
-        p_motor_state[id_index].position = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].velocity = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
-        p_motor_state[id_index].torque = tqe_int2float(tqe, TINT16);
+        break;
+    }
+    default:
+        break;
     }
 }
 

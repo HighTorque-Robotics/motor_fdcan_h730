@@ -76,7 +76,7 @@ typedef struct
     float i_d;       //d轴电流
     float i_q;       //q轴电流
     version_s version;  // 电机固件版本号
-    char model[16];  // 电机型号 (如 "5036_02")
+    char model[25];  // 电机型号 (如 "5036_02")
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
 

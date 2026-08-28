@@ -348,7 +348,7 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
 }
 
 /**
- * @brief 运控模式(MIT模式) (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)
+ * @brief MIT模式 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param pos 位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定

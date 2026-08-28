@@ -33,6 +33,7 @@
 #include "debug_print.h"
 
 #include "test_motor.h"
+#include "test_motor_many.h"
 
 /* USER CODE END Includes */
 
@@ -121,9 +122,8 @@ int main(void)
         if (HAL_GetTick() - tick_ctrl >= 1)
         {
             tick_ctrl = HAL_GetTick();
-            test_motor_control(1);
+            test_motor_many();
         }
-
 
         motor_process_state_all();
 
