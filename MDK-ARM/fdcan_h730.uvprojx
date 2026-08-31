@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H730xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/led;../App/my_fdcan;../App/debug_print;../src/livelybot_fdcan;../src/convert;../src/motor_control;../src/motor;../src/motor_many;../test/test_motor;../test/test_motor_many;../src/motor_config</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/led;../App/my_fdcan;../App/debug_print;../src/hightorque_fdcan;../src/convert;../src/motor_control;../src/motor;../src/motor_many;../test/test_motor;../test/test_motor_many;../src/motor_config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -421,9 +421,9 @@
               <FilePath>..\src\motor\motor.c</FilePath>
             </File>
             <File>
-              <FileName>livelybot_fdcan.c</FileName>
+              <FileName>hightorque_fdcan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\livelybot_fdcan\livelybot_fdcan.c</FilePath>
+              <FilePath>..\src\hightorque_fdcan\hightorque_fdcan.c</FilePath>
             </File>
             <File>
               <FileName>convert.c</FileName>

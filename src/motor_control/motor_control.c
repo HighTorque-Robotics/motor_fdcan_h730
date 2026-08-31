@@ -18,13 +18,13 @@ void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, c
     switch(type)
     {
     case TFLOAT:
-        livelybot_dq_volt_float(fdcanHandle, id, 0.0f, volt_raw);
+        hightorque_dq_volt_float(fdcanHandle, id, 0.0f, volt_raw);
         break;
     case TINT32:
-        livelybot_dq_volt_int32(fdcanHandle, id, 0, volt_raw);
+        hightorque_dq_volt_int32(fdcanHandle, id, 0, volt_raw);
         break;
     case TINT16:
-        livelybot_dq_volt_int16(fdcanHandle, id, 0, volt_raw);
+        hightorque_dq_volt_int16(fdcanHandle, id, 0, volt_raw);
         break;
     default:
         break;
@@ -47,13 +47,13 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
     switch(type)
     {
     case TFLOAT:
-        livelybot_dq_current_float(fdcanHandle, id, 0.0f, cur_raw);
+        hightorque_dq_current_float(fdcanHandle, id, 0.0f, cur_raw);
         break;
     case TINT32:
-        livelybot_dq_current_int32(fdcanHandle, id, 0, cur_raw);
+        hightorque_dq_current_int32(fdcanHandle, id, 0, cur_raw);
         break;
     case TINT16:
-        livelybot_dq_current_int16(fdcanHandle, id, 0, cur_raw);
+        hightorque_dq_current_int16(fdcanHandle, id, 0, cur_raw);
         break;
     default:
         break;
@@ -77,13 +77,13 @@ void motor_set_dq_current_full(port_t portx, const data_type_t type, const uint8
     switch(type)
     {
     case TFLOAT:
-        livelybot_dq_current_float(fdcanHandle, id, d_raw, q_raw);
+        hightorque_dq_current_float(fdcanHandle, id, d_raw, q_raw);
         break;
     case TINT32:
-        livelybot_dq_current_int32(fdcanHandle, id, (int32_t)d_raw, (int32_t)q_raw);
+        hightorque_dq_current_int32(fdcanHandle, id, (int32_t)d_raw, (int32_t)q_raw);
         break;
     case TINT16:
-        livelybot_dq_current_int16(fdcanHandle, id, (int16_t)d_raw, (int16_t)q_raw);
+        hightorque_dq_current_int16(fdcanHandle, id, (int16_t)d_raw, (int16_t)q_raw);
         break;
     default:
         break;
@@ -106,13 +106,13 @@ void motor_set_pos(port_t portx, const data_type_t type, const uint8_t id, const
     switch(type)
     {
     case TFLOAT:
-        livelybot_pos_float(fdcanHandle, id, pos_raw);
+        hightorque_pos_float(fdcanHandle, id, pos_raw);
         break;
     case TINT32:
-        livelybot_pos_int32(fdcanHandle, id, pos_raw);
+        hightorque_pos_int32(fdcanHandle, id, pos_raw);
         break;
     case TINT16:
-        livelybot_pos_int16(fdcanHandle, id, pos_raw);
+        hightorque_pos_int16(fdcanHandle, id, pos_raw);
         break;
     default:
         break;
@@ -136,13 +136,13 @@ void motor_set_vel(port_t portx, const data_type_t type, const uint8_t id, const
     switch(type)
     {
     case TFLOAT:
-        livelybot_vel_float(fdcanHandle, id, vel_raw);
+        hightorque_vel_float(fdcanHandle, id, vel_raw);
         break;
     case TINT32:
-        livelybot_vel_int32(fdcanHandle, id, vel_raw);
+        hightorque_vel_int32(fdcanHandle, id, vel_raw);
         break;
     case TINT16:
-        livelybot_vel_int16(fdcanHandle, id, vel_raw);
+        hightorque_vel_int16(fdcanHandle, id, vel_raw);
         break;
     default:
         break;
@@ -165,13 +165,13 @@ void motor_set_tqe(port_t portx, const data_type_t type, const uint8_t id, const
     switch(type)
     {
     case TFLOAT:
-        livelybot_torque_float(fdcanHandle, id, tqe_raw);
+        hightorque_torque_float(fdcanHandle, id, tqe_raw);
         break;
     case TINT32:
-        livelybot_torque_int32(fdcanHandle, id, tqe_raw);
+        hightorque_torque_int32(fdcanHandle, id, tqe_raw);
         break;
     case TINT16:
-        livelybot_torque_int16(fdcanHandle, id, tqe_raw);
+        hightorque_torque_int16(fdcanHandle, id, tqe_raw);
         break;
     default:
         break;
@@ -198,13 +198,13 @@ void motor_set_pos_vel(port_t portx, const data_type_t type, const uint8_t id, c
     switch(type)
     {
     case TFLOAT:
-        livelybot_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN);        // NAN_FLOAT
+        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN);        // NAN_FLOAT
         break;
     case TINT32:
-        livelybot_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x80000000); // NAN_INT32
+        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x80000000); // NAN_INT32
         break;
     case TINT16:
-        livelybot_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x8000);     // NAN_INT16
+        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x8000);     // NAN_INT16
         break;
     default:
         break;
@@ -235,13 +235,13 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_
     switch(type)
     {
     case TFLOAT:
-        livelybot_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
+        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
         break;
     case TINT32:
-        livelybot_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
+        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
         break;
     case TINT16:
-        livelybot_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
+        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, tqe_raw);
         break;
     default:
         break;
@@ -272,13 +272,13 @@ void motor_set_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_
     switch(type)
     {
     case TFLOAT:
-        livelybot_pos_velmax_acc_float(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_velmax_acc_float(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     case TINT32:
-        livelybot_pos_velmax_acc_int32(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_velmax_acc_int32(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     case TINT16:
-        livelybot_pos_velmax_acc_int16(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_velmax_acc_int16(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     default:
         break;
@@ -305,13 +305,13 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
     switch(type)
     {
     case TFLOAT:
-        livelybot_vel_acc_float(fdcanHandle, id, vel_raw, acc_raw);
+        hightorque_vel_acc_float(fdcanHandle, id, vel_raw, acc_raw);
         break;
     case TINT32:
-        livelybot_vel_acc_int32(fdcanHandle, id, vel_raw, acc_raw);
+        hightorque_vel_acc_int32(fdcanHandle, id, vel_raw, acc_raw);
         break;
     case TINT16:
-        livelybot_vel_acc_int16(fdcanHandle, id, vel_raw, acc_raw);
+        hightorque_vel_acc_int16(fdcanHandle, id, vel_raw, acc_raw);
         break;
     default:
         break;
@@ -351,13 +351,13 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
     switch(type)
     {
     case TFLOAT:
-        livelybot_pos_vel_tqe_kp_kd_float_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_float_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     case TINT32:
-        livelybot_pos_vel_tqe_kp_kd_int32_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_int32_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     case TINT16:
-        livelybot_pos_vel_tqe_kp_kd_int16_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_int16_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     default:
         break;
@@ -378,13 +378,13 @@ void motor_get_state_send(port_t portx, const data_type_t type, const uint8_t id
     switch(type)
     {
     case TFLOAT:
-        livelybot_check_motor_state_float(fdcanHandle, id);
+        hightorque_request_state_float(fdcanHandle, id);
         break;
     case TINT32:
-        livelybot_check_motor_state_int32(fdcanHandle, id);
+        hightorque_request_state_int32(fdcanHandle, id);
         break;
     case TINT16:
-        livelybot_check_motor_state_int16(fdcanHandle, id);
+        hightorque_request_state_int16(fdcanHandle, id);
         break;
     default:
         break;
@@ -403,7 +403,7 @@ void motor_get_version(port_t portx, const uint8_t id)
 
     // for (uint8_t i = 0; i < 5; i++)
     {
-        livelybot_check_motor_version(fdcanHandle, id);
+        hightorque_request_fw_version(fdcanHandle, id);
     }
 }
 
@@ -417,7 +417,7 @@ void motor_get_model(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    livelybot_check_motor_model(fdcanHandle, id);
+    hightorque_request_model(fdcanHandle, id);
 }
 
 
@@ -430,7 +430,7 @@ void motor_get_hardware_version(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    livelybot_check_motor_hardware(fdcanHandle, id);
+    hightorque_request_hw_version(fdcanHandle, id);
 }
 
 
@@ -446,13 +446,13 @@ void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        livelybot_motor_stop_float(fdcanHandle, id);
+        hightorque_motor_stop_float(fdcanHandle, id);
         break;
     case TINT32:
-        livelybot_motor_stop_int32(fdcanHandle, id);
+        hightorque_motor_stop_int32(fdcanHandle, id);
         break;
     case TINT16:
-        livelybot_motor_stop_int16(fdcanHandle, id);
+        hightorque_motor_stop_int16(fdcanHandle, id);
         break;
     default:
         break;
@@ -472,13 +472,13 @@ void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        livelybot_motor_brake_float(fdcanHandle, id);
+        hightorque_motor_brake_float(fdcanHandle, id);
         break;
     case TINT32:
-        livelybot_motor_brake_int32(fdcanHandle, id);
+        hightorque_motor_brake_int32(fdcanHandle, id);
         break;
     case TINT16:
-        livelybot_motor_brake_int16(fdcanHandle, id);
+        hightorque_motor_brake_int16(fdcanHandle, id);
         break;
     default:
         break;
@@ -495,7 +495,7 @@ void motor_set_reset(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    livelybot_motor_reset_int8(fdcanHandle, id);
+    hightorque_motor_reset_int8(fdcanHandle, id);
 }
 
 

@@ -413,9 +413,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             // motor_config_closed_loop 以"非 0"视为确认成功
             // 成功 → ack = 1(非零); 失败 → ack = 0
             p_motor_state[id_index].ack = (result == 0) ? 1 : 0;
-
-            // 失败时把原因码存入 fault 便于排查; 成功时清零
-            p_motor_state[id_index].fault = (result == 0) ? 0 : result;
         }
         break;
     }

@@ -3,7 +3,7 @@
 
 
 #include "motor.h"
-#include "livelybot_fdcan.h"
+#include "hightorque_fdcan.h"
 
 
 uint8_t motor_pos_reset(port_t portx, const uint8_t id);

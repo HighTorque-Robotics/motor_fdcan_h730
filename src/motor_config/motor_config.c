@@ -48,15 +48,15 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
-    livelybot_motor_reset_int8(fdcanHandle, id);
+    hightorque_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
-    if (motor_config_closed_loop(livelybot_pos_rezero, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
+    if (motor_config_closed_loop(hightorque_pos_rezero, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
     {
         return 1;
     }
 
-    livelybot_motor_reset_int8(fdcanHandle, id);
+    hightorque_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     return 0;
@@ -75,7 +75,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
-    livelybot_motor_id(fdcanHandle, old_id, new_id);
+    hightorque_motor_id(fdcanHandle, old_id, new_id);
     HAL_Delay(100);
 
     if (motor_config_closed_loop(NULL, fdcanHandle, old_id, &p_motor_state[old_id - 1].ack) != 0)
@@ -83,7 +83,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
         return 1;
     }
 
-    livelybot_motor_reset_int8(fdcanHandle, new_id);
+    hightorque_motor_reset_int8(fdcanHandle, new_id);
     HAL_Delay(100);
 
     return 0;
@@ -111,7 +111,7 @@ uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t
         return 1;
     }
 
-    livelybot_check_motor_state_periodic(fdcanHandle, id, t_us);
+    hightorque_request_state_periodic(fdcanHandle, id, t_us);
     HAL_Delay(100);
 
 
