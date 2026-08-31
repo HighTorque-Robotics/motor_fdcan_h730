@@ -15,7 +15,7 @@ void test_motor_control(const uint8_t id)
         motor_set_dq_vlot(portx, type, id, 0.0);
         break;
     case 1:
-        motor_set_dq_current_full(portx, type, id, 0.0f, 0.5f);
+        motor_set_dq_current(portx, type, id, 0.5f);
         break;
     case 2:
         motor_set_pos(portx, type, id, 0.0);

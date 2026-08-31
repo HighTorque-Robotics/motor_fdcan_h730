@@ -15,10 +15,7 @@
 #include "hightorque_fdcan.h"
 #include "debug_print.h"
 
-/* ============================================================
- *  电机控制模式码 (控制帧)
- * ============================================================ */
-typedef enum __packed
+typedef enum __packed //电机控制模式码 (控制帧)
 {
     MODE_NULL        = 0,     // 空模式 (占位)          
     MODE_STOP        = 0x01,  // 停止 (惯性停止)      
@@ -36,20 +33,18 @@ typedef enum __packed
     MODE_MIT         = 0x21,  // MIT 运控 (位置+速度+力矩+Kp+Kd)
 } motor_mode_t;
 
-/* ============================================================
- *  电机查询码 (查询帧)
- * ============================================================ */
-typedef enum __packed
+
+typedef enum __packed //电机查询码 (查询帧)
 {
     SYSTEM                           = 0x03,  // 查询系统信息 
     FW_VERSION                       = 0x04,  // 查询固件版本 
     HW_VERSION                       = 0x05,  // 查询硬件版本 
     MODEL                            = 0x07,  // 查询电机型号 
-    MODE_FLAUT_NUM                   = 0x0A,  // 查询码、模式、错误码、NUM(查询指令 0x0A)
-    MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 查询码、模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 查询码、模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
-    FLAUT_POS_VEL_TQE                = 0x0E,  // 查询码、错误码、位置、速度、力矩（查询指令 0x0E）
-//  MODE_FLAUT_CD_CQ                 = 0x0D,  // 查询码、模式、错误码、D轴、Q轴（查询指令 0x0D）
+    MODE_FLAUT_NUM                   = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
+    MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
+    FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E）
+//  MODE_FLAUT_CD_CQ                 = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）
 
 } many_request_type_t;
 
@@ -73,15 +68,16 @@ typedef struct
 
 typedef struct
 {
-    uint8_t mode;       // 模式（对应 motor_mode_t 枚举）
+    motor_mode_t mode;  // 模式（对应 motor_mode_t 枚举）
     uint8_t fault;      // 错误码
     float position;     // 位置
     float velocity;     // 速度
     float torque;       // 力矩
     int8_t  temp;       // 温度（单位：摄氏度，分辨率：1度）
-    uint8_t query;      // 最后响应的查询码（对应 prot_query_t 枚举）
     uint8_t ack;        // 应答，用于电机设置相关的应答
-    version_s version;  // 电机固件版本号
+    version_s version;      // 电机固件版本号
+    version_s hw_version;   // 电机硬件版本号
+
     char model[25];     // 电机型号 (如 "5036_02")
     // float i_d;          // d轴电流
     // float i_q;          // q轴电流

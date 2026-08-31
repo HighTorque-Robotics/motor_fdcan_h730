@@ -150,8 +150,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 5, sizeof(int16_t));
             my_memcpy((uint8_t *)&tqe, p_data + 7, sizeof(int16_t));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
@@ -166,8 +165,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(int32_t));
             my_memcpy((uint8_t *)&tqe, p_data + 11, sizeof(int32_t));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
@@ -182,8 +180,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 7, sizeof(float));
             my_memcpy((uint8_t *)&tqe, p_data + 11, sizeof(float));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = (uint8_t)p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].position  = conv_from_turns(pos, MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -212,8 +209,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel,     p_data + 7, sizeof(int16_t));
             my_memcpy((uint8_t *)&tqe,     p_data + 9, sizeof(int16_t));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TINT16);  // 0.1°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
@@ -230,8 +226,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel,     p_data + 11, sizeof(int32_t));
             my_memcpy((uint8_t *)&tqe,     p_data + 15, sizeof(int32_t));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TINT32);  // 0.001°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
@@ -248,8 +243,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel,     p_data + 11, sizeof(float));
             my_memcpy((uint8_t *)&tqe,     p_data + 15, sizeof(float));
 
-            p_motor_state[id_index].query     = p_data[0];
-            p_motor_state[id_index].mode      = (uint8_t)p_data[1];
+            p_motor_state[id_index].mode      = (motor_mode_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
             p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TFLOAT);  // 1°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -276,8 +270,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int16_t));
     //         my_memcpy((uint8_t *)&i_q, p_data + 5, sizeof(int16_t));
 
-    //         p_motor_state[id_index].query   = p_data[0];
-    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].mode    = (motor_mode_t)p_data[1];
     //         p_motor_state[id_index].fault   = p_data[2];
     //         // p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT16);
     //         // p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT16);
@@ -290,8 +283,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int32_t));
     //         my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(int32_t));
 
-    //         p_motor_state[id_index].query   = p_data[0];
-    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].mode    = (motor_mode_t)p_data[1];
     //         p_motor_state[id_index].fault   = p_data[2];
     //         // p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT32);
     //         // p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT32);
@@ -304,8 +296,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(float));
     //         my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(float));
 
-    //         p_motor_state[id_index].query   = p_data[0];
-    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].mode    = (motor_mode_t)p_data[1];
     //         p_motor_state[id_index].fault   = p_data[2];
     //         // p_motor_state[id_index].i_d     = i_d;
     //         // p_motor_state[id_index].i_q     = i_q;
@@ -331,7 +322,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 4, sizeof(int16_t));
             my_memcpy((uint8_t *)&tqe, p_data + 6, sizeof(int16_t));
 
-            p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].fault     = p_data[1];
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
@@ -346,7 +336,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 6, sizeof(int32_t));
             my_memcpy((uint8_t *)&tqe, p_data + 10, sizeof(int32_t));
 
-            p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].fault     = p_data[1];
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
@@ -361,7 +350,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             my_memcpy((uint8_t *)&vel, p_data + 6, sizeof(float));
             my_memcpy((uint8_t *)&tqe, p_data + 10, sizeof(float));
 
-            p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].fault     = p_data[1];
             p_motor_state[id_index].position  = conv_from_turns(pos, MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel, MOTOR_DATA_TYPE_FLAG);

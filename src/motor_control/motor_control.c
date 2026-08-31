@@ -59,36 +59,7 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
         break;
     }
 }
-/*
- * @brief DQ 电流模式，分别下发 D 轴和 Q 轴目标电流。
- * @note 函数同时兼容协议支持的三种数据类型；输入单位始终为A，
- *       发送前由 cur_float2int() 按协议量程完成换算。
- *       该接口函数用于测试，暂不开放给客户使用，新增可变化i_d电流参数
- * @param id 电机 ID
- * @param d_cur D 相电流，单位：（A），例：0.1 -> 0.1A
- * @param d_cur D 相电流，单位：（A），例：0.3 -> 0.3A
- */
-void motor_set_dq_current_full(port_t portx, const data_type_t type, const uint8_t id, const float d_cur, const float q_cur)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    const float d_raw = cur_float2int(d_cur, type);
-    const float q_raw = cur_float2int(q_cur, type);
 
-    switch(type)
-    {
-    case TFLOAT:
-        hightorque_dq_current_float(fdcanHandle, id, d_raw, q_raw);
-        break;
-    case TINT32:
-        hightorque_dq_current_int32(fdcanHandle, id, (int32_t)d_raw, (int32_t)q_raw);
-        break;
-    case TINT16:
-        hightorque_dq_current_int16(fdcanHandle, id, (int16_t)d_raw, (int16_t)q_raw);
-        break;
-    default:
-        break;
-    }
-}
 
 /**
  * @brief 位置模式，使用最大速度和加速度运动到目标位置（并让电机返回状态信息）
@@ -272,13 +243,13 @@ void motor_set_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_
     switch(type)
     {
     case TFLOAT:
-        hightorque_pos_velmax_acc_float(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_vel_acc_float(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     case TINT32:
-        hightorque_pos_velmax_acc_int32(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_vel_acc_int32(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     case TINT16:
-        hightorque_pos_velmax_acc_int16(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
+        hightorque_pos_vel_acc_int16(fdcanHandle, id, pos_raw, vel_raw, acc_raw);
         break;
     default:
         break;
@@ -351,13 +322,13 @@ void motor_set_pos_vel_tqe_kp_kd_2(port_t portx, const data_type_t type, const u
     switch(type)
     {
     case TFLOAT:
-        hightorque_pos_vel_tqe_kp_kd_float_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_float(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     case TINT32:
-        hightorque_pos_vel_tqe_kp_kd_int32_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_int32(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     case TINT16:
-        hightorque_pos_vel_tqe_kp_kd_int16_2(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
+        hightorque_pos_vel_tqe_kp_kd_int16(fdcanHandle, id, pos_raw, vel_raw, tqe_raw, kp_raw, kd_raw);
         break;
     default:
         break;
@@ -446,13 +417,13 @@ void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        hightorque_motor_stop_float(fdcanHandle, id);
+        hightorque_set_stop_float(fdcanHandle, id);
         break;
     case TINT32:
-        hightorque_motor_stop_int32(fdcanHandle, id);
+        hightorque_set_stop_int32(fdcanHandle, id);
         break;
     case TINT16:
-        hightorque_motor_stop_int16(fdcanHandle, id);
+        hightorque_set_stop_int16(fdcanHandle, id);
         break;
     default:
         break;
@@ -472,33 +443,16 @@ void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        hightorque_motor_brake_float(fdcanHandle, id);
+        hightorque_set_brake_float(fdcanHandle, id);
         break;
     case TINT32:
-        hightorque_motor_brake_int32(fdcanHandle, id);
+        hightorque_set_brake_int32(fdcanHandle, id);
         break;
     case TINT16:
-        hightorque_motor_brake_int16(fdcanHandle, id);
+        hightorque_set_brake_int16(fdcanHandle, id);
         break;
     default:
         break;
     }
 }
-
-
-/**
- * @brief 电机软重启，重启后进入停止模式
- * @param portx CAN 通道选择，用于指定通信的 CAN 端口
- * @param id 电机 ID
- */
-void motor_set_reset(port_t portx, const uint8_t id)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-
-    hightorque_motor_reset_int8(fdcanHandle, id);
-}
-
-
-
-
 

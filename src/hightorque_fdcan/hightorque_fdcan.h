@@ -46,15 +46,15 @@ void hightorque_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
 void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
 /* 位置、速度、力矩、PD控制（真运控模式） */
-void hightorque_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
-void hightorque_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
-void hightorque_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
+void hightorque_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
+void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
+void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
 
 
 /* 位置、速度、加速度限制（梯形控制） */
-void hightorque_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc);
-void hightorque_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc);
-void hightorque_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
+void hightorque_pos_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc);
+void hightorque_pos_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc);
+void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc);
 
 /* 速度、加速度控制 */
 void hightorque_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc);
@@ -62,7 +62,7 @@ void hightorque_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc);
 
 /* 周期请求电机状态返回 (TINT16 发送: 0x03 0x00 0x05 <查询码> + 4字节微秒, t_us=0 停止周期返回) */
-void hightorque_request_state_periodic(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);
+void hightorque_timed_return(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us);
 
 /* 重设零点 */
 void hightorque_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
@@ -71,20 +71,20 @@ void hightorque_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 void hightorque_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 重启电机 */
-void hightorque_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 更改电机ID */
-void hightorque_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id);
+void hightorque_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id);
 
 /* 电机停止 */
-void hightorque_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
-void hightorque_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
-void hightorque_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 电机刹车 */
-void hightorque_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
-void hightorque_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
-void hightorque_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
+void hightorque_set_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);
 
 /* 读取电机状态 */
 void hightorque_request_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id);

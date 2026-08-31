@@ -18,10 +18,8 @@
 #endif
 
 
-/* ============================================================
- *  一拖多模式码 (一拖多控制帧 CAN ID 子码)
- * ============================================================ */
-typedef enum __packed
+
+typedef enum __packed// 一拖多模式码
 {
     MANY_MODE_POSITION    = 0x80,        // 位置控制 (每电机2字节)
     MANY_MODE_VELOCITY    = 0x81,        // 速度控制 (每电机2字节)
@@ -35,7 +33,7 @@ typedef enum __packed
     MANY_MODE_VEL_ACC     = 0x90,        // 速度 + 加速度 (块 0x90~0x91, 2帧)
     MANY_MODE_POS_VEL_TQE = 0x92,        // 位置 + 速度 + 前馈力矩 (块 0x92~0x94, 3帧)
     MANY_MODE_POS_VEL_ACC = 0x95,        // 位置 + 速度 + 加速度(梯形) (块 0x95~0x97, 3帧)
-    MANY_MODE_POS_VEL_TQE_KP_KD_2 = 0x98,// MIT 运控 (位置+速度+力矩+Kp+Kd)
+    MANY_MODE_POS_VEL_TQE_KP_KD = 0x98,// MIT 运控 (位置+速度+力矩+Kp+Kd)
     MANY_MODE_MIT_END     = 0x9C,        // MIT 运控模式 CAN ID 基址上限
 } many_mode_t;
 

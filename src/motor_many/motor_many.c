@@ -376,9 +376,9 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
 
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MANY_MODE_POS_VEL_TQE_KP_KD_2)
+    if (p_many_data->mode != MANY_MODE_POS_VEL_TQE_KP_KD)
     {
-        p_many_data->mode = MANY_MODE_POS_VEL_TQE_KP_KD_2;
+        p_many_data->mode = MANY_MODE_POS_VEL_TQE_KP_KD;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -413,7 +413,7 @@ static uint8_t get_mode_data_len(uint8_t mode)
     case MANY_MODE_POS_VEL_TQE:
     case MANY_MODE_POS_VEL_ACC:
         return 6;
-    case MANY_MODE_POS_VEL_TQE_KP_KD_2:
+    case MANY_MODE_POS_VEL_TQE_KP_KD:
         return 10;
     }
 
@@ -431,8 +431,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    /* 一拖多固定 TINT16, base_id = ID_PREFIX_TINT16, fdcan_send 自动置 bit[15]=1 */
-    const uint32_t base_id = ID_PREFIX_TINT16;
+    /* 一拖多固定 TINT16,  ID_PREFIX_TINT16, fdcan_send 自动置 bit[15]=1 */
 
     uint8_t id = p_many_data->mode;          /* 一拖多模式下 bits[6:0] = 模式块编号 */
     uint8_t *p_data = p_many_data->data;     /* 当前模式打包好的连续数据 */
@@ -445,16 +444,15 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         const uint8_t cut_len = (data_len > 60) ? 60 : data_len;      // 每帧最多切 60 字节数据
         data_len -= cut_len;
 
-        /* 帧长 = 数据 + 1 查询码, 并做 CAN FD 块对齐 (8/12/16/20/24/32/48/64) */
+        /* 帧长 = 数据 + 1 查询码, CAN FD 块对齐由 fdcan_send 内部完成 */
         const uint16_t byte_len = cut_len + 1;
-        const uint16_t frame_len = get_fdcan_data_size(get_fdcan_dlc(byte_len));
 
         my_memcpy(buf, p_data, cut_len);
-        buf[frame_len - 1] = (uint8_t)request_type;                  // 查询码放帧尾 (对齐后最后一字节)
+        buf[cut_len] = (uint8_t)request_type;                        // 查询码放数据后第一字节
         p_data += cut_len;
 
         /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
-        fdcan_send(fdcanHandle, base_id | id, buf, byte_len);
+        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, buf, byte_len);
         id++;                                                         // 每帧模式块编号递增
     }
 }
