@@ -494,7 +494,7 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         p_data += cut_len;
 
         /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
-        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, buf, byte_len);
+        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, buf, frame_len);
         id++;                                                         // 每帧模式块编号递增
     }
 }
