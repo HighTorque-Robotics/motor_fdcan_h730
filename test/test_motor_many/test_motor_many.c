@@ -45,7 +45,7 @@ void test_motor_many()
             motor_many_pos_vel_acc(PORT1, id, 0, 0, 0.0);
             break;
         case 7:
-            motor_many_pos_vel_tqe_kp_kd_2(PORT1, id, 0, 0, 0, 0, 0);
+            motor_many_pos_vel_tqe_kp_kd(PORT1, id, 0, 0, 0, 0, 0);
             break;
         case 8:
             motor_many_vel_acc(PORT1, id, 0.0, 0.0);

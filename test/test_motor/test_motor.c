@@ -36,7 +36,7 @@ void test_motor_control(const uint8_t id)
         motor_set_pos_velmax_acc(portx, type, id, 0, 0.0, 0.0);
         break;
     case 8:
-        motor_set_pos_vel_tqe_kp_kd_2(portx, type, id, 0, 0, 0, 0, 0);
+        motor_set_pos_vel_tqe_kp_kd(portx, type, id, 0, 0, 0, 0, 0);
         break;
     case 9:
         motor_set_vel_acc(portx, type, id, 0.0, 0.0);

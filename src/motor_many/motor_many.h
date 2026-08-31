@@ -107,7 +107,7 @@ void motor_many_rezero(port_t portx, const uint8_t id, const uint8_t enable);
 void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe);
 void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const float acc);
 void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, const float vel, const float acc);
-void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
+void motor_many_pos_vel_tqe_kp_kd(port_t portx, const uint8_t id, const float pos, const float vel, const float tqe, const float kp, const float kd);
 
 void motor_many_send(port_t portx, many_request_type_t request_type);
 
