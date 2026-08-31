@@ -23,7 +23,6 @@
  */
 void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    //                     dq电压模式  query  d轴电压           q轴电压
     static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
@@ -42,7 +41,6 @@ void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, fl
  */
 void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    //                     dq电压模式  query  d轴电压           q轴电压
     static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -60,7 +58,6 @@ void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, 
  */
 void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    //                     dq电压模式  query  d轴电压    q轴电压
     static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
@@ -78,7 +75,6 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, 
  */
 void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    //                      dq电流模式  query  d轴电流           q轴电流
     static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -96,7 +92,6 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d,
  */
 void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    //                     dq电流模式  query  d轴电流           q轴电流
     static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
@@ -115,7 +110,6 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
  */
 void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    //                     dq电流模式 query  d轴电流    q轴电流
     static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
@@ -133,7 +127,6 @@ void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
  */
 void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
 {
-    //                          Mode  query  位置
     static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
@@ -150,7 +143,6 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque
  */
 void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
 {
-    //                      力矩模式  query  力矩
     static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
@@ -167,7 +159,6 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torq
  */
 void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
 {
-    //                      力矩模式  query  力矩
     static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
@@ -186,7 +177,6 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torq
  */
 void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
 {
-    //           位置速度最大力矩模式  query  位置                   速度                     力矩
     static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -208,7 +198,6 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float p
 void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
 {
 
-    //           位置速度最大力矩模式  query  位置                   速度                     力矩
     static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -230,7 +219,6 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
 void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
 
-    //           位置速度最大力矩模式  query  位置       速度        力矩
     static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -249,7 +237,6 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t
  */
 void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 {
-    //                      位置模式  query  位置
     static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -266,7 +253,6 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
  */
 void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 {
-    //                      位置模式  query  位置
     static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -283,7 +269,6 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
  */
 void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 {
-    //                      位置模式  query 位置
     static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
@@ -300,7 +285,6 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
  */
 void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
-    //                      速度模式  query 速度
     static uint8_t cmd[] = {MOTOR_MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
