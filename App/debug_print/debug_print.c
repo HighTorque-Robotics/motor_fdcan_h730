@@ -29,7 +29,7 @@ void debug_print(int num, ...)
     data[num] = *(float *)tail;
 
     HAL_UART_Transmit_DMA(&huart1, (uint8_t *)data,
-                      (uint16_t)((num + 1) * sizeof(float)));
+                          (uint16_t)((num + 1) * sizeof(float)));
 
     va_end(args);
 }

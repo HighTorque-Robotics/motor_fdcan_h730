@@ -46,7 +46,7 @@ void test_motor_control(const uint8_t id)
         break;
     case 11:
         motor_get_state_send(portx, type, id);
-        break;   
+        break;
     case 12:
         motor_get_version(portx, id);
         break;

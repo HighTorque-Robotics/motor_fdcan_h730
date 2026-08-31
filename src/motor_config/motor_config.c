@@ -100,7 +100,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
 
     /* id 超出的电机数量时, 返回帧不会被解析 */
     if (old_id < MOTOR_ID_MIN || old_id > MOTOR_MAX_NUM ||
-        new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
+            new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
     {
         MOTOR_ERR();
         return 1;

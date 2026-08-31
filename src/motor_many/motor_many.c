@@ -38,7 +38,7 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
         }
     }
-    
+
     p_many_data->voltage[index] = vol_raw;
 }
 

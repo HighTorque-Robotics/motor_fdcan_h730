@@ -199,7 +199,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
     case QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE:
     {
-        
+
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
         switch (id_title)
         {
@@ -265,7 +265,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     // ===================== QUERY_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
     case QUERY_MODE_FLAUT_CD_CQ:
     {
-        
+
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
         switch (id_title)
         {
