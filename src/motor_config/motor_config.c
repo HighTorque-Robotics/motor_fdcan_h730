@@ -48,38 +48,15 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
-    set_motor_reset_int8(fdcanHandle, id);
+    livelybot_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
-    if (motor_config_closed_loop(set_pos_rezero, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
+    if (motor_config_closed_loop(livelybot_pos_rezero, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
     {
         return 1;
     }
 
-    set_motor_reset_int8(fdcanHandle, id);
-    HAL_Delay(100);
-
-    return 0;
-}
-
-
-/**
- * @brief 保存电机设置
- * @param portx CAN 通道选择，用于指定通信的 CAN 端口
- * @param id 电机 ID
- * @return 0-成功，1-失败
- */
-uint8_t motor_conf_write(port_t portx, const uint8_t id)
-{
-    FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
-    p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
-
-    if (motor_config_closed_loop(set_conf_write, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
-    {
-        return 1;
-    }
-
-    set_motor_reset_int8(fdcanHandle, id);
+    livelybot_motor_reset_int8(fdcanHandle, id);
     HAL_Delay(100);
 
     return 0;
@@ -98,15 +75,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
-    /* id 超出的电机数量时, 返回帧不会被解析 */
-    if (old_id < MOTOR_ID_MIN || old_id > MOTOR_MAX_NUM ||
-            new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
-    {
-        MOTOR_ERR();
-        return 1;
-    }
-
-    set_motor_id(fdcanHandle, old_id, new_id);
+    livelybot_motor_id(fdcanHandle, old_id, new_id);
     HAL_Delay(100);
 
     if (motor_config_closed_loop(NULL, fdcanHandle, old_id, &p_motor_state[old_id - 1].ack) != 0)
@@ -114,7 +83,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
         return 1;
     }
 
-    set_motor_reset_int8(fdcanHandle, new_id);
+    livelybot_motor_reset_int8(fdcanHandle, new_id);
     HAL_Delay(100);
 
     return 0;
@@ -142,7 +111,7 @@ uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t
         return 1;
     }
 
-    request_motor_state(fdcanHandle, id, t_us);
+    livelybot_check_motor_state_periodic(fdcanHandle, id, t_us);
     HAL_Delay(100);
 
 

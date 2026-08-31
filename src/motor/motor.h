@@ -18,31 +18,39 @@
 /* ============================================================
  *  电机控制模式码 (控制帧)
  * ============================================================ */
-typedef enum
+typedef enum __packed
 {
-    MOTOR_MODE_STOP        = 0x01,  /**< 停止 (惯性停止)            */
-    MOTOR_MODE_BRAKE       = 0x18,  /**< 刹车 (主动制动)            */
-    MOTOR_MODE_VOLT        = 0x19,  /**< DQ 电压控制                */
-    MOTOR_MODE_CUR         = 0x1A,  /**< DQ 电流控制                */
-    MOTOR_MODE_TQE         = 0x1B,  /**< 力矩控制                   */
-    MOTOR_MODE_VEL         = 0x1C,  /**< 速度控制                   */
-    MOTOR_MODE_POS         = 0x1D,  /**< 位置控制                   */
-    MOTOR_MODE_VEL_ACC     = 0x1E,  /**< 速度 + 加速度             */
-    MOTOR_MODE_POS_VEL_TQE = 0x1F,  /**< 位置 + 速度 + 前馈力矩    */
-    MOTOR_MODE_POS_VEL_ACC = 0x20,  /**< 位置 + 速度 + 加速度(梯形) */
-    MOTOR_MODE_MIT         = 0x21,  /**< MIT 运控 (位置+速度+力矩+Kp+Kd) */
+    MODE_NULL        = 0,     // 空模式 (占位)          
+    MODE_STOP        = 0x01,  // 停止 (惯性停止)      
+    MODE_BRAKE       = 0x18,  // 刹车 (主动制动)      
+    MODE_CMD         = 0x02,  // 普通控制 (当前未启用)
+    MODE_SYSTEM      = 0x03,  // 系统命令 (查询/设置/保存/重启/改ID)
+    MODE_VOLT        = 0x19,  // DQ 电压控制
+    MODE_CUR         = 0x1A,  // DQ 电流控制
+    MODE_TQE         = 0x1B,  // 力矩控制
+    MODE_VEL         = 0x1C,  // 速度控制
+    MODE_POS         = 0x1D,  // 位置控制
+    MODE_VEL_ACC     = 0x1E,  // 速度 + 加速度
+    MODE_POS_VEL_TQE = 0x1F,  // 位置 + 速度 + 前馈力矩   
+    MODE_POS_VEL_ACC = 0x20,  // 位置 + 速度 + 加速度(梯形)
+    MODE_MIT         = 0x21,  // MIT 运控 (位置+速度+力矩+Kp+Kd)
 } motor_mode_t;
 
 /* ============================================================
  *  电机查询码 (查询帧)
  * ============================================================ */
-typedef enum
+typedef enum __packed
 {
-    QUERY_MODE_FLAUT_NUM                   = 0x0A,  // 查询码、模式、错误码、NUM(查询指令 0x0A)
-    QUERY_MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 查询码、模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 查询码、模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
-    QUERY_MODE_FLAUT_CD_CQ                 = 0x0D,  // 查询码、模式、错误码、D轴、Q轴（查询指令 0x0D）
-    QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 查询码、错误码、位置、速度、力矩（查询指令 0x0E）
+    SYSTEM                           = 0x03,  // 查询系统信息 
+    FW_VERSION                       = 0x04,  // 查询固件版本 
+    HW_VERSION                       = 0x05,  // 查询硬件版本 
+    MODEL                            = 0x07,  // 查询电机型号 
+    MODE_FLAUT_NUM                   = 0x0A,  // 查询码、模式、错误码、NUM(查询指令 0x0A)
+    MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 查询码、模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 查询码、模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
+    FLAUT_POS_VEL_TQE                = 0x0E,  // 查询码、错误码、位置、速度、力矩（查询指令 0x0E）
+//  MODE_FLAUT_CD_CQ                 = 0x0D,  // 查询码、模式、错误码、D轴、Q轴（查询指令 0x0D）
+
 } many_request_type_t;
 
 
@@ -57,26 +65,26 @@ typedef enum
 
 typedef struct
 {
-    uint8_t major : 4;
-    uint8_t minor : 8;
-    uint8_t patch : 4;
+    uint8_t major;
+    uint8_t minor;
+    uint8_t patch;
 } version_s, *p_version_s;
 
 
 typedef struct
 {
-    uint8_t mode;      // 模式（对应 motor_mode_t 枚举）
-    uint8_t fault;     // 错误码
-    float position;  // 位置
-    float velocity;  // 速度
-    float torque;    // 力矩
-    int8_t  temp;      // 温度（单位：摄氏度，分辨率：1度）
-    uint8_t query;     // 最后响应的查询码（对应 prot_query_t 枚举）
-    uint8_t ack;     // 应答，用于电机设置相关的应答
-    float i_d;       //d轴电流
-    float i_q;       //q轴电流
+    uint8_t mode;       // 模式（对应 motor_mode_t 枚举）
+    uint8_t fault;      // 错误码
+    float position;     // 位置
+    float velocity;     // 速度
+    float torque;       // 力矩
+    int8_t  temp;       // 温度（单位：摄氏度，分辨率：1度）
+    uint8_t query;      // 最后响应的查询码（对应 prot_query_t 枚举）
+    uint8_t ack;        // 应答，用于电机设置相关的应答
     version_s version;  // 电机固件版本号
-    char model[25];  // 电机型号 (如 "5036_02")
+    char model[25];     // 电机型号 (如 "5036_02")
+    // float i_d;          // d轴电流
+    // float i_q;          // q轴电流
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
 

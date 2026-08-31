@@ -18,23 +18,26 @@
 #endif
 
 
-#define  MODE_POSITION              0X80
-#define  MODE_VELOCITY              0X81
-#define  MODE_TORQUE                0X82
-#define  MODE_VOLTAGE               0X83
-#define  MODE_CURRENT               0X84
-
-#define  MODE_STOP                  0x85   // 停止 (每电机1字节: 非0启用, 0不启用)
-#define  MODE_BRAKE                 0x86   // 刹车 (每电机1字节: 非0启用, 0不启用)
-#define  MODE_RESET                 0x87   // 电机软重启 (每电机1字节: 非0启用, 0不启用)
-#define  MODE_REZERO                0x88   // 电机重置零位 (每电机1字节: 非0启用, 0不启用)
-
-#define  MODE_VEL_ACC               0X90   // 块 0x90~0x91 (2帧)
-#define  MODE_POS_VEL_TQE           0X92   // 块 0x92~0x94 (3帧)
-#define  MODE_POS_VEL_ACC           0X95   // 块 0x95~0x97 (3帧)
-
-#define  MODE_POS_VEL_TQE_KP_KD_2   0X98
-#define  MODE_MIT_END               0x9C   /**< MIT 运控模式 CAN ID 基址上限 */
+/* ============================================================
+ *  一拖多模式码 (一拖多控制帧 CAN ID 子码)
+ * ============================================================ */
+typedef enum __packed
+{
+    MANY_MODE_POSITION    = 0x80,        // 位置控制 (每电机2字节)
+    MANY_MODE_VELOCITY    = 0x81,        // 速度控制 (每电机2字节)
+    MANY_MODE_TORQUE      = 0x82,        // 力矩控制 (每电机2字节)
+    MANY_MODE_VOLTAGE     = 0x83,        // DQ 电压控制 (每电机2字节)
+    MANY_MODE_CURRENT     = 0x84,        // DQ 电流控制 (每电机2字节)
+    MANY_MODE_STOP        = 0x85,        // 停止 (每电机1字节: 非0启用, 0不启用)
+    MANY_MODE_BRAKE       = 0x86,        // 刹车 (每电机1字节: 非0启用, 0不启用)
+    MANY_MODE_RESET       = 0x87,        // 电机软重启 (每电机1字节: 非0启用, 0不启用)
+    MANY_MODE_REZERO      = 0x88,        // 电机重置零位 (每电机1字节: 非0启用, 0不启用)
+    MANY_MODE_VEL_ACC     = 0x90,        // 速度 + 加速度 (块 0x90~0x91, 2帧)
+    MANY_MODE_POS_VEL_TQE = 0x92,        // 位置 + 速度 + 前馈力矩 (块 0x92~0x94, 3帧)
+    MANY_MODE_POS_VEL_ACC = 0x95,        // 位置 + 速度 + 加速度(梯形) (块 0x95~0x97, 3帧)
+    MANY_MODE_POS_VEL_TQE_KP_KD_2 = 0x98,// MIT 运控 (位置+速度+力矩+Kp+Kd)
+    MANY_MODE_MIT_END     = 0x9C,        // MIT 运控模式 CAN ID 基址上限
+} many_mode_t;
 
 
 

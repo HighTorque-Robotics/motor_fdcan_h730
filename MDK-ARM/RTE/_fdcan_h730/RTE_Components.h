@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'fdcan_h730'
- * Target:  'fdcan_h730'
+ * Project: 'fdcan_h730' 
+ * Target:  'fdcan_h730' 
  */
 
 #ifndef RTE_COMPONENTS_H
@@ -12,7 +12,7 @@
 
 
 /*
- * Define the Device Header File:
+ * Define the Device Header File: 
  */
 #define CMSIS_device_header "stm32h7xx.h"
 

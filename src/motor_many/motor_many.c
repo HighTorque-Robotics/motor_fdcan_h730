@@ -30,9 +30,9 @@ void motor_many_dq_volt(port_t portx, const uint8_t id, const float vol)
     const int16_t vol_raw = vol_float2int(vol, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_VOLTAGE)
+    if (p_many_data->mode != MANY_MODE_VOLTAGE)
     {
-        p_many_data->mode = MODE_VOLTAGE;
+        p_many_data->mode = MANY_MODE_VOLTAGE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -55,9 +55,9 @@ void motor_many_dq_current(port_t portx, const uint8_t id, const float cur)
     const int16_t cur_raw = cur_float2int(cur, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_CURRENT)
+    if (p_many_data->mode != MANY_MODE_CURRENT)
     {
-        p_many_data->mode = MODE_CURRENT;
+        p_many_data->mode = MANY_MODE_CURRENT;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -81,9 +81,9 @@ void motor_many_pos(port_t portx, const uint8_t id, const float pos)
     const int16_t pos_raw = pos_float2int(pos_turns, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POSITION)
+    if (p_many_data->mode != MANY_MODE_POSITION)
     {
-        p_many_data->mode = MODE_POSITION;
+        p_many_data->mode = MANY_MODE_POSITION;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -107,9 +107,9 @@ void motor_many_vel(port_t portx, const uint8_t id, const float vel)
     const int16_t vel_raw = vel_float2int(vel_turns, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_VELOCITY)
+    if (p_many_data->mode != MANY_MODE_VELOCITY)
     {
-        p_many_data->mode = MODE_VELOCITY;
+        p_many_data->mode = MANY_MODE_VELOCITY;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -132,9 +132,9 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
     const int16_t tqe_raw = tqe_float2int(tqe, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_TORQUE)
+    if (p_many_data->mode != MANY_MODE_TORQUE)
     {
-        p_many_data->mode = MODE_TORQUE;
+        p_many_data->mode = MANY_MODE_TORQUE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->torque[i] = 0x8000;  // NAN_INT16
@@ -156,9 +156,9 @@ void motor_many_stop(port_t portx, const uint8_t id, const uint8_t enable)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_STOP)
+    if (p_many_data->mode != MANY_MODE_STOP)
     {
-        p_many_data->mode = MODE_STOP;
+        p_many_data->mode = MANY_MODE_STOP;
         for (int i = 0; i < MANY_MOTOR_SIZE; i++)
         {
             p_many_data->stop[i] = 0;
@@ -180,9 +180,9 @@ void motor_many_brake(port_t portx, const uint8_t id, const uint8_t enable)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_BRAKE)
+    if (p_many_data->mode != MANY_MODE_BRAKE)
     {
-        p_many_data->mode = MODE_BRAKE;
+        p_many_data->mode = MANY_MODE_BRAKE;
         for (int i = 0; i < MANY_MOTOR_SIZE; i++)
         {
             p_many_data->brake[i] = 0;
@@ -204,9 +204,9 @@ void motor_many_reset(port_t portx, const uint8_t id, const uint8_t enable)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_RESET)
+    if (p_many_data->mode != MANY_MODE_RESET)
     {
-        p_many_data->mode = MODE_RESET;
+        p_many_data->mode = MANY_MODE_RESET;
         for (int i = 0; i < MANY_MOTOR_SIZE; i++)
         {
             p_many_data->reset[i] = 0;
@@ -228,9 +228,9 @@ void motor_many_rezero(port_t portx, const uint8_t id, const uint8_t enable)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_REZERO)
+    if (p_many_data->mode != MANY_MODE_REZERO)
     {
-        p_many_data->mode = MODE_REZERO;
+        p_many_data->mode = MANY_MODE_REZERO;
         for (int i = 0; i < MANY_MOTOR_SIZE; i++)
         {
             p_many_data->rezero[i] = 0;
@@ -265,9 +265,9 @@ void motor_many_pos_vel_MAXtqe(port_t portx, const uint8_t id, const float pos, 
     const int16_t tqe_raw = tqe_float2int(tqe, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_TQE)
+    if (p_many_data->mode != MANY_MODE_POS_VEL_TQE)
     {
-        p_many_data->mode = MODE_POS_VEL_TQE;
+        p_many_data->mode = MANY_MODE_POS_VEL_TQE;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -298,9 +298,9 @@ void motor_many_vel_acc(port_t portx, const uint8_t id, const float vel, const f
     const int16_t acc_raw = acc_float2int(acc_turns, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_VEL_ACC)
+    if (p_many_data->mode != MANY_MODE_VEL_ACC)
     {
-        p_many_data->mode = MODE_VEL_ACC;
+        p_many_data->mode = MANY_MODE_VEL_ACC;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -333,9 +333,9 @@ void motor_many_pos_vel_acc(port_t portx, const uint8_t id, const float pos, con
     const int16_t acc_raw = acc_float2int(acc_turns, TINT16);
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_ACC)
+    if (p_many_data->mode != MANY_MODE_POS_VEL_ACC)
     {
-        p_many_data->mode = MODE_POS_VEL_ACC;
+        p_many_data->mode = MANY_MODE_POS_VEL_ACC;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -376,9 +376,9 @@ void motor_many_pos_vel_tqe_kp_kd_2(port_t portx, const uint8_t id, const float 
 
     const uint16_t index = id - 1;
 
-    if (p_many_data->mode != MODE_POS_VEL_TQE_KP_KD_2)
+    if (p_many_data->mode != MANY_MODE_POS_VEL_TQE_KP_KD_2)
     {
-        p_many_data->mode = MODE_POS_VEL_TQE_KP_KD_2;
+        p_many_data->mode = MANY_MODE_POS_VEL_TQE_KP_KD_2;
         for (int i = 0; i < MANY_DATA_BUF_MAX_LEN / sizeof(int16_t); i++)
         {
             p_many_data->data16[i] = 0x8000;  // NAN_INT16
@@ -397,23 +397,23 @@ static uint8_t get_mode_data_len(uint8_t mode)
 {
     switch(mode)
     {
-    case MODE_POSITION:
-    case MODE_VELOCITY:
-    case MODE_TORQUE:
-    case MODE_VOLTAGE:
-    case MODE_CURRENT:
+    case MANY_MODE_POSITION:
+    case MANY_MODE_VELOCITY:
+    case MANY_MODE_TORQUE:
+    case MANY_MODE_VOLTAGE:
+    case MANY_MODE_CURRENT:
         return 2;
-    case MODE_STOP:
-    case MODE_BRAKE:
-    case MODE_RESET:
-    case MODE_REZERO:
+    case MANY_MODE_STOP:
+    case MANY_MODE_BRAKE:
+    case MANY_MODE_RESET:
+    case MANY_MODE_REZERO:
         return 1;
-    case MODE_VEL_ACC:
+    case MANY_MODE_VEL_ACC:
         return 4;
-    case MODE_POS_VEL_TQE:
-    case MODE_POS_VEL_ACC:
+    case MANY_MODE_POS_VEL_TQE:
+    case MANY_MODE_POS_VEL_ACC:
         return 6;
-    case MODE_POS_VEL_TQE_KP_KD_2:
+    case MANY_MODE_POS_VEL_TQE_KP_KD_2:
         return 10;
     }
 

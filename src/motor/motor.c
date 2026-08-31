@@ -129,20 +129,20 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
  * @param p_data fdcan 帧数据指针
  * @param len fdcan 数据长度
  */
-static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint32_t id_title, const uint8_t *p_data, const uint8_t len)
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint32_t id_type, const uint8_t *p_data, const uint8_t len)
 {
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
 
     switch (p_data[0])
     {
-    // ===================== QUERY_MODE_FAULT_POS_VEL_TQE (0x0B) 响应 =====================
-    case QUERY_MODE_FLAUT_POS_VEL_TQE:
+    // ===================== MODE_FAULT_POS_VEL_TQE (0x0B) 响应 =====================
+    case MODE_FLAUT_POS_VEL_TQE:
     {
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
-        switch (id_title)
+        switch (id_type)
         {
-        case ID_PREFIX_TINT16:
+        case TINT16:
         {
             int16_t pos = 0, vel = 0, tqe = 0;
 
@@ -158,7 +158,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
             break;
         }
-        case ID_PREFIX_TINT32:
+        case TINT32:
         {
             int32_t pos = 0, vel = 0, tqe = 0;
 
@@ -174,7 +174,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
             break;
         }
-        case ID_PREFIX_TFLOAT:
+        case TFLOAT:
         {
             float pos = 0, vel = 0, tqe = 0;
 
@@ -196,14 +196,14 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         break;
     }
 
-    // ===================== QUERY_MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
-    case QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE:
+    // ===================== MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
+    case MODE_FLAUT_TEMP_POS_VEL_TQE:
     {
 
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
-        switch (id_title)
+        switch (id_type)
         {
-        case ID_PREFIX_TINT16:
+        case TINT16:
         {
             int16_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -221,7 +221,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
             break;
         }
-        case ID_PREFIX_TINT32:
+        case TINT32:
         {
             int32_t pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -239,7 +239,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
             break;
         }
-        case ID_PREFIX_TFLOAT:
+        case TFLOAT:
         {
             float pos = 0, vel = 0, tqe = 0, temp_raw = 0;
 
@@ -262,68 +262,68 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
         break;
     }
-    // ===================== QUERY_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
-    case QUERY_MODE_FLAUT_CD_CQ:
-    {
+    // // ===================== MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
+    // case MODE_FLAUT_CD_CQ:
+    // {
 
-        // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
-        switch (id_title)
-        {
-        case ID_PREFIX_TINT16:
-        {
-            int16_t i_d = 0, i_q = 0;
+    //     // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
+    //     switch (id_type)
+    //     {
+    //     case TINT16:
+    //     {
+    //         int16_t i_d = 0, i_q = 0;
 
-            my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int16_t));
-            my_memcpy((uint8_t *)&i_q, p_data + 5, sizeof(int16_t));
+    //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int16_t));
+    //         my_memcpy((uint8_t *)&i_q, p_data + 5, sizeof(int16_t));
 
-            p_motor_state[id_index].query   = p_data[0];
-            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
-            p_motor_state[id_index].fault   = p_data[2];
-            p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT16);
-            p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT16);
-            break;
-        }
-        case ID_PREFIX_TINT32:
-        {
-            int32_t i_d = 0, i_q = 0;
+    //         p_motor_state[id_index].query   = p_data[0];
+    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].fault   = p_data[2];
+    //         // p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT16);
+    //         // p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT16);
+    //         break;
+    //     }
+    //     case TINT32:
+    //     {
+    //         int32_t i_d = 0, i_q = 0;
 
-            my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int32_t));
-            my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(int32_t));
+    //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(int32_t));
+    //         my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(int32_t));
 
-            p_motor_state[id_index].query   = p_data[0];
-            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
-            p_motor_state[id_index].fault   = p_data[2];
-            p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT32);
-            p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT32);
-            break;
-        }
-        case ID_PREFIX_TFLOAT:
-        {
-            float i_d = 0, i_q = 0;
+    //         p_motor_state[id_index].query   = p_data[0];
+    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].fault   = p_data[2];
+    //         // p_motor_state[id_index].i_d     = cur_int2float(i_d, TINT32);
+    //         // p_motor_state[id_index].i_q     = cur_int2float(i_q, TINT32);
+    //         break;
+    //     }
+    //     case TFLOAT:
+    //     {
+    //         float i_d = 0, i_q = 0;
 
-            my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(float));
-            my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(float));
+    //         my_memcpy((uint8_t *)&i_d, p_data + 3, sizeof(float));
+    //         my_memcpy((uint8_t *)&i_q, p_data + 7, sizeof(float));
 
-            p_motor_state[id_index].query   = p_data[0];
-            p_motor_state[id_index].mode    = (uint8_t)p_data[1];
-            p_motor_state[id_index].fault   = p_data[2];
-            p_motor_state[id_index].i_d     = i_d;
-            p_motor_state[id_index].i_q     = i_q;
-            break;
-        }
-        default:
-            break;
-        }
-        break;
-    }
-    // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
+    //         p_motor_state[id_index].query   = p_data[0];
+    //         p_motor_state[id_index].mode    = (uint8_t)p_data[1];
+    //         p_motor_state[id_index].fault   = p_data[2];
+    //         // p_motor_state[id_index].i_d     = i_d;
+    //         // p_motor_state[id_index].i_q     = i_q;
+    //         break;
+    //     }
+    //     default:
+    //         break;
+    //     }
+    //     break;
+    // }
+    // ===================== FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B, TINT32/TFLOAT=4B
-    case QUERY_FLAUT_POS_VEL_TQE:
+    case FLAUT_POS_VEL_TQE:
     {
-        switch (id_title)
+        switch (id_type)
         {
-        case ID_PREFIX_TINT16:
+        case TINT16:
         {
             int16_t pos = 0, vel = 0, tqe = 0;
 
@@ -338,7 +338,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
             break;
         }
-        case ID_PREFIX_TINT32:
+        case TINT32:
         {
             int32_t pos = 0, vel = 0, tqe = 0;
 
@@ -353,7 +353,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
             break;
         }
-        case ID_PREFIX_TFLOAT:
+        case TFLOAT:
         {
             float pos = 0, vel = 0, tqe = 0;
 
@@ -375,7 +375,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     }
     // ===================== 电机固件版本 (0x04) =====================
     // 返回帧: 04 | patch | minor | major (各1字节)
-    case 0x04:
+    case FW_VERSION:
     {
         p_motor_state[id_index].version.major = p_data[3];
         p_motor_state[id_index].version.minor = p_data[2];
@@ -384,7 +384,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     }
     // ===================== 电机型号查询响应 =====================
     // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
-    case 0x07:
+    case MODEL:
     {
         const uint8_t model_len = p_data[1];
 
@@ -403,15 +403,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
         break;
     }
-    // ===================== 配置命令应答帧 (0x03) =====================
-    // 应答帧(2字节): 03 | result
-    //   result = 0x00 : 配置成功
-    //   result != 0x00: 配置失败, result 即失败原因码
-    // 注意: 这里是"返回的"2 字节应答帧, 与"发送的"3~8 字节命令帧严格区分
-    // 对应发送的系统命令:
-    //   周期返回 03 00 05 <查询码> + 4字节微秒
-    //   软重启 03 03 01 / 保存设置 03 03 02 / 重设零位 03 03 03 / 改ID 03 03 04 <新ID>
-    case 0x03:
+    case SYSTEM:
     {
         if (len >= 2)
         {
@@ -452,13 +444,19 @@ void motor_process_state_all()
             {
                 const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-                const uint32_t id_title = fdcan_rx_header.Identifier & 0x00030000UL;  // 提取 bits[17:16] 数据类型
+                const uint32_t id_type = (fdcan_rx_header.Identifier >> 16) & 0x3;  // 提取 bits[17:16] 数据类型, 得 0~3 对应 data_type_t (TINT16_NOHDR=0, TINT16=1, TINT32=2, TFLOAT=3)
                 const uint8_t  motor_id = (fdcan_rx_header.Identifier >> 8) & 0x7F;  // 提取 bits[14:8] 主机ID (电机返回ID, 1~127)
+                const uint8_t  dir      = (fdcan_rx_header.Identifier >> 15) & 0x1;  // 提取 bit[15] 帧方向: 1=控制帧, 0=返回帧
 
+                /* 帧方向判断: bit[15]=1 为控制(发送)帧, 非返回帧直接丢弃 */
+                if (dir != 0)
+                {
+                    continue;
+                }
 
                 if (motor_id > 0 && motor_id <= MOTOR_MAX_NUM)
                 {
-                    motor_process_state(port_maping[i].fdcan, motor_id, id_title, fdcan_rdata, len);
+                    motor_process_state(port_maping[i].fdcan, motor_id, id_type, fdcan_rdata, len);
                 }
             }
         }

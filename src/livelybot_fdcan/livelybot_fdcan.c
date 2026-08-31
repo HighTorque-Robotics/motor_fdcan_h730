@@ -2,18 +2,6 @@
 #include "my_fdcan.h"
 #include "motor.h"
 
-
-
-//static void print_data(uint8_t *data, uint16_t len)
-//{
-//    for (int i = 0; i < len; i++)
-//    {
-//        printf("%d\r\n", &data[i]);
-//    }
-//    printf("\r\n\r\n");
-//}
-
-
 /**
  * @brief 电压控制 float
  * @param fdcanHandle &hfdcanx
@@ -21,9 +9,9 @@
  * @param d d轴电压，例：0.0 -> 0v（通常设为 0）
  * @param q q轴电压，例：0.3 -> 0.3v
  */
-void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
+void livelybot_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -39,9 +27,9 @@ void set_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, fl
  * @param d d轴电压，单位：0.001V（通常设为 0）
  * @param q q轴电压，单位：0.001V
  */
-void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
+void livelybot_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
@@ -56,9 +44,9 @@ void set_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, 
  * @param d d轴电压，单位：0.1V（通常设为 0）
  * @param q q轴电压，单位：0.1V
  */
-void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
+void livelybot_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
@@ -73,9 +61,9 @@ void set_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, 
  * @param d d轴电流，例：0.0 -> 0A（通常设为 0）
  * @param q q轴电流，例：0.3 -> 0.3A
  */
-void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
+void livelybot_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
@@ -90,9 +78,9 @@ void set_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d,
  * @param d d轴电流，单位：0.001A（通常设为 0）
  * @param q q轴电流，单位：0.001A
  */
-void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
+void livelybot_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -108,9 +96,9 @@ void set_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
  * @param d d轴电流，单位：0.1A（通常设为 0）
  * @param q q轴电流，单位：0.1A
  */
-void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
+void livelybot_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_CUR, QUERY_MODE_FLAUT_CD_CQ, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
@@ -125,9 +113,9 @@ void set_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
  * @param id 电机ID
  * @param torque 力矩（单位见文档）
  */
-void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
+void livelybot_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -141,9 +129,9 @@ void set_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque
  * @param id id 电机ID
  * @param torque 力矩（单位见文档）
  */
-void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
+void livelybot_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -157,9 +145,9 @@ void set_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torq
  * @param id id 电机ID
  * @param torque 力矩（单位见文档）
  */
-void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
+void livelybot_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -175,9 +163,9 @@ void set_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torq
  * @param vel 速度：单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
  * @param torque 最大力矩（单位见文档）
  */
-void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
+void livelybot_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -195,10 +183,10 @@ void set_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float p
  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  * @param torque 最大力矩（单位见文档）
  */
-void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
+void livelybot_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -216,10 +204,10 @@ void set_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t
  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
  * @param torque 最大力矩（单位见文档）
  */
-void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
+void livelybot_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -235,9 +223,9 @@ void set_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t
  * @param id 电机ID
  * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
  */
-void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
+void livelybot_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -251,9 +239,9 @@ void set_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
  * @param id 电机ID
  * @param pos 位置：单位 0.00001 圈，如 pos = 50000 表示转到 0.5 圈的位置。
  */
-void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
+void livelybot_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -267,9 +255,9 @@ void set_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
  * @param id 电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。
  */
-void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
+void livelybot_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -283,9 +271,9 @@ void set_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
  * @param id 电机ID
  * @param vel 速度：单位 1 转/秒，如 vel = 0.1 -> 0.1 转/秒
  */
-void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
+void livelybot_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -299,10 +287,10 @@ void set_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
  * @param id 电机ID
  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  */
-void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
+void livelybot_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -316,10 +304,10 @@ void set_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
  * @param id 电机ID
  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
  */
-void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
+void livelybot_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -335,10 +323,10 @@ void set_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
  * @param vel 速度：单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
  * @param tqe 前馈力矩：（单位见文档）
  */
-void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
+void livelybot_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE,
+    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
@@ -364,10 +352,10 @@ void set_pos_vel_tqe_kp_kd_float_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  * @param tqe 前馈力矩（单位见文档）
  */
-void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
+void livelybot_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE,
+    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
@@ -393,10 +381,10 @@ void set_pos_vel_tqe_kp_kd_int32_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
  * @param tqe 前馈力矩（单位见文档）
  */
-void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
+void livelybot_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -415,10 +403,10 @@ void set_pos_vel_tqe_kp_kd_int16_2(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id,
  * @param vel_max 速度限制，单位 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
  * @param acc 加速度，单位：1 转/秒^2
  */
-void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc)
+void livelybot_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -436,10 +424,10 @@ void set_pos_velmax_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
  * @param vel_max 速度限制：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  * @param acc 加速度：单位 0.00001 转/秒^2，如 acc = 50000 表示 0.5 转/秒^2
  */
-void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc)
+void livelybot_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -457,9 +445,9 @@ void set_pos_velmax_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
  * @param vel_max 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
  * @param acc 加速度：单位 0.001 转/秒^2，如 acc = 100 表示 0.1 转/秒^2
  */
-void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
+void livelybot_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
@@ -476,10 +464,10 @@ void set_pos_velmax_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
  * @param vel 速度，单位： 1 转/秒，如 vel = 0.5 表示 0.5 转/秒
  * @param acc 加速度，单位：1 转/秒^2
  */
-void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc)
+void livelybot_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -495,10 +483,10 @@ void set_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, 
  * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
  * @param acc 加速度：单位 0.001 转/秒^2，如 vel = 500 表示 0.5 转/秒^2
  */
-void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
+void livelybot_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -514,10 +502,10 @@ void set_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel
  * @param vel 速度：单位 0.00025 转/秒，如 vel = 400 表示 0.1 转/秒
  * @param acc 加速度：单位 0.01 转/秒^2，如 vel = 40 表示 0.4 转/秒^2
  */
-void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
+void livelybot_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
@@ -532,12 +520,12 @@ void set_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel
  * @param id 电机ID
  * @param t_us 周期时间, 单位: 1us, 4字节小端; 填 0 表示停止周期返回
  * @note 发送: 0x03 0x00 0x05 <查询码> + 4字节微秒
- *       返回数据格式由 cmd[3] 查询码决定, 当前 QUERY_MODE_FLAUT_POS_VEL_TQE(0x0B)
+ *       返回数据格式由 cmd[3] 查询码决定, 当前 MODE_FLAUT_POS_VEL_TQE(0x0B)
  *       即 模式/错误/位置/速度/力矩; 可换 0x0C(含温度)/0x0D(DQ电流)/0x0E(无模式)
  */
-void request_motor_state(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
+void livelybot_check_motor_state_periodic(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
 {
-    static uint8_t cmd[] = {0x03, 0x00, 0x05, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x00, 0x05, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[4], &t_us, sizeof(uint32_t));
 
@@ -550,9 +538,9 @@ void request_motor_state(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t 
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x03, 0x03, 0x03};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x03};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -563,9 +551,9 @@ void set_pos_rezero(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x03, 0x03, 0x02};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x02};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -576,9 +564,9 @@ void set_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {0x03, 0x03, 0x01};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x01};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -590,16 +578,16 @@ void set_motor_reset_int8(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param old_id 当前电机ID
  * @param new_id 新电机ID
  */
-void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id)
+void livelybot_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id)
 {
-    /* new_id 限定在 1~126 (127 = BROADCAST_ID 广播地址, 不可作为电机 ID) */
-    if (new_id < MOTOR_ID_MIN || new_id > MOTOR_ID_MAX)
+    /* old_id / new_id 需在 1 ~ MOTOR_MAX_NUM 范围内, 否则返回帧不会被解析 (见 motor.c) */
+    if (old_id < MOTOR_ID_MIN || old_id > MOTOR_MAX_NUM ||new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
     {
         MOTOR_ERR();
-        new_id = (new_id < MOTOR_ID_MIN) ? MOTOR_ID_MIN : MOTOR_ID_MAX;
+        return;
     }
 
-    static uint8_t cmd[] = {0x03, 0x03, 0x04, 0x00};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x04, 0x00};
 
     cmd[3] = new_id;
 
@@ -612,9 +600,9 @@ void set_motor_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {MOTOR_MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, cmd, sizeof(cmd));
 }
@@ -625,10 +613,10 @@ void set_motor_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, cmd, sizeof(cmd));
 }
@@ -639,10 +627,10 @@ void set_motor_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -653,10 +641,10 @@ void set_motor_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, cmd, sizeof(cmd));
 }
@@ -667,10 +655,10 @@ void set_motor_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, cmd, sizeof(cmd));
 }
@@ -681,10 +669,10 @@ void set_motor_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MOTOR_MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -695,9 +683,9 @@ void set_motor_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -707,9 +695,9 @@ void read_motor_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -719,9 +707,9 @@ void read_motor_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -731,9 +719,9 @@ void read_motor_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, 0x04};
+    const uint8_t cmd[] = {0x00, FW_VERSION};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -744,9 +732,9 @@ void read_motor_version_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_hardware(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, 0x05};
+    const uint8_t cmd[] = {0x00, HW_VERSION};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -758,9 +746,9 @@ void read_motor_hardware_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  */
-void read_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void livelybot_check_motor_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, 0x07};
+    const uint8_t cmd[] = {0x00, MODEL};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }

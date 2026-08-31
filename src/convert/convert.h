@@ -32,12 +32,12 @@ typedef enum
 } pos_vel_type_t;
 
 
-typedef enum  // 数据类型 (枚举值 = CAN ID bits[17:16])
+typedef enum __packed  // 数据类型 (枚举值 = CAN ID bits[17:16])
 {
-    TINT16_NOHDR = 0,   // bits[17:16]=00, 一拖多专用
-    TINT16       = 1,   // bits[17:16]=01
-    TINT32       = 2,   // bits[17:16]=10
-    TFLOAT       = 3,   // bits[17:16]=11
+    TINT16_NOHDR = 0,
+    TINT16       = 1,
+    TINT32       = 2,
+    TFLOAT       = 3,   
 } data_type_t;
 
 
