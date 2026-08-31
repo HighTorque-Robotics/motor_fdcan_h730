@@ -215,7 +215,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 10);  // 0.1°C
+            p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TINT16);  // 0.1°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT16), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT16);
@@ -233,7 +233,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw / 1000);  // 0.001°C
+            p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TINT32);  // 0.001°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos_int2float(pos, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel_int2float(vel, TINT32), MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe_int2float(tqe, TINT32);
@@ -251,7 +251,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
             p_motor_state[id_index].query     = p_data[0];
             p_motor_state[id_index].mode      = (uint8_t)p_data[1];
             p_motor_state[id_index].fault     = p_data[2];
-            p_motor_state[id_index].temp      = (int8_t)(temp_raw);  // 1°C/LSB
+            p_motor_state[id_index].temp      = (int8_t)temp_int2float(temp_raw, TFLOAT);  // 1°C/LSB
             p_motor_state[id_index].position  = conv_from_turns(pos, MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].velocity  = conv_from_turns(vel, MOTOR_DATA_TYPE_FLAG);
             p_motor_state[id_index].torque    = tqe;
@@ -390,7 +390,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
 
         if (model_len > 0 && model_len <= 15 && len >= model_len + 2)
         {
-            char model_str[16] = {0};
+            char model_str[25] = {0};
 
             // 型号数据为 ASCII 字符直读 (如 0x35='5', 0x5F='_'), 直接复制即可
             for (uint8_t i = 0; i < model_len; i++)
@@ -404,21 +404,25 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         break;
     }
     // ===================== 配置命令应答帧 (0x03) =====================
-    // 返回帧: 03 | result
+    // 应答帧(2字节): 03 | result
     //   result = 0x00 : 配置成功
-    //   result != 0x00: 配置失败, result 为失败原因码
-    // 对应发送的系统命令: 软重启 03 03 01 / 保存设置 03 03 02 / 重设零位 03 03 03 / 改ID 03 03 04
+    //   result != 0x00: 配置失败, result 即失败原因码
+    // 注意: 这里是"返回的"2 字节应答帧, 与"发送的"3~8 字节命令帧严格区分
+    // 对应发送的系统命令:
+    //   周期返回 03 00 05 <查询码> + 4字节微秒
+    //   软重启 03 03 01 / 保存设置 03 03 02 / 重设零位 03 03 03 / 改ID 03 03 04 <新ID>
     case 0x03:
     {
         if (len >= 2)
         {
             const uint8_t result = p_data[1];
 
-            // ack: 1 = 配置成功, 0 = 配置失败
-            // (motor_config_closed_loop 以"非 0"判定确认成功, 故成功必须置非零)
+            //  result == 0 表示成功 (03 00), 非 0 表示失败 (03 XX)
+            // motor_config_closed_loop 以"非 0"视为确认成功
+            // 成功 → ack = 1(非零); 失败 → ack = 0
             p_motor_state[id_index].ack = (result == 0) ? 1 : 0;
 
-            // 失败原因码 fault ; 成功时清零
+            // 失败时把原因码存入 fault 便于排查; 成功时清零
             p_motor_state[id_index].fault = (result == 0) ? 0 : result;
         }
         break;

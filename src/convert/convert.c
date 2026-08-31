@@ -192,6 +192,12 @@ float pid_int2float(const float in_data, const data_type_t type)
 }
 
 
+float temp_int2float(const float in_data, const data_type_t type)
+{
+    return data_int2float(in_data, type, 10.0f, 1000.0f);
+}
+
+
 
 
 void my_memcpy(void *p1, const void *p2, const int16_t len)

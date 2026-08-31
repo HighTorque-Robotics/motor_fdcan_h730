@@ -66,6 +66,7 @@ float vel_int2float(const float in_data, const data_type_t type);
 float tqe_int2float(const float in_data, const data_type_t type);
 float acc_int2float(const float in_data, const data_type_t type);
 float pid_int2float(const float in_data, const data_type_t type);
+float temp_int2float(const float in_data, const data_type_t type);
 
 
 /* 数据搬运 */

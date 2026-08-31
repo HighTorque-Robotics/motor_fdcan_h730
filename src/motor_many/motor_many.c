@@ -458,4 +458,3 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         id++;                                                         // 每帧模式块编号递增
     }
 }
-
