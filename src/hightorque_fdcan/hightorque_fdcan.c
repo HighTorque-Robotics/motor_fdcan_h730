@@ -523,7 +523,7 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
  *       返回数据格式由 cmd[3] 查询码决定, 当前 MODE_FLAUT_POS_VEL_TQE(0x0B)
  *       即 模式/错误/位置/速度/力矩; 可换 0x0C(含温度)/0x0D(DQ电流)/0x0E(无模式)
  */
-void hightorque_timed_return(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
+void hightorque_request_timed_return(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x00, 0x05, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
@@ -564,7 +564,7 @@ void hightorque_conf_write(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_SYSTEM, 0x03, 0x01};
 
@@ -600,7 +600,7 @@ void hightorque_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
     static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
 
@@ -613,7 +613,7 @@ void hightorque_set_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
     static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
@@ -627,7 +627,7 @@ void hightorque_set_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
     static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
@@ -641,7 +641,7 @@ void hightorque_set_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
     static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
@@ -655,7 +655,7 @@ void hightorque_set_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
     static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
@@ -669,7 +669,7 @@ void hightorque_set_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  * @param fdcanHandle &hfdcanx
  * @param id id 电机ID
  */
-void hightorque_set_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
+void hightorque_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
     static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};

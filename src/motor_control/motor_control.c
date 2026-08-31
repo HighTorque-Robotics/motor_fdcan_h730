@@ -417,13 +417,13 @@ void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        hightorque_set_stop_float(fdcanHandle, id);
+        hightorque_stop_float(fdcanHandle, id);
         break;
     case TINT32:
-        hightorque_set_stop_int32(fdcanHandle, id);
+        hightorque_stop_int32(fdcanHandle, id);
         break;
     case TINT16:
-        hightorque_set_stop_int16(fdcanHandle, id);
+        hightorque_stop_int16(fdcanHandle, id);
         break;
     default:
         break;
@@ -443,13 +443,13 @@ void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id)
     switch(type)
     {
     case TFLOAT:
-        hightorque_set_brake_float(fdcanHandle, id);
+        hightorque_brake_float(fdcanHandle, id);
         break;
     case TINT32:
-        hightorque_set_brake_int32(fdcanHandle, id);
+        hightorque_brake_int32(fdcanHandle, id);
         break;
     case TINT16:
-        hightorque_set_brake_int16(fdcanHandle, id);
+        hightorque_brake_int16(fdcanHandle, id);
         break;
     default:
         break;

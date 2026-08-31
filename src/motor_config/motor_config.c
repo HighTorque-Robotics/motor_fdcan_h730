@@ -48,7 +48,7 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
 
-    hightorque_set_reset(fdcanHandle, id);
+    hightorque_reset(fdcanHandle, id);
     HAL_Delay(200);
 
     if (motor_config_closed_loop(hightorque_pos_rezero, fdcanHandle, id, &p_motor_state[id - 1].ack) != 0)
@@ -56,7 +56,7 @@ uint8_t motor_pos_reset(port_t portx, const uint8_t id)
         return 1;
     }
 
-    hightorque_set_reset(fdcanHandle, id);
+    hightorque_reset(fdcanHandle, id);
     HAL_Delay(200);
 
     return 0;
@@ -83,7 +83,7 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
         return 1;
     }
 
-    hightorque_set_reset(fdcanHandle, new_id);
+    hightorque_reset(fdcanHandle, new_id);
     HAL_Delay(200);
 
     return 0;
@@ -111,7 +111,7 @@ uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t
         return 1;
     }
 
-    hightorque_timed_return(fdcanHandle, id, t_us);
+    hightorque_request_timed_return(fdcanHandle, id, t_us);
     HAL_Delay(100);
 
 

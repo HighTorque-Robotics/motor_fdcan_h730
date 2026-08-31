@@ -15,7 +15,7 @@
 #include "hightorque_fdcan.h"
 #include "debug_print.h"
 
-typedef enum __packed //电机控制模式码 (控制帧)
+typedef enum __packed  // 电机控制模式码
 {
     MODE_NULL        = 0,     // 空模式 (占位)          
     MODE_STOP        = 0x01,  // 停止 (惯性停止)      
@@ -34,7 +34,7 @@ typedef enum __packed //电机控制模式码 (控制帧)
 } motor_mode_t;
 
 
-typedef enum __packed //电机查询码 (查询帧)
+typedef enum __packed  // 电机查询码
 {
     SYSTEM                           = 0x03,  // 查询系统信息 
     FW_VERSION                       = 0x04,  // 查询固件版本 
@@ -68,19 +68,19 @@ typedef struct
 
 typedef struct
 {
-    motor_mode_t mode;  // 模式（对应 motor_mode_t 枚举）
-    uint8_t fault;      // 错误码
-    float position;     // 位置
-    float velocity;     // 速度
-    float torque;       // 力矩
-    int8_t  temp;       // 温度（单位：摄氏度，分辨率：1度）
-    uint8_t ack;        // 应答，用于电机设置相关的应答
+    motor_mode_t mode;      // 模式（对应 motor_mode_t 枚举）
+    uint8_t fault;          // 错误码
+    float position;         // 位置
+    float velocity;         // 速度
+    float torque;           // 力矩
+    int8_t  temp;           // 温度（单位：摄氏度，分辨率：1度）
+    uint8_t ack;            // 应答，用于电机设置相关的应答
     version_s version;      // 电机固件版本号
     version_s hw_version;   // 电机硬件版本号
 
-    char model[25];     // 电机型号 (如 "5036_02")
-    // float i_d;          // d轴电流
-    // float i_q;          // q轴电流
+    char model[25];         // 电机型号 (如 "5036_02")
+    // float i_d;           // d轴电流
+    // float i_q;           // q轴电流
 } motor_state_s, *p_motor_state_s;  // 这个结构体会定义成结构体数组，其中数组下标 +1 即为电机 ID
 
 

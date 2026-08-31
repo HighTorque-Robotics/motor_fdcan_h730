@@ -4,8 +4,6 @@
 many_data_s many_data_port[MANY_PORT_SIZE][MANY_DATA_BUF_MAX_LEN];
 
 
-
-
 p_many_data_s motor_get_many_pointer(port_t portx)
 {
     if (portx < 1 || portx > MANY_PORT_SIZE)
@@ -421,6 +419,49 @@ static uint8_t get_mode_data_len(uint8_t mode)
 }
 
 
+static uint8_t get_fdcan_len(uint16_t len)
+{
+    uint32_t dlc = 0;
+
+    if (len <= 8)
+    {
+        dlc = len;
+    }
+    else if (len <= 12)
+    {
+        dlc = 12;
+    }
+    else if (len <= 16)
+    {
+        dlc = 16;
+    }
+    else if (len <= 20)
+    {
+        dlc = 20;
+    }
+    else if (len <= 24)
+    {
+        dlc = 24;
+    }
+    else if (len <= 32)
+    {
+        dlc = 32;
+    }
+    else if (len <= 48)
+    {
+        dlc = 48;
+    }
+    else
+    {
+        dlc = 64;
+    }
+
+    return dlc;
+}
+
+
+
+
 /**
  * @brief 一拖多 发送 (切分成多帧, 每帧最多 60 字节, ID 递增, query 填帧尾)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
@@ -444,11 +485,12 @@ void motor_many_send(port_t portx, many_request_type_t request_type)
         const uint8_t cut_len = (data_len > 60) ? 60 : data_len;      // 每帧最多切 60 字节数据
         data_len -= cut_len;
 
-        /* 帧长 = 数据 + 1 查询码, CAN FD 块对齐由 fdcan_send 内部完成 */
+        /* 帧长 = 数据 + 1 查询码, 并做 CAN FD 块对齐 (8/12/16/20/24/32/48/64) */
         const uint16_t byte_len = cut_len + 1;
+        const uint8_t frame_len = get_fdcan_len(byte_len);
 
         my_memcpy(buf, p_data, cut_len);
-        buf[cut_len] = (uint8_t)request_type;                        // 查询码放数据后第一字节
+        buf[frame_len - 1] = (uint8_t)request_type;                  // 查询码放帧尾 (对齐后最后一字节)
         p_data += cut_len;
 
         /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
