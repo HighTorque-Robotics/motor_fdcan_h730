@@ -2,19 +2,6 @@
 #include <stdio.h>
 
 
-void test_motor_many_stop(uint8_t enable)
-{
-    for (uint8_t id = 1; id <= MANY_MOTOR_SIZE; id++)
-    {
-        motor_many_stop(PORT1, id, enable);
-    }
-
-    motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
-    motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
-    motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
-}
-
-
 void test_motor_many()
 {
     const uint8_t mode = 3;

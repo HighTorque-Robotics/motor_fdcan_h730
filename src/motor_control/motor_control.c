@@ -10,7 +10,7 @@
  * @param id 电机 ID
  * @param volt Q 相电压，单位：（V），例：0.3 -> 0.3V（D 轴固定为 0）
  */
-void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, const float volt)
+void motor_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, const float volt)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float volt_raw = vol_float2int(volt, type);
@@ -39,7 +39,7 @@ void motor_set_dq_vlot(port_t portx, const data_type_t type, const uint8_t id, c
  * @param id 电机 ID
  * @param cur Q 相电流，单位：（A），例：0.3 -> 0.3A（D 轴固定为 0）
  */
-void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id, const float cur)
+void motor_dq_current(port_t portx, const data_type_t type, const uint8_t id, const float cur)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float cur_raw = cur_float2int(cur, type);
@@ -68,7 +68,7 @@ void motor_set_dq_current(port_t portx, const data_type_t type, const uint8_t id
  * @param id 电机 ID
  * @param pos 目标位置，单位可为转（r）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_pos(port_t portx, const data_type_t type, const uint8_t id, const float pos)
+void motor_pos(port_t portx, const data_type_t type, const uint8_t id, const float pos)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -98,7 +98,7 @@ void motor_set_pos(port_t portx, const data_type_t type, const uint8_t id, const
  * @param id 电机 ID
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_vel(port_t portx, const data_type_t type, const uint8_t id, const float vel)
+void motor_vel(port_t portx, const data_type_t type, const uint8_t id, const float vel)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -128,7 +128,7 @@ void motor_set_vel(port_t portx, const data_type_t type, const uint8_t id, const
  * @param id 电机 ID
  * @param tqe 目标力矩，单位牛米（Nm）
  */
-void motor_set_tqe(port_t portx, const data_type_t type, const uint8_t id, const float tqe)
+void motor_tqe(port_t portx, const data_type_t type, const uint8_t id, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float tqe_raw = tqe_float2int(tqe, type);
@@ -158,7 +158,7 @@ void motor_set_tqe(port_t portx, const data_type_t type, const uint8_t id, const
  * @param pos 目标位置，单位可为转（rev）、弧度（rad）、或度（°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel)
+void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -192,7 +192,7 @@ void motor_set_pos_vel(port_t portx, const data_type_t type, const uint8_t id, c
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm）
  */
-void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id,
+void motor_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id,
                               const float pos, const float vel, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
@@ -229,7 +229,7 @@ void motor_set_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param acc 目标加速度，单位可为转每秒平方（rev/s^2）、弧度每秒平方（rad/s^2）、或度每秒平方（°/s^2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc)
+void motor_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -265,7 +265,7 @@ void motor_set_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param acc 目标加速度，单位可为转每秒平方（rev/s^2）、弧度每秒平方（rad/s^2）、或度每秒平方（°/s^2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const float vel, const float acc)
+void motor_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const float vel, const float acc)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float vel_turns = conv_to_turns(vel, MOTOR_DATA_TYPE_FLAG);
@@ -301,7 +301,7 @@ void motor_set_vel_acc(port_t portx, const data_type_t type, const uint8_t id, c
  * @param kp 单位可为牛米每转（Nm/rev）、牛米每弧度（Nm/rad）、或牛米每度（Nm/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
+void motor_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
                                    const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
@@ -342,7 +342,7 @@ void motor_set_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uin
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
  */
-void motor_get_state_send(port_t portx, const data_type_t type, const uint8_t id)
+void motor_request_state(port_t portx, const data_type_t type, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -368,7 +368,7 @@ void motor_get_state_send(port_t portx, const data_type_t type, const uint8_t id
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
-void motor_get_version(port_t portx, const uint8_t id)
+void motor_request_fw_version(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -384,7 +384,7 @@ void motor_get_version(port_t portx, const uint8_t id)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
-void motor_get_model(port_t portx, const uint8_t id)
+void motor_request_model(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -397,7 +397,7 @@ void motor_get_model(port_t portx, const uint8_t id)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
-void motor_get_hardware_version(port_t portx, const uint8_t id)
+void motor_request_hw_version(port_t portx, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -410,7 +410,7 @@ void motor_get_hardware_version(port_t portx, const uint8_t id)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
-void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
+void motor_stop(port_t portx, const data_type_t type, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -436,7 +436,7 @@ void motor_set_stop(port_t portx, const data_type_t type, const uint8_t id)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */
-void motor_set_brake(port_t portx, const data_type_t type, const uint8_t id)
+void motor_brake(port_t portx, const data_type_t type, const uint8_t id)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
