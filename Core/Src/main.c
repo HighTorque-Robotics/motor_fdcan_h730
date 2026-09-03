@@ -122,7 +122,7 @@ int main(void)
         if (HAL_GetTick() - tick_ctrl >= 1)
         {
             tick_ctrl = HAL_GetTick();
-            test_motor_many();
+            test_motor_control(1);
         }
 
         motor_process_state_all();

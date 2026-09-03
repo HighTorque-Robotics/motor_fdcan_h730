@@ -7,8 +7,6 @@
 #include "fdcan.h"
 
 
-
-void test_motor_many_stop(uint8_t enable);
 void test_motor_many(void);
 
 

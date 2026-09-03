@@ -8,20 +8,7 @@
 
 # 2. 项目概览
 
-## 2.1 核心模块与职责
-
-例程 按「底层协议 → 上层封装」分为多层，各目录/模块职责如下：
-
-| 模块               | 对应目录                | 职责                                                         |
-| ------------------ | ----------------------- | ------------------------------------------------------------ |
-| `hightorque_fdcan` | `src/hightorque_fdcan/` | 底层协议封装（`hightorque_*` 发送函数）<br>与具体控制模式一一对应 |
-| `convert`          | `src/convert/`          | 单位换算(可更换)：弧度/角度/圈数 ↔ float ↔ int<br>（`conv_to_turns` / `*_float2int`） |
-| `motor`            | `src/motor/`            | 电机状态管理：`motor_state_s` 全局数组<br>（下标 +1 即电机 ID）<br>`motor_process_state_all` 返回帧解析 |
-| `motor_control`    | `src/motor_control/`    | 单电机控制封装（`motor_*`）：<br>单位换算后立即调用底层并发送 |
-| `motor_many`       | `src/motor_many/`       | 一拖多批量控制<br>（`motor_many_*` 打包 + `motor_many_send` 统一发送） |
-| `motor_config`     | `src/motor_config/`     | 电机配置（改 ID / 重置零位 / 周期返回，闭环确认）            |
-
-## 2.2 目录结构
+## 2.1 目录结构
 
 ```plaintext
 fdcan_h730/
@@ -42,7 +29,7 @@ fdcan_h730/
     └── test_motor_many/       # 一拖多控制测试（test_motor_many / stop）
 ```
 
-## 2.3 适用版本
+## 2.2 适用版本
 
 *   例程版本号：`v4.0.0`
 
@@ -100,23 +87,11 @@ fdcan_h730/
 
 **验证成功标志**：串口能持续打印非 0、且随指令变化的 `pos / vel / tqe`，且 `fault` 为 0。若一直为 0 或无打印，见「11. 故障排查」。
 
-## 5. 示例程序
-
-示例位于 `test/`，共 2 个目录，均依赖真实硬件（电机 + FDCAN 接线），无硬件无法观测效果。
-
-| 示例       | 入口                           | 说明                                                         |
-| ---------- | ------------------------------ | ------------------------------------------------------------ |
-| 单电机     | `test_motor_control(id)`       | 通过 `mode` 变量（0~14）切换：DQ 电压 / DQ 电流 / 位置 / 速度 / 力矩 / 位置+速度 / 位置+速度+最大力矩 / 梯形 / MIT / 速度+加速度 / 停止 / 读取状态 / 读取版本 / 刹车 / 读取型号。默认 `mode = 3`（速度控制） |
-| 一拖多     | `test_motor_many()`            | 通过 `mode` 变量切换一拖多各模式，循环遍历本通道所有电机写入缓冲后统一 `motor_many_send()` |
-| 一拖多停止 | `test_motor_many_stop(enable)` | 演示批量停止并连续发送 3 次查询帧确保电机响应                |
-
----
-
-## 6. 配置
+## 5. 配置
 
 配置入口为 `src/motor/motor.h` 与 `src/convert/convert.h`，修改后需重新编译。
 
-### 6.1 通道与电机数（`src/motor/motor.h`）
+### 5.1 通道与电机数（`src/motor/motor.h`）
 
 ```c
 #define MOTOR_PORT_NUM  2   // CAN 通道数量（当前 2 路）
@@ -126,7 +101,7 @@ fdcan_h730/
 
 `MOTOR_MAX_NUM` 决定状态数组大小；电机 ID 从 1 开始连续，**ID > MOTOR\_MAX\_NUM 的返回帧不会被解析**（见 `motor.c` 入口判断）。
 
-### 6.2 更换单位（`src/convert/convert.h`）
+### 5.2 更换单位（`src/convert/convert.h`）
 
 ```c
 #define MOTOR_DATA_TYPE_FLAG  TURNS   // RADIAN_2PI（弧度）/ ANGLE_360（角度）/ TURNS（圈数）
@@ -135,16 +110,7 @@ fdcan_h730/
 
 角度类参数（`pos` / `vel` / `acc`）统一按此宏换算；`tqe`（力矩）固定为 N·m，不随单位制变化。
 
-### 6.3 电机 ID 范围（`src/convert/convert.h`）
-
-```c
-#define BROADCAST_ID  0x7F
-#define MOTOR_ID_MIN  1
-#define MOTOR_ID_MAX  (BROADCAST_ID - 1)   // 126
-
-```
-
-### 6.4 通道映射（`src/motor/motor.c` 的 `port_maping`）
+### 5.3 通道映射（`src/motor/motor.c` 的 `port_maping`）
 
 | 通道    | 外设      | 说明                                            |
 | ------- | --------- | ----------------------------------------------- |
@@ -156,13 +122,13 @@ fdcan_h730/
 
 ---
 
-## 7. 初始化与运行结构
+## 6. 初始化与运行结构
 
-### 7.1 初始化流程
+### 6.1 初始化流程
 
-上电后由 CubeMX 生成的外设初始化（`MX_FDCAN1_Init` / `MX_FDCAN2_Init`）完成 FDCAN 波特率（1M/5M）、FD 帧、BRS 配置；随后 `fdcan_filter_init(fdcanHandle)` 配置全局过滤器、使能接收中断与发送 FIFO 空中断并启动 FDCAN。
+上电后由 CubeMX 生成的外设初始化（`MX_FDCAN1_Init` / `MX_FDCAN2_Init`）完成 FDCAN 波特率（1M/5M）、FD 帧、BRS 配置。
 
-### 7.2 主循环（`Core/Src/main.c`）
+### 6.2 主循环（`Core/Src/main.c`）
 
 ```c
 while (1)
@@ -189,17 +155,17 @@ while (1)
 
 控制例程按需下发指令；一拖多方式需先写缓冲再 `motor_many_send()` 统一发送。
 
-### 7.3 反馈机制
+### 6.3 反馈机制
 
 *   控制帧（除软重启外）**自带状态查询**：电机收到控制指令后按查询码返回一帧状态，`motor_process_state_all()` 自动解析并写入对应 `motor_state_s`；
 
-*   解析由主循环周期调用完成，无需用户干预。
+*   解析需调用解析函数来完成。
 
 ---
 
-## 8. 接口层次
+## 7. 接口层次
 
-### 8.1 单电机方式（`motor_control`）
+### 7.1 单电机方式（`motor_control`）
 
 *   直接调用 `motor_*(portx, type, id, ...)`，一次控制一台电机；
 
@@ -207,7 +173,7 @@ while (1)
 
 *   适合小电机数、逐个控制的场景。
 
-### 8.2 一拖多方式（`motor_many`）
+### 7.2 一拖多方式（`motor_many`）
 
 *   先调用 `motor_many_*(portx, id, ...)` 把多台电机指令打包进缓冲区（`many_data_s`）；
 
@@ -215,22 +181,74 @@ while (1)
 
 *   适合多电机（每条 CAN 通道 ≤ 30 台）批量控制的场景。
 
-### 8.3 底层接口（`hightorque_fdcan`）
+### 7.3 底层接口（`hightorque_fdcan`）
 
 `hightorque_*` 是协议层最小发送单元，按数据类型分为 `*_float` / `*_int32` / `*_int16` 三组。`motor_control` / `motor_many` 只是单位换算与打包封装，最终都落到 `hightorque_*` + `fdcan_send` 的同一套协议，**可以混用**。
 
-### 8.4 使用方式对比
+### 7.4 使用方式对比
 
-| 方式   | 控制调用                            | 发送方式                     | 状态读取                    | 适用场景               |
-| ------ | ----------------------------------- | ---------------------------- | --------------------------- | ---------------------- |
-| 单电机 | `motor_pos(PORT1, TFLOAT, 1, 1.0f)` | 内部立即发送                 | `motor_get_state(PORT1, 1)` | 电机少、逐个控制       |
-| 一拖多 | `motor_many_pos(PORT1, 1, 1.0f)`    | `motor_many_send()` 统一发送 | 同上                        | 单通道 ≤ 30 台批量控制 |
+| 方式   | 控制调用                            | 适用场景               |
+| ------ | ----------------------------------- | ---------------------- |
+| 单电机 | `motor_pos(PORT1, TFLOAT, 1, 1.0f)` | 电机少、逐个控制       |
+| 一拖多 | `motor_many_pos(PORT1, 1, 1.0f)`    | 单通道 ≤ 30 台批量控制 |
 
 ---
 
-## 9. 控制与反馈
+## 8. 控制与反馈
 
-### 9.1 单电机控制函数（`motor_control` / `hightorque`）
+**控制接口总览**
+
+控制函数分为单电机（立即发送）与一拖多（打包后统一发送）两种方式，常用接口如下，详细说明见对应小节。
+
+**单电机控制接口（详见 8.1）**
+
+| 接口 | 用途 | 说明 |
+| --- | --- | --- |
+| `motor_dq_vlot` | DQ 电压控制 | 固定 d=0，仅 q 轴电压（V） |
+| `motor_dq_current` | DQ 电流控制 | 固定 d=0，仅 q 轴电流（A） |
+| `motor_pos` | 位置控制 | 最大速度/加速度运动到目标位置 |
+| `motor_vel` | 速度控制 | 最大加速度加速到目标速度 |
+| `motor_tqe` | 力矩控制 | 输出指定力矩（N·m） |
+| `motor_vel_acc` | 速度 + 加速度 | 指定加速度加速到目标速度 |
+| `motor_pos_vel` | 位置 + 速度 | 以目标速度运动到目标位置 |
+| `motor_pos_vel_MAXtqe` | 位置 + 速度 + 最大力矩 | 限制最大输出力矩（N·m） |
+| `motor_pos_velmax_acc` | 位置 + 速度 + 加速度（梯形） | 推荐的位置控制方式 |
+| `motor_pos_vel_tqe_kp_kd` | MIT 运控 | 位置 + 速度 + 力矩 + Kp/Kd |
+| `motor_stop` | 停止 | 三相悬空，可自由转动 |
+| `motor_brake` | 刹车 | 三相接地，阻尼刹车 |
+
+**一拖多控制接口（详见 8.2，打包后需调用 `motor_many_send()`）**
+
+| 接口 | 用途 | 说明 |
+| --- | --- | --- |
+| `motor_many_pos` | 位置控制 | 每电机 2 字节 |
+| `motor_many_vel` | 速度控制 | 每电机 2 字节 |
+| `motor_many_tqe` | 力矩控制 | 每电机 2 字节 |
+| `motor_many_dq_volt` / `motor_many_dq_current` | DQ 电压 / 电流 | 每电机 2 字节 |
+| `motor_many_vel_acc` | 速度 + 加速度 | 每电机 4 字节 |
+| `motor_many_pos_vel_MAXtqe` | 位置 + 速度 + 最大力矩 | 每电机 6 字节 |
+| `motor_many_pos_vel_acc` | 位置 + 速度 + 加速度（梯形） | 每电机 6 字节 |
+| `motor_many_pos_vel_tqe_kp_kd` | MIT 运控 | 每电机 10 字节 |
+| `motor_many_stop` / `motor_many_brake` / `motor_many_reset` / `motor_many_rezero` | 停止 / 刹车 / 软重启 / 重置零位 | 每电机 1 字节 enable |
+
+**状态读取接口（详见 8.3）**
+
+| 接口 | 用途 | 说明 |
+| --- | --- | --- |
+| `motor_request_state` | 主动查询状态 | 查询码 0x0B，返回帧自动解析 |
+| `motor_get_state` | 读取最新状态 | 返回 `p_motor_state_s`（含 pos/vel/tqe/temp/fault 等） |
+| `motor_request_fw_version` / `motor_request_hw_version` / `motor_request_model` | 查询版本 / 型号 | 结果写入 `state.version` / `state.hw_version` / `state.model` |
+| `motor_timed_return_status` | 周期返回状态 | 电机按设定周期自动返回状态帧，`t_us=0` 停止 |
+
+**配置接口（详见 8.4）**
+
+| 接口 | 用途 | 说明 |
+| --- | --- | --- |
+| `motor_pos_reset` | 重置零位（校准） | 返回 0 成功，非 0 失败 |
+| `motor_set_id` | 更改电机 ID | 返回 0 成功，非 0 失败 |
+
+
+### 8.1 单电机控制函数（`motor_control` / `hightorque`）
 
 所有单电机控制函数最终实现在 `src/hightorque_fdcan/hightorque_fdcan.c`（`hightorque_*`），`motor_control.c` 的 `motor_*` 做单位换算后调用。调用形式统一为：
 
@@ -247,7 +265,7 @@ motor_xxx(portx, type, id, 参数...);
 
 *   每个控制函数**内部立即发送**，无需额外 `send()`。
 
-#### DQ 电压控制模式
+#### 8.1.1 DQ 电压控制模式
 
 设置 D/Q 轴电压（本工程固定 `d=0`，仅设置 q 轴）。
 
@@ -258,7 +276,7 @@ motor_dq_vlot(PORT1, TFLOAT, id, 0.3f);
 
 ```
 
-#### DQ 电流控制模式
+#### 8.1.2 DQ 电流控制模式
 
 设置 D/Q 轴电流（本工程固定 `d=0`，仅设置 q 轴）。
 
@@ -269,7 +287,7 @@ motor_dq_current(PORT1, TFLOAT, id, 0.5f);
 
 ```
 
-#### 位置控制模式
+#### 8.1.3 位置控制模式
 
 电机以最大速度和最大加速度运动到指定目标位置。
 
@@ -282,7 +300,7 @@ motor_pos(PORT1, TFLOAT, id, pos);
 
 ```
 
-#### 速度控制模式
+#### 8.1.4 速度控制模式
 
 电机以最大加速度加速到指定目标速度。
 
@@ -293,7 +311,7 @@ motor_vel(PORT1, TFLOAT, id, vel);
 
 ```
 
-#### 力矩控制模式
+#### 8.1.5 力矩控制模式
 
 电机按设定目标力矩转动。
 
@@ -306,7 +324,7 @@ motor_tqe(PORT1, TFLOAT, id, tqe);
 
 ```
 
-#### 速度 + 加速度控制模式
+#### 8.1.6 速度 + 加速度控制模式
 
 电机以指定加速度加速到目标速度。
 
@@ -317,7 +335,7 @@ motor_vel_acc(PORT1, TFLOAT, id, vel, acc);
 
 ```
 
-#### 位置 + 速度控制模式
+#### 8.1.7 位置 + 速度控制模式
 
 电机以目标速度运动至目标位置，不限制加速度和最大输出力矩。
 
@@ -328,7 +346,7 @@ motor_pos_vel(PORT1, TFLOAT, id, pos, vel);
 
 ```
 
-#### 位置 + 速度 + 最大力矩控制模式
+#### 8.1.8 位置 + 速度 + 最大力矩控制模式
 
 电机以目标速度运动至指定目标位置，同时限制最大输出力矩。
 
@@ -341,7 +359,7 @@ motor_pos_vel_MAXtqe(PORT1, TFLOAT, id, pos, vel, tqe);
 
 ```
 
-#### 位置 + 速度 + 加速度控制模式（梯形控制）
+#### 8.1.9 位置 + 速度 + 加速度控制模式（梯形控制）
 
 电机按恒定加速度运动，实现「先加速 → 匀速 → 减速」的梯形速度控制。
 
@@ -354,7 +372,7 @@ motor_pos_velmax_acc(PORT1, TFLOAT, id, pos, vel, acc);
 
 ```
 
-#### MIT 模式（位置 + 速度 + 力矩 + Kp/Kd）
+#### 8.1.10 MIT 模式（位置 + 速度 + 力矩 + Kp/Kd）
 
 电机输出力矩计算公式：
 
@@ -380,7 +398,16 @@ motor_pos_vel_tqe_kp_kd(PORT1, TFLOAT, id, pos, vel, tqe, kp, kd);
 
 ```
 
-### 9.2 一拖多控制（`motor_many`）
+
+#### 8.1.11 停止 / 刹车
+
+```c
+motor_stop(PORT1, TFLOAT, id);    // 三相悬空，可自由转动
+motor_brake(PORT1, TFLOAT, id);   // 三相接地，阻尼刹车（有外力仍可缓慢转动）
+
+```
+
+### 8.2 一拖多控制（`motor_many`）
 
 `motor_many` 是一拖多批量控制封装，内部持有 `many_data_s` 打包缓冲区。控制函数需指定 `portx` 与电机 `id`；写入缓冲后统一 `motor_many_send()` 发送。
 
@@ -388,13 +415,13 @@ motor_pos_vel_tqe_kp_kd(PORT1, TFLOAT, id, pos, vel, tqe, kp, kd);
 
 *   一拖多固定 `TINT16` 数据类型（无需指定 `type`），每电机数据长度由模式决定（2/4/6/10 字节），单帧最多切 60 字节数据，超出自动切分多帧、模式块编号递增；
 
-*   停止 / 刹车 / 软重启 / 重置零位为每电机 1 字节 `enable`（非 0 启用）；
+*   停止 / 刹车 / 软重启 / 重置零位为每电机 1 字节 `启用`（非 0 启用）；
 
 *   发送帧 CAN ID = `ID_PREFIX_TINT16 | 模式块编号`（`fdcan_send` 自动置 bit\[15\]=1）；
 
 *   `motor_many_send(portx, request_type)` 的第二参数为查询码，决定返回帧内容（0x0B 标准状态 / 0x0C 含温度 / 0x0E 无模式）。
 
-#### 位置控制
+#### 8.2.1 位置控制
 
 ```c
 motor_many_pos(PORT1, 1, pos1);
@@ -403,7 +430,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 速度控制
+#### 8.2.2 速度控制
 
 ```c
 motor_many_vel(PORT1, id, vel);
@@ -411,7 +438,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 力矩控制
+#### 8.2.3 力矩控制
 
 ```c
 motor_many_tqe(PORT1, id, tqe);
@@ -419,7 +446,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### DQ 电压 / 电流
+#### 8.2.4 DQ 电压 / 电流
 
 ```c
 motor_many_dq_volt(PORT1, id, vol);      // DQ 电压
@@ -428,7 +455,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 速度 + 加速度
+#### 8.2.5 速度 + 加速度
 
 ```c
 motor_many_vel_acc(PORT1, id, vel, acc);
@@ -436,7 +463,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 位置 + 速度 + 最大力矩
+#### 8.2.6 位置 + 速度 + 最大力矩
 
 ```c
 motor_many_pos_vel_MAXtqe(PORT1, id, pos, vel, tqe);
@@ -444,7 +471,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 位置 + 速度 + 加速度（梯形控制）
+#### 8.2.7 位置 + 速度 + 加速度（梯形控制）
 
 ```c
 motor_many_pos_vel_acc(PORT1, id, pos, vel, acc);
@@ -452,7 +479,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### MIT 运控
+#### 8.2.8 MIT 运控
 
 ```c
 motor_many_pos_vel_tqe_kp_kd(PORT1, id, pos, vel, tqe, kp, kd);
@@ -460,7 +487,7 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-#### 停止 / 刹车 / 软重启 / 重置零位（每电机 1 字节 enable）
+#### 8.2.9 停止 / 刹车 / 软重启 / 重置零位（每电机 1 字节 启用）
 
 ```c
 motor_many_stop(PORT1, id, 1);    // 停止
@@ -471,24 +498,17 @@ motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
 
 ```
 
-### 9.3 状态读取与系统函数
 
-#### 停止 / 刹车
+### 8.3 状态读取与系统函数
 
-```c
-motor_stop(PORT1, TFLOAT, id);    // 三相悬空，可自由转动
-motor_brake(PORT1, TFLOAT, id);   // 三相接地，阻尼刹车（有外力仍可缓慢转动）
-
-```
-
-#### 主动读取状态（不控制时）
+#### 8.3.1 主动读取状态
 
 ```c
 motor_request_state(PORT1, TFLOAT, id);   // 发送查询指令（查询码 0x0B），返回帧自动解析
 
 ```
 
-#### 读取最新状态
+#### 8.3.2 读取最新状态
 
 ```c
 p_motor_state_s state = motor_get_state(PORT1, id);
@@ -501,55 +521,67 @@ printf("ID:%2d, mode:%2X, fault:%2X, pos: %8.4f, vel: %8.4f, tor: %8.4f\r\n",
 
 *   状态解析由主循环 `motor_process_state_all()` 自动完成；读取前须保证 `id ∈ [1, MOTOR_MAX_NUM]`（越界有 `MOTOR_ERR` 保护）。
 
-#### 读取固件版本 / 硬件版本 / 型号
+#### 8.3.3 读取固件版本 / 硬件版本 / 型号
 
 ```c
-motor_request_fw_version(PORT1, id);            // 固件版本 → state.version (major.minor.patch)
+motor_request_fw_version(PORT1, id);   // 固件版本 → state.version (major.minor.patch)
 motor_request_hw_version(PORT1, id);   // 硬件版本 → state.hw_version
-motor_request_model(PORT1, id);              // 型号 → state.model (ASCII)
+motor_request_model(PORT1, id);        // 型号 → state.model (ASCII)
 
 ```
 
-### 9.4 配置类函数（`motor_config`）
 
-配置类函数用于修改电机参数（零位 / ID / 周期返回），底层采用**闭环确认**机制（`motor_config_closed_loop`：清零 `ack` → 循环重发 → 等待 `ack` 非 0 或超时），函数返回值 `0` 表示成功、`1` 表示超时失败。
-
-#### 重置零位（校准）
-
-将当前机械位置设为电机零点，需电机处于静止状态后调用。
-
-```c
-uint8_t motor_pos_reset(port_t portx, const uint8_t id);   // 返回 0 成功，1 失败
-```
-
-*   内部流程：软重启 → 重发重设零位命令并闭环确认 → 再次软重启，全程自动完成；
-*   成功后电机以当前位置为新零点，后续位置控制均以此为基准。
-
-#### 更改电机 ID
-
-将电机 ID 从 `old_id` 改为 `new_id`。
-
-```c
-uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id);   // 返回 0 成功，1 失败
-```
-
-*   底层按 `old_id` 寻址下发改 ID 命令，闭环确认后用 `new_id` 软重启；
-*   **注意**：修改后请同步更新 `src/motor/motor.h` 的 `MOTOR_MAX_NUM`（及配置），否则新 ID 超出范围不会解析返回帧。
-
-#### 周期返回状态（运行时功能）
+#### 8.3.4 周期返回状态（运行时功能）
 
 让电机按设定周期自动返回状态帧（无需每次手动查询）。
 
 ```c
 uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t t_us);   // 返回 0 成功，1 失败
+
 ```
 
-*   `t_us`：返回周期，单位 1us（4 字节小端），填 `0` 停止周期返回；
-*   **注意**：周期小于 100us 电机会报错（系统命令返回 `03 01`）；
-*   **注意**：该功能为运行时设置，末尾**不做软重启**（重启会清除该设置），这点与 `motor_pos_reset` / `motor_set_id` 不同。
+*   `t_us`：返回周期，单位 us（4 字节小端），填 `0` 停止周期返回；
+
+*   **注意**：周期小于 100us,电机不会周期返回状态。 （系统命令返回 `03 xx` xx为非0 ）；
+
+*   断电后不会再返回
+
+### 8.4 配置类函数（`motor_config`）
 
 
----
+配置类函数用于修改电机参数（零位 / ID）。周期返回为读取类功能，见 8.3.4。
+
+底层采用**闭环确认**机制（`motor_config_closed_loop`：
+
+*   清零 `ack` → 循环重发 → 等待 `ack` 非 0 或超时）
+
+*   函数返回值 `0` 表示成功、返回1 表示超时失败。
+
+#### 8.4.1 重置零位（校准）
+
+将当前机械位置设为电机零点，需电机处于静止状态后调用。
+
+```c
+uint8_t motor_pos_reset(port_t portx, const uint8_t id);  // 返回 0 成功，非零失败
+
+```
+
+*   内部流程：软重启 → 重发重设零位命令并闭环确认 → 再次软重启，全程自动完成；
+
+*   成功后电机以当前位置为新零点，后续位置控制均以此为基准。
+
+#### 8.4.2 更改电机 ID
+
+将电机 ID 从 `old_id` 改为 `new_id`。
+
+```c
+uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id);   // 返回 0 成功，1 失败
+
+```
+
+*   底层按 `old_id` 寻址下发改 ID 命令，闭环确认后用 `new_id` 软重启；
+
+*   **注意**：修改后请同步更新 `src/motor/motor.h` 的 `MOTOR_MAX_NUM`（及配置），否则新 ID 超出范围不会解析返回帧。
 
 ## 10. 单位与数据类型
 
@@ -563,14 +595,13 @@ uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t
 
 枚举值 = CAN ID bits\[17:16\]：
 
-| 枚举           | 说明           |
-| -------------- | -------------- |
-| `TINT16_NOHDR` | 无模式头 int16 |
-| `TINT16`       | int16          |
-| `TINT32`       | int32          |
-| `TFLOAT`       | float          |
+| 枚举     | 说明  |
+| -------- | ----- |
+| `TINT16` | int16 |
+| `TINT32` | int32 |
+| `TFLOAT` | float |
 
-### 10.3 换算与量程（发送：物理→raw；接收：raw→物理）
+### 10.3 换算与量程
 
 | 量          | TINT16 缩放   | TINT32 缩放     | TFLOAT     | TINT16 最大表示范围 |
 | ----------- | ------------- | --------------- | ---------- | ------------------- |
@@ -581,7 +612,7 @@ uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t
 | 加速度      | 1000/(圈/秒²) | 100000/(圈/秒²) | 直接 float | ±32.76 圈/秒²       |
 | kp / kd     | 10            | 1000            | 直接 float | ±3276               |
 
-*   超限数据会被 `data_limit` 钳位到类型上限；NAN 用 `NAN_INT16 = 0x8000` / `NAN_INT32 = 0x80000000` 表示。
+*   超限数据会被 `data_limit` 限制到类型上限；NAN 用 `NAN_INT16 = 0x8000` / `NAN_INT32 = 0x80000000` 表示。
 
 ---
 
