@@ -229,7 +229,7 @@ void motor_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id
  * @param vel 目标速度，单位可为转每秒（rps）、弧度每秒（rad/s）、或度每秒（°/s），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  * @param acc 目标加速度，单位可为转每秒平方（rev/s^2）、弧度每秒平方（rad/s^2）、或度每秒平方（°/s^2），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
-void motor_pos_velmax_acc(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc)
+void motor_pos_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const float pos, const float vel, const float acc)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
