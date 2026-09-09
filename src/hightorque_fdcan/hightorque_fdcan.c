@@ -11,7 +11,7 @@
  */
 void hightorque_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -29,7 +29,7 @@ void hightorque_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
  */
 void hightorque_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
@@ -46,7 +46,7 @@ void hightorque_dq_volt_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
  */
 void hightorque_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    static uint8_t cmd[] = {MODE_VOLT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VOLT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
 
@@ -63,7 +63,7 @@ void hightorque_dq_volt_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
  */
 void hightorque_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q)
 {
-    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
 
@@ -80,7 +80,7 @@ void hightorque_dq_current_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, f
  */
 void hightorque_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t d, int32_t q)
 {
-    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[6], &q, sizeof(q));
@@ -98,7 +98,7 @@ void hightorque_dq_current_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, i
  */
 void hightorque_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t d, int16_t q)
 {
-    static uint8_t cmd[] = {MODE_CUR, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_CUR, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &d, sizeof(d));
     my_memcpy(&cmd[4], &q, sizeof(q));
@@ -115,7 +115,7 @@ void hightorque_dq_current_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, i
  */
 void hightorque_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float torque)
 {
-    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -131,7 +131,7 @@ void hightorque_torque_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float
  */
 void hightorque_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t torque)
 {
-    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -147,7 +147,7 @@ void hightorque_torque_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32
  */
 void hightorque_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t torque)
 {
-    static uint8_t cmd[] = {MODE_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &torque, sizeof(torque));
 
@@ -165,7 +165,7 @@ void hightorque_torque_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16
  */
 void hightorque_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float torque)
 {
-    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -186,7 +186,7 @@ void hightorque_pos_vel_tqe_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
 void hightorque_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t torque)
 {
 
-    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel, sizeof(vel));
@@ -207,7 +207,7 @@ void hightorque_pos_vel_tqe_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
 void hightorque_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t torque)
 {
 
-    static uint8_t cmd[] = {MODE_POS_VEL_TQE, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_TQE, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -225,7 +225,7 @@ void hightorque_pos_vel_tqe_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
  */
 void hightorque_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos)
 {
-    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -241,7 +241,7 @@ void hightorque_pos_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float po
  */
 void hightorque_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos)
 {
-    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -257,7 +257,7 @@ void hightorque_pos_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
  */
 void hightorque_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos)
 {
-    static uint8_t cmd[] = {MODE_POS, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
 
@@ -273,7 +273,7 @@ void hightorque_pos_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
  */
 void hightorque_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel)
 {
-    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -290,7 +290,7 @@ void hightorque_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float ve
 void hightorque_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel)
 {
 
-    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -307,7 +307,7 @@ void hightorque_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t 
 void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel)
 {
 
-    static uint8_t cmd[] = {MODE_VEL, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
 
@@ -326,7 +326,7 @@ void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
 void hightorque_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd)
 {
 
-    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE,
+    static uint8_t cmd[] = {MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
@@ -355,7 +355,7 @@ void hightorque_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_
 void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd)
 {
 
-    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE,
+    static uint8_t cmd[] = {MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00,
@@ -384,7 +384,7 @@ void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd)
 {
 
-    static uint8_t cmd[] = {MODE_MIT, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_MIT, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel, sizeof(vel));
@@ -406,7 +406,7 @@ void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_
 void hightorque_pos_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel_max, float acc)
 {
 
-    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -427,7 +427,7 @@ void hightorque_pos_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
 void hightorque_pos_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel_max, int32_t acc)
 {
 
-    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[6], &vel_max, sizeof(vel_max));
@@ -447,7 +447,7 @@ void hightorque_pos_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
  */
 void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel_max, int16_t acc)
 {
-    static uint8_t cmd[] = {MODE_POS_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_POS_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &pos, sizeof(pos));
     my_memcpy(&cmd[4], &vel_max, sizeof(vel_max));
@@ -467,7 +467,7 @@ void hightorque_pos_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, 
 void hightorque_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float vel, float acc)
 {
 
-    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -486,7 +486,7 @@ void hightorque_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
 void hightorque_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
 {
 
-    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[6], &acc, sizeof(acc));
@@ -505,7 +505,7 @@ void hightorque_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int3
 void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel, int16_t acc)
 {
 
-    static uint8_t cmd[] = {MODE_VEL_ACC, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_VEL_ACC, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[2], &vel, sizeof(vel));
     my_memcpy(&cmd[4], &acc, sizeof(acc));
@@ -520,12 +520,12 @@ void hightorque_vel_acc_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int1
  * @param id 电机ID
  * @param t_us 周期时间, 单位: 1us, 4字节小端; 填 0 表示停止周期返回
  * @note 发送: 0x03 0x00 0x05 <查询码> + 4字节微秒
- *       返回数据格式由 cmd[3] 查询码决定, 当前 MODE_FLAUT_POS_VEL_TQE(0x0B)
+ *       返回数据格式由 cmd[3] 查询码决定, 当前 QUERY_MODE_FLAUT_POS_VEL_TQE(0x0B)
  *       即 模式/错误/位置/速度/力矩; 可换 0x0C(含温度)/0x0D(DQ电流)/0x0E(无模式)
  */
 void hightorque_request_timed_return(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, uint32_t t_us)
 {
-    static uint8_t cmd[] = {MODE_SYSTEM, 0x00, 0x05, MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
+    static uint8_t cmd[] = {MODE_SYSTEM, 0x00, 0x05, QUERY_MODE_FLAUT_POS_VEL_TQE, 0x00, 0x00, 0x00, 0x00};
 
     my_memcpy(&cmd[4], &t_us, sizeof(uint32_t));
 
@@ -602,7 +602,7 @@ void hightorque_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new
  */
 void hightorque_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, cmd, sizeof(cmd));
 }
@@ -616,7 +616,7 @@ void hightorque_stop_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, cmd, sizeof(cmd));
 }
@@ -630,7 +630,7 @@ void hightorque_stop_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MODE_STOP, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_STOP, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -644,7 +644,7 @@ void hightorque_stop_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, cmd, sizeof(cmd));
 }
@@ -658,7 +658,7 @@ void hightorque_brake_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, cmd, sizeof(cmd));
 }
@@ -672,7 +672,7 @@ void hightorque_brake_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
 
-    static uint8_t cmd[] = {MODE_BRAKE, MODE_FLAUT_POS_VEL_TQE};
+    static uint8_t cmd[] = {MODE_BRAKE, QUERY_MODE_FLAUT_POS_VEL_TQE};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, cmd, sizeof(cmd));
 }
@@ -685,7 +685,7 @@ void hightorque_brake_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void hightorque_request_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TFLOAT | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -697,7 +697,7 @@ void hightorque_request_state_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id
  */
 void hightorque_request_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TINT32 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -709,7 +709,7 @@ void hightorque_request_state_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id
  */
 void hightorque_request_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, MODE_FLAUT_POS_VEL_TQE};
+    const uint8_t cmd[] = {0x00, QUERY_MODE_FLAUT_POS_VEL_TQE};
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
 
@@ -721,7 +721,7 @@ void hightorque_request_state_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id
  */
 void hightorque_request_fw_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, FW_VERSION};
+    const uint8_t cmd[] = {0x00, QUERY_FW_VERSION};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -734,7 +734,7 @@ void hightorque_request_fw_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void hightorque_request_hw_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, HW_VERSION};
+    const uint8_t cmd[] = {0x00, QUERY_HW_VERSION};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }
@@ -748,7 +748,7 @@ void hightorque_request_hw_version(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
  */
 void hightorque_request_model(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 {
-    const uint8_t cmd[] = {0x00, MODEL};
+    const uint8_t cmd[] = {0x00, QUERY_MODEL};
 
     fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, (uint8_t *)cmd, sizeof(cmd));
 }

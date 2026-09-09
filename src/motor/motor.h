@@ -4,8 +4,8 @@
 
 
 
-#define  MOTOR_PORT_NUM  2  // 使用 CAN 通道数量  
-#define  MOTOR_MAX_NUM   2// 单个 CAN 通道所连接的最大电机数量
+#define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
+#define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
 
 
 
@@ -36,17 +36,17 @@ typedef enum __packed  // 电机控制模式码
 
 typedef enum __packed  // 电机查询码
 {
-    SYSTEM                           = 0x03,  // 查询系统信息 
-    FW_VERSION                       = 0x04,  // 查询固件版本 
-    HW_VERSION                       = 0x05,  // 查询硬件版本 
-    MODEL                            = 0x07,  // 查询电机型号 
-    MODE_FLAUT_NUM                   = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
-    MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
-    MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
-    FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E）
-//  MODE_FLAUT_CD_CQ                 = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）
+    QUERY_SYSTEM                           = 0x03,  // 查询系统信息 
+    QUERY_FW_VERSION                       = 0x04,  // 查询固件版本 
+    QUERY_HW_VERSION                       = 0x05,  // 查询硬件版本 
+    QUERY_MODEL                            = 0x07,  // 查询电机型号 
+    QUERY_MODE_FLAUT_NUM                   = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
+    QUERY_MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
+    QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
+    QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E）
+//  QUERY_MODE_FLAUT_CD_CQ                 = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）
 
-} many_request_type_t;
+} motor_query_t;
 
 
 typedef enum

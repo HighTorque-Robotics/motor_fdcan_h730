@@ -467,7 +467,7 @@ static uint8_t get_fdcan_len(uint16_t len)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param request_type 决定电机返回帧包含的信息
  */
-void motor_many_send(port_t portx, many_request_type_t request_type)
+void motor_many_send(port_t portx, motor_query_t request_type)
 {
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);

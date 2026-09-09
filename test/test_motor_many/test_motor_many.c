@@ -45,5 +45,5 @@ void test_motor_many()
         }
     }
 
-    motor_many_send(PORT1, MODE_FLAUT_POS_VEL_TQE);
+    motor_many_send(PORT1, QUERY_MODE_FLAUT_POS_VEL_TQE);
 }

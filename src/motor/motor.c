@@ -136,8 +136,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
 
     switch (p_data[0])
     {
-    // ===================== MODE_FAULT_POS_VEL_TQE (0x0B) 响应 =====================
-    case MODE_FLAUT_POS_VEL_TQE:
+    // ===================== QUERY_MODE_FLAUT_POS_VEL_TQE (0x0B) 响应 =====================
+    case QUERY_MODE_FLAUT_POS_VEL_TQE:
     {
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
         switch (id_type)
@@ -193,8 +193,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         break;
     }
 
-    // ===================== MODE_FAULT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
-    case MODE_FLAUT_TEMP_POS_VEL_TQE:
+    // ===================== QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE (0x0C) 响应 =====================
+    case QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE:
     {
 
         // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
@@ -256,8 +256,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
         break;
     }
-    // // ===================== MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
-    // case MODE_FLAUT_CD_CQ:
+    // // ===================== QUERY_MODE_FLAUT_CD_CQ (0x0D) 响应 =====================
+    // case QUERY_MODE_FLAUT_CD_CQ:
     // {
 
     //     // --------- 按数据类型分发 (TINT16/TINT32/TFLOAT) ---------
@@ -363,7 +363,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     }
     // ===================== 电机固件版本 (0x04) =====================
     // 返回帧: 04 | patch | minor | major (各1字节)
-    case FW_VERSION:
+    case QUERY_FW_VERSION:
     {
         p_motor_state[id_index].version.major = p_data[3];
         p_motor_state[id_index].version.minor = p_data[2];
@@ -372,7 +372,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
     }
     // ===================== 电机型号查询响应 =====================
     // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
-    case MODEL:
+    case QUERY_MODEL:
     {
         const uint8_t model_len = p_data[1];
 
@@ -391,7 +391,7 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t 
         }
         break;
     }
-    case SYSTEM:
+    case QUERY_SYSTEM:
     {
         if (len >= 2)
         {
