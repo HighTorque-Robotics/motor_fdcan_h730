@@ -124,13 +124,34 @@ p_motor_state_s motor_get_state(port_t portx, uint8_t id)
 
 /**
  * @brief 解析电机返回信息
- * @param fdcanHandle
- * @param id 电机 ID
+ * @param fdcanHandle FDCAN 句柄
+ * @param identifier CAN ID
  * @param p_data fdcan 帧数据指针
  * @param len fdcan 数据长度
  */
-static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint8_t id, const uint32_t id_type, const uint8_t *p_data, const uint8_t len)
+static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t identifier, const uint8_t *p_data, const uint8_t len)
 {
+    if (p_data == NULL || len == 0U)
+    {
+        return;
+    }
+
+    const uint32_t id_type = (identifier >> 16) & 0x3U;            // bits[17:16]: 数据类型
+    const uint8_t  id      = (uint8_t)((identifier >> 8) & 0x7FU); // bits[14:8]: 电机 ID
+    const uint8_t  dir     = (uint8_t)((identifier >> 15) & 0x1U); // bit[15]: 1=控制帧, 0=返回帧
+
+    /* motor_process_state 只处理电机返回帧，控制帧直接丢弃 */
+    if (dir != 0U)
+    {
+        return;
+    }
+
+    /* 防止无效 ID 导致状态数组越界 */
+    if (id < MOTOR_ID_MIN || id > MOTOR_MAX_NUM)
+    {
+        return;
+    }
+
     p_motor_state_s p_motor_state = motor_get_state_pointer1(fdcanHandle);
     const uint8_t id_index = id - 1;
 
@@ -427,22 +448,9 @@ void motor_process_state_all()
         {
             if (fdcan_rx_header.DataLength != 0)
             {
-                const uint16_t len = get_fdcan_data_size(fdcan_rx_header.DataLength);
+                const uint8_t len = (uint8_t)get_fdcan_data_size(fdcan_rx_header.DataLength);
 
-                const uint32_t id_type = (fdcan_rx_header.Identifier >> 16) & 0x3;  // 提取 bits[17:16] 数据类型, 得 0~3 对应 data_type_t (TINT16_NOHDR=0, TINT16=1, TINT32=2, TFLOAT=3)
-                const uint8_t  motor_id = (fdcan_rx_header.Identifier >> 8) & 0x7F;  // 提取 bits[14:8] 主机ID (电机返回ID, 1~127)
-                const uint8_t  dir      = (fdcan_rx_header.Identifier >> 15) & 0x1;  // 提取 bit[15] 帧方向: 1=控制帧, 0=返回帧
-
-                /* 帧方向判断: bit[15]=1 为控制(发送)帧, 非返回帧直接丢弃 */
-                if (dir != 0)
-                {
-                    continue;
-                }
-
-                if (motor_id > 0 && motor_id <= MOTOR_MAX_NUM)
-                {
-                    motor_process_state(port_maping[i].fdcan, motor_id, id_type, fdcan_rdata, len);
-                }
+                motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier, fdcan_rdata, len);
             }
         }
     }
