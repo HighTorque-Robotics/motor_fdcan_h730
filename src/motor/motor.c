@@ -76,38 +76,6 @@ FDCAN_HandleTypeDef *motor_get_fdcan_pointer(port_t portx)
 }
 
 
-
-void motor_print_state()
-{
-    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
-    {
-        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
-        {
-            motor_state_s *p_motor_state = motor_get_state(portx, id);
-            printf("PORT: %d, ID: %2d, mode: %2d, temp: %2d, fault: %2d, pos: %.3lf, vel: %.3lf, tqe: %.3lf\r\n", portx, id, p_motor_state->mode, p_motor_state->temp,
-                   p_motor_state->fault, p_motor_state->position, p_motor_state->velocity, p_motor_state->torque);
-        }
-        printf("\r\n");
-    }
-}
-
-
-void motor_print_version()
-{
-    for (uint8_t portx = PORT1; portx < PORT1 + MOTOR_PORT_NUM; portx++)
-    {
-        for (uint8_t id = 1; id <= MOTOR_MAX_NUM; id++)
-        {
-            const p_version_s p_version = &(motor_get_state(portx, id)->version);
-
-            printf("PORT: %d, ID: %2d, version = %d.%d.%d\r\n", portx, id, p_version->major, p_version->minor, p_version->patch);
-        }
-        printf("\r\n");
-    }
-}
-
-
-
 /**
  * @brief 获取指定端口和ID的电机状态指针
  * @param portx 指定电机所在的端口，可能的值为 PORT1 或 PORT2
@@ -328,10 +296,10 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
     //     }
     //     break;
     // }
-    // ===================== FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
+    // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B, TINT32/TFLOAT=4B
-    case FLAUT_POS_VEL_TQE:
+    case QUERY_FLAUT_POS_VEL_TQE:
     {
         switch (id_type)
         {

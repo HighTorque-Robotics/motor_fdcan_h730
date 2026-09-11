@@ -132,7 +132,7 @@ int main(void)
         {
             tick_print = HAL_GetTick();
             led_toggle();
-            motor_print_state();
+            test_motor_print_state();
         }
     }
     /* USER CODE END 3 */

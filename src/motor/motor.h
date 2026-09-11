@@ -40,7 +40,6 @@ typedef enum __packed  // 电机查询码
     QUERY_FW_VERSION                       = 0x04,  // 查询固件版本 
     QUERY_HW_VERSION                       = 0x05,  // 查询硬件版本 
     QUERY_MODEL                            = 0x07,  // 查询电机型号 
-    QUERY_MODE_FLAUT_NUM                   = 0x0A,  // 模式、错误码、NUM(查询指令 0x0A)
     QUERY_MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
     QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
     QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E）
@@ -94,8 +93,6 @@ typedef struct
 
 
 
-void motor_print_state(void);
-void motor_print_version(void);
 
 p_motor_state_s motor_get_state(port_t portx, uint8_t id);
 
