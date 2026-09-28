@@ -6,9 +6,7 @@
 #include "convert.h"
 
 
-/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧由调用处 | ID_SEND_FRAME 置 bit[15]=1) */
-/* bits[18]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
-
+/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧在执行can_send时，通过ID_SEND_FRAME置 bit[15]=1) */
 /* ---- 数据类型 (由 convert.h 的 data_type_t 枚举左移16位派生, 只改枚举即可同步) ---- */
 #define  ID_PREFIX_TINT16_NOHDR     ((uint32_t)TINT16_NOHDR << 16)  // bits[17:16]=00
 #define  ID_PREFIX_TINT16           ((uint32_t)TINT16       << 16)  // bits[17:16]=01

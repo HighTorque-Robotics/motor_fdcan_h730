@@ -337,7 +337,7 @@ void motor_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t
 
 
 /**
- * @brief 发送查询查询电机状态信息的指令（在motor_process_state中解析）
+ * @brief 发送查询电机状态信息的指令（在motor_process_state中解析）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -393,7 +393,7 @@ void motor_request_model(port_t portx, const uint8_t id)
 
 
 /**
- * @brief 发送查询电机硬件版本号指令（cmd: 0x00 0x05，在 motor_process_state 中解析并打印）
+ * @brief 发送查询电机硬件版本号指令（cmd: 0x00 0x05，在 motor_process_state 中解析）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */

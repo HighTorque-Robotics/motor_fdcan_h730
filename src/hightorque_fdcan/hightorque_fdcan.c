@@ -316,7 +316,7 @@ void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t 
 
 
 /**
- * @brief MIT模式 float (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩) (Mkp 表示电机内部 kp, kd 表示电机内部 kd)
+ * @brief MIT模式 float (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param pos 位置：单位 1 圈，如 pos = 0.5 表示转到 0.5 圈的位置。
@@ -480,8 +480,8 @@ void hightorque_vel_acc_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, floa
  * @brief 电机速度、加速度控制 int32
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
- * @param vel 速度：单位 0.00001 转/秒，如 vel = 50000 表示 0.5 转/秒
- * @param acc 加速度：单位 0.001 转/秒^2，如 vel = 500 表示 0.5 转/秒^2
+ * @param vel 速度：单位 0.00001  转/秒，如 vel = 50000 表示 0.5 转/秒
+ * @param acc 加速度：单位 0.001 转/秒^2，如 acc = 500 表示 0.5 转/秒^2
  */
 void hightorque_vel_acc_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel, int32_t acc)
 {

@@ -29,6 +29,9 @@ Listings/
 Objects/
 DebugConfig/
 
+# Keil RTE 自动生成文件 (Run-Time Environment, 每次构建会重新生成)
+MDK-ARM/RTE/
+
 # ==================== VSCode ====================
 .vscode/
 c_cpp_properties.json

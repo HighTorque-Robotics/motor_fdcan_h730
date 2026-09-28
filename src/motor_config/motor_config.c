@@ -97,7 +97,6 @@ uint8_t motor_set_id(port_t portx, const uint8_t old_id, const uint8_t new_id)
  * @param t_us 周期时间, 单位: 1us (4字节小端); 填 0 停止周期返回; 小于 100us 电机会报错 03 01
  * @return 0-成功，1-设置失败
  * @note 周期返回是运行时功能, 末尾不做软重启 (重启会打断/清除该设置),
- *       这点与 motor_pos_reset / motor_conf_write / motor_set_id 不同
  */
 uint8_t motor_timed_return_status(port_t portx, const uint8_t id, const uint32_t t_us)
 {
