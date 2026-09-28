@@ -118,8 +118,8 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        /* ---- 1kHz: 控制例程调用 (test_motor_control) ---- */
-        if (HAL_GetTick() - tick_ctrl >= 1)
+        /* ---- 100Hz: 控制例程调用 (test_motor_control) ---- */
+        if (HAL_GetTick() - tick_ctrl >= 10)
         {
             tick_ctrl = HAL_GetTick();
             test_motor_control(1);
