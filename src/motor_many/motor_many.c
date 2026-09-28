@@ -472,7 +472,7 @@ void motor_many_send(port_t portx, motor_query_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    /* 一拖多固定 TINT16,  ID_PREFIX_TINT16, fdcan_send 自动置 bit[15]=1 */
+    /* 一拖多固定 TINT16, CAN ID = ID_PREFIX_TINT16 | 模式块编号 | ID_SEND_FRAME */
 
     uint8_t id = p_many_data->mode;          /* 一拖多模式下 bits[6:0] = 模式块编号 */
     uint8_t *p_data = p_many_data->data;     /* 当前模式打包好的连续数据 */
@@ -494,7 +494,7 @@ void motor_many_send(port_t portx, motor_query_t request_type)
         p_data += cut_len;
 
         /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
-        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, buf, frame_len);
+        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, buf, frame_len);
         id++;                                                         // 每帧模式块编号递增
     }
 }
