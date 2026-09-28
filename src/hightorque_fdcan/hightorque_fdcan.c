@@ -581,7 +581,7 @@ void hightorque_reset(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id)
 void hightorque_id(FDCAN_HandleTypeDef *fdcanHandle, uint8_t old_id, uint8_t new_id)
 {
     /* old_id / new_id 需在 1 ~ MOTOR_MAX_NUM 范围内, 否则返回帧不会被解析 (见 motor.c) */
-    if (old_id < MOTOR_ID_MIN || old_id > MOTOR_MAX_NUM ||new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
+    if (old_id < MOTOR_ID_MIN || old_id > MOTOR_MAX_NUM || new_id < MOTOR_ID_MIN || new_id > MOTOR_MAX_NUM)
     {
         MOTOR_ERR();
         return;

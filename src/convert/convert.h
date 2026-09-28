@@ -37,7 +37,7 @@ typedef enum __packed  // 数据类型 (枚举值 = CAN ID bits[17:16])
     TINT16_NOHDR = 0,
     TINT16       = 1,
     TINT32       = 2,
-    TFLOAT       = 3,   
+    TFLOAT       = 3,
 } data_type_t;
 
 

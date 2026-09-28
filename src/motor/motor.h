@@ -17,9 +17,9 @@
 
 typedef enum __packed  // 电机控制模式码
 {
-    MODE_NULL        = 0,     // 空模式 (占位)          
-    MODE_STOP        = 0x01,  // 停止 (惯性停止)      
-    MODE_BRAKE       = 0x18,  // 刹车 (主动制动)      
+    MODE_NULL        = 0,     // 空模式 (占位)
+    MODE_STOP        = 0x01,  // 停止 (惯性停止)
+    MODE_BRAKE       = 0x18,  // 刹车 (主动制动)
     MODE_CMD         = 0x02,  // 普通控制 (当前未启用)
     MODE_SYSTEM      = 0x03,  // 系统命令 (查询/设置/保存/重启/改ID)
     MODE_VOLT        = 0x19,  // DQ 电压控制
@@ -28,7 +28,7 @@ typedef enum __packed  // 电机控制模式码
     MODE_VEL         = 0x1C,  // 速度控制
     MODE_POS         = 0x1D,  // 位置控制
     MODE_VEL_ACC     = 0x1E,  // 速度 + 加速度
-    MODE_POS_VEL_TQE = 0x1F,  // 位置 + 速度 + 前馈力矩   
+    MODE_POS_VEL_TQE = 0x1F,  // 位置 + 速度 + 前馈力矩
     MODE_POS_VEL_ACC = 0x20,  // 位置 + 速度 + 加速度(梯形)
     MODE_MIT         = 0x21,  // MIT 运控 (位置+速度+力矩+Kp+Kd)
 } motor_mode_t;
@@ -36,14 +36,14 @@ typedef enum __packed  // 电机控制模式码
 
 typedef enum __packed  // 电机查询码
 {
-    QUERY_SYSTEM                           = 0x03,  // 查询系统信息 
-    QUERY_FW_VERSION                       = 0x04,  // 查询固件版本 
-    QUERY_HW_VERSION                       = 0x05,  // 查询硬件版本 
-    QUERY_MODEL                            = 0x07,  // 查询电机型号 
+    QUERY_SYSTEM                           = 0x03,  // 查询系统信息
+    QUERY_FW_VERSION                       = 0x04,  // 查询固件版本
+    QUERY_HW_VERSION                       = 0x05,  // 查询硬件版本
+    QUERY_MODEL                            = 0x07,  // 查询电机型号
     QUERY_MODE_FLAUT_POS_VEL_TQE           = 0x0B,  // 模式、错误码、位置、速度、力矩 (查询指令 0x0B)
     QUERY_MODE_FLAUT_TEMP_POS_VEL_TQE      = 0x0C,  // 模式、温度、错误码、位置、速度、力矩（查询指令 0x0C）
     QUERY_FLAUT_POS_VEL_TQE                = 0x0E,  // 错误码、位置、速度、力矩（查询指令 0x0E）
-//  QUERY_MODE_FLAUT_CD_CQ                 = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）
+    //  QUERY_MODE_FLAUT_CD_CQ                 = 0x0D,  // 模式、错误码、D轴、Q轴（查询指令 0x0D）
 
 } motor_query_t;
 
