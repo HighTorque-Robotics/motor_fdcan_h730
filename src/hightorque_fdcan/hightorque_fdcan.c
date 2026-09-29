@@ -374,7 +374,7 @@ void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_
 
 
 /**
- * @brief MIT模式 int16 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩) (kp 表示电机内部 kp, kd 表示电机内部 kd)
+ * @brief MIT模式 int16 (输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩) (kp 表示电机内部 kp, kd 表示电机内部 kd)
  * @param fdcanHandle &hfdcanx
  * @param id 电机ID
  * @param pos 位置：单位 0.0001 圈，如 pos = 5000 表示转到 0.5 圈的位置。

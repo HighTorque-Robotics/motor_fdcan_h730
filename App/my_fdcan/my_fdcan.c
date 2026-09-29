@@ -12,7 +12,7 @@ FDCAN_TxHeaderTypeDef TxHeader =
 };
 
 
-uint32_t get_fdcan_dlc(uint16_t size)
+uint32_t fdcan_size2dlc(uint16_t size)
 {
     uint32_t fdcan_dlc = 0;
 
@@ -84,7 +84,7 @@ uint32_t get_fdcan_dlc(uint16_t size)
 }
 
 
-uint16_t get_fdcan_data_size(uint32_t dlc)
+uint16_t fdcan_dlc2size(uint32_t dlc)
 {
     uint16_t size = 0;
 
@@ -180,6 +180,6 @@ void fdcan_send(FDCAN_HandleTypeDef *fdcanHandle, uint32_t id, uint8_t *data, ui
 
         TxHeader.IdType = FDCAN_STANDARD_ID;
     }
-    TxHeader.DataLength = get_fdcan_dlc(size);
+    TxHeader.DataLength = fdcan_size2dlc(size);
     HAL_FDCAN_AddMessageToTxFifoQ(fdcanHandle, &TxHeader, data);
 }

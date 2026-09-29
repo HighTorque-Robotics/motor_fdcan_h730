@@ -417,7 +417,7 @@ void motor_process_state_all()
         {
             if (fdcan_rx_header.DataLength != 0)
             {
-                const uint8_t len = (uint8_t)get_fdcan_data_size(fdcan_rx_header.DataLength);
+                const uint8_t len = (uint8_t)fdcan_dlc2size(fdcan_rx_header.DataLength);
 
                 motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier, fdcan_rdata, len);
             }

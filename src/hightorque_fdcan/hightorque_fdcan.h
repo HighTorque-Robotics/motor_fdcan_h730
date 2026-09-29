@@ -45,7 +45,7 @@ void hightorque_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float ve
 void hightorque_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
 void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
-/* 位置、速度、力矩、PD控制（真运控模式） */
+/* 位置、速度、力矩、PD控制(输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩) */
 void hightorque_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
 void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
