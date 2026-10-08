@@ -118,14 +118,12 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        /* ---- 1kHz: 控制例程调用 (test_motor_control) ---- */
-        if (HAL_GetTick() - tick_ctrl >= 1)
+        /* ---- 100Hz: 控制例程调用 (test_motor_control) ---- */
+        if (HAL_GetTick() - tick_ctrl >= 10)
         {
             tick_ctrl = HAL_GetTick();
             test_motor_control(1);
         }
-
-        motor_process_state_all();
 
         /* ---- 500ms: 终端打印 + LED ---- */
         if (HAL_GetTick() - tick_print >= 500)
@@ -134,6 +132,8 @@ int main(void)
             led_toggle();
             test_motor_print_state();
         }
+        motor_process_state_all();
+
     }
     /* USER CODE END 3 */
 }

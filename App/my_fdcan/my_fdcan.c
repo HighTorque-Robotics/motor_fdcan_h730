@@ -12,7 +12,7 @@ FDCAN_TxHeaderTypeDef TxHeader =
 };
 
 
-uint32_t get_fdcan_dlc(uint16_t size)
+uint32_t fdcan_size2dlc(uint16_t size)
 {
     uint32_t fdcan_dlc = 0;
 
@@ -84,7 +84,7 @@ uint32_t get_fdcan_dlc(uint16_t size)
 }
 
 
-uint16_t get_fdcan_data_size(uint32_t dlc)
+uint16_t fdcan_dlc2size(uint32_t dlc)
 {
     uint16_t size = 0;
 
@@ -169,9 +169,9 @@ void fdcan_filter_init(FDCAN_HandleTypeDef *fdcanHandle)
 
 void fdcan_send(FDCAN_HandleTypeDef *fdcanHandle, uint32_t id, uint8_t *data, uint16_t size)
 {
-    TxHeader.Identifier = id | 0x8000u;  // 自动置 bit[15]=1 (发送控制帧)
+    TxHeader.Identifier = id;   // 发送帧标志 bit[15] 由调用处组合: ID_PREFIX_XXX | id | ID_SEND_FRAME
 
-    if(TxHeader.Identifier > 0x7ff)  // 用置位后的值判断, 避免小ID被误判为标准帧而截断
+    if (id > 0x7ff)   // ID > 0x7ff 使用扩展帧
     {
         TxHeader.IdType = FDCAN_EXTENDED_ID;
     }
@@ -180,6 +180,6 @@ void fdcan_send(FDCAN_HandleTypeDef *fdcanHandle, uint32_t id, uint8_t *data, ui
 
         TxHeader.IdType = FDCAN_STANDARD_ID;
     }
-    TxHeader.DataLength = get_fdcan_dlc(size);
+    TxHeader.DataLength = fdcan_size2dlc(size);
     HAL_FDCAN_AddMessageToTxFifoQ(fdcanHandle, &TxHeader, data);
 }

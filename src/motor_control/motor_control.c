@@ -193,7 +193,7 @@ void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const
  * @param tqe 最大力矩，电机转动过程中输出力矩不会超过这个值，单位牛米（Nm）
  */
 void motor_pos_vel_MAXtqe(port_t portx, const data_type_t type, const uint8_t id,
-                              const float pos, const float vel, const float tqe)
+                          const float pos, const float vel, const float tqe)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
     const float pos_turns = conv_to_turns(pos, MOTOR_DATA_TYPE_FLAG);
@@ -291,7 +291,7 @@ void motor_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const
 
 
 /**
- * @brief MIT模式 (输出力矩 = 位置偏差 * kp + 速度偏差 * kd + 前馈力矩)（并让电机返回状态信息）
+ * @brief MIT模式 (输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩)
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -302,7 +302,7 @@ void motor_vel_acc(port_t portx, const data_type_t type, const uint8_t id, const
  * @param kd 单位可为牛米秒每转（Nm·s/rev）、牛米秒每弧度（Nm·s/rad）、或牛米秒每度（Nm·s/°），具体由宏定义 MOTOR_DATA_TYPE_FLAG 决定
  */
 void motor_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t id,
-                                   const float pos, const float vel, const float tqe, const float kp, const float kd)
+                             const float pos, const float vel, const float tqe, const float kp, const float kd)
 {
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
@@ -337,7 +337,7 @@ void motor_pos_vel_tqe_kp_kd(port_t portx, const data_type_t type, const uint8_t
 
 
 /**
- * @brief 发送查询查询电机状态信息的指令（在motor_process_state中解析）
+ * @brief 发送查询电机状态信息的指令（在motor_process_state中解析）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param type 通信协议的数据类型，影响数据的精度和量程（具体请参考FDCAN文档）
  * @param id 电机 ID
@@ -393,7 +393,7 @@ void motor_request_model(port_t portx, const uint8_t id)
 
 
 /**
- * @brief 发送查询电机硬件版本号指令（cmd: 0x00 0x05，在 motor_process_state 中解析并打印）
+ * @brief 发送查询电机硬件版本号指令（cmd: 0x00 0x05，在 motor_process_state 中解析）
  * @param portx CAN 通道选择，用于指定通信的 CAN 端口
  * @param id 电机 ID
  */

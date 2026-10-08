@@ -144,7 +144,7 @@ void motor_many_tqe(port_t portx, const uint8_t id, const float tqe)
 
 
 /**
- * @brief 一拖多 停止模式 (CAN ID 0x8085)
+ * @brief 一拖多 停止模式 (CAN ID 0x18085)
  * @param portx can通道（需要在 motor.c 中修改 port_maping 结构体数组进行映射）
  * @param id 电机 ID
  * @param enable 1-启用, 0-不启用
@@ -472,9 +472,9 @@ void motor_many_send(port_t portx, motor_query_t request_type)
     p_many_data_s p_many_data = motor_get_many_pointer(portx);
     FDCAN_HandleTypeDef *fdcanHandle = motor_get_fdcan_pointer(portx);
 
-    /* 一拖多固定 TINT16,  ID_PREFIX_TINT16, fdcan_send 自动置 bit[15]=1 */
+    /* 一拖多固定 TINT16, CAN ID = ID_PREFIX_TINT16 | 模式块编号 | ID_SEND_FRAME */
 
-    uint8_t id = p_many_data->mode;          /* 一拖多模式下 bits[6:0] = 模式块编号 */
+    uint8_t id = p_many_data->mode;          /* 一拖多模式下 bits[7:0] = 模式块编号 */
     uint8_t *p_data = p_many_data->data;     /* 当前模式打包好的连续数据 */
     uint16_t data_len = get_mode_data_len(id) * MANY_MOTOR_SIZE;
 
@@ -493,8 +493,8 @@ void motor_many_send(port_t portx, motor_query_t request_type)
         buf[frame_len - 1] = (uint8_t)request_type;                  // 查询码放帧尾 (对齐后最后一字节)
         p_data += cut_len;
 
-        /* 传字节数 byte_len, fdcan_send 内部自动转 DLC 并对齐填充 */
-        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id, buf, frame_len);
+        /* 传字节数 frame_len, fdcan_send 内部自动转 DLC 并对齐填充 */
+        fdcan_send(fdcanHandle, ID_PREFIX_TINT16 | id | ID_SEND_FRAME, buf, frame_len);
         id++;                                                         // 每帧模式块编号递增
     }
 }

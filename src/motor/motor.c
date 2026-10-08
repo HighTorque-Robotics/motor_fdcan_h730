@@ -15,11 +15,11 @@ const port_mapping_s port_maping[MOTOR_PORT_NUM] =  // 通道映射表
         .state = motor_state_port[0],
     },
 
-    {
-        .port = PORT2,
-        .fdcan = &hfdcan2,
-        .state = motor_state_port[1],
-    },
+    // {
+    //     .port = PORT2,
+    //     .fdcan = &hfdcan2,
+    //     .state = motor_state_port[1],
+    // },
 
     // {
     //     .port = PORT3,
@@ -296,6 +296,8 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
     //     }
     //     break;
     // }
+
+
     // ===================== QUERY_FLAUT_POS_VEL_TQE (0x0E) 响应 =====================
     // 返回帧: 查询码(0x0E) | 错误码 | 位置 | 速度 | 力矩, 无模式字段
     // 字段宽度由 CAN ID 类型位决定: TINT16=2B, TINT32/TFLOAT=4B
@@ -360,7 +362,6 @@ static void motor_process_state(FDCAN_HandleTypeDef *fdcanHandle, const uint32_t
         break;
     }
     // ===================== 电机型号查询响应 =====================
-    // 注意: 必须在"一拖多"分支之前, 否则会被 id_index < MOTOR_MAX_NUM 拦截
     case QUERY_MODEL:
     {
         const uint8_t model_len = p_data[1];
@@ -416,7 +417,7 @@ void motor_process_state_all()
         {
             if (fdcan_rx_header.DataLength != 0)
             {
-                const uint8_t len = (uint8_t)get_fdcan_data_size(fdcan_rx_header.DataLength);
+                const uint8_t len = (uint8_t)fdcan_dlc2size(fdcan_rx_header.DataLength);
 
                 motor_process_state(port_maping[i].fdcan, fdcan_rx_header.Identifier, fdcan_rdata, len);
             }

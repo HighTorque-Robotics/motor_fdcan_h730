@@ -6,14 +6,14 @@
 #include "convert.h"
 
 
-/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧由 fdcan_send 自动置 bit[15]=1) */
-/* bits[18]=CAN MIT, bits[17:16]=数据类型(与 data_type_t 枚举值一致), bit[15]=控制/返回区分 */
-
+/* CAN ID 帧头 (接收端 bit[15]=0; 发送控制帧在执行can_send时，通过ID_SEND_FRAME置 bit[15]=1) */
 /* ---- 数据类型 (由 convert.h 的 data_type_t 枚举左移16位派生, 只改枚举即可同步) ---- */
 #define  ID_PREFIX_TINT16_NOHDR     ((uint32_t)TINT16_NOHDR << 16)  // bits[17:16]=00
 #define  ID_PREFIX_TINT16           ((uint32_t)TINT16       << 16)  // bits[17:16]=01
 #define  ID_PREFIX_TINT32           ((uint32_t)TINT32       << 16)  // bits[17:16]=10
 #define  ID_PREFIX_TFLOAT           ((uint32_t)TFLOAT       << 16)  // bits[17:16]=11
+
+#define  ID_SEND_FRAME         0x8000u  // bits[15]=1(发送帧)
 
 /* dq 电压模式 (d=0, q=实际电压) */
 void hightorque_dq_volt_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float d, float q);
@@ -45,7 +45,7 @@ void hightorque_vel_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float ve
 void hightorque_vel_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t vel);
 void hightorque_vel_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t vel);
 
-/* 位置、速度、力矩、PD控制（真运控模式） */
+/* 位置、速度、力矩、PD控制(输出力矩 = (目标位置-当前位置) * kp + (目标速度-当前速度) * kd + 前馈力矩) */
 void hightorque_pos_vel_tqe_kp_kd_float(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, float pos, float vel, float tqe, float kp, float kd);
 void hightorque_pos_vel_tqe_kp_kd_int32(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int32_t pos, int32_t vel, int32_t tqe, int32_t kp, int32_t kd);
 void hightorque_pos_vel_tqe_kp_kd_int16(FDCAN_HandleTypeDef *fdcanHandle, uint8_t id, int16_t pos, int16_t vel, int16_t tqe, int16_t kp, int16_t kd);
