@@ -20,8 +20,10 @@ static inline void MOTOR_ERR(void) {}
 #endif
 
 
-#define MY_2PI (6.28318530717f)
-#define MY_PI  (3.14159265358f)
+#define  MY_2PI      (6.28318530717f)
+#define  MY_PI       (3.14159265358f)
+#define  MAX_INT16   0x7FFF      // 32767      (int16 最大正值)
+#define  MAX_INT32   0x7FFFFFFF  // 2147483647 (int32 最大正值)
 
 
 typedef enum

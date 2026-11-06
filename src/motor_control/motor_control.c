@@ -170,7 +170,7 @@ void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const
     switch(type)
     {
     case TFLOAT:
-        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, MAX_FLOAT);      // 最大取值
+        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, 100000.0f);      // 最大取值
         break;
     case TINT32:
         hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, MAX_INT32); // 最大正值
