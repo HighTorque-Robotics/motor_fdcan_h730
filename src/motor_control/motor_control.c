@@ -1,5 +1,6 @@
 #include "motor_control.h"
 #include "motor.h"
+#include <float.h> 
 
 
 
@@ -169,13 +170,13 @@ void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const
     switch(type)
     {
     case TFLOAT:
-        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN);        // NAN_FLOAT
+        hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, FLT_MAX);        // 最大正值
         break;
     case TINT32:
-        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x7FFFFFFF); // 最大正值
+        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, MAX_INT32); // 最大正值
         break;
     case TINT16:
-        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x7FFF);     // 最大正值
+        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, MAX_INT16); // 最大正值
         break;
     default:
         break;
