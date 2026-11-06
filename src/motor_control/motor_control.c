@@ -172,10 +172,10 @@ void motor_pos_vel(port_t portx, const data_type_t type, const uint8_t id, const
         hightorque_pos_vel_tqe_float(fdcanHandle, id, pos_raw, vel_raw, NAN);        // NAN_FLOAT
         break;
     case TINT32:
-        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x80000000); // NAN_INT32
+        hightorque_pos_vel_tqe_int32(fdcanHandle, id, pos_raw, vel_raw, 0x7FFFFFFF); // 最大正值
         break;
     case TINT16:
-        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x8000);     // NAN_INT16
+        hightorque_pos_vel_tqe_int16(fdcanHandle, id, pos_raw, vel_raw, 0x7FFF);     // 最大正值
         break;
     default:
         break;
