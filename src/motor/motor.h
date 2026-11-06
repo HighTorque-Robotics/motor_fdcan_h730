@@ -7,9 +7,10 @@
 #define  MOTOR_PORT_NUM  1  // 使用 CAN 通道数量  
 #define  MOTOR_MAX_NUM   1// 单个 CAN 通道所连接的最大电机数量
 
-/* 各数据类型可表示的最大正值 (用于力矩等字段取值) */
+/* 各数据类型的最大取值 (用于力矩等字段取值) */
 #define  MAX_INT16   0x7FFF      // 32767      (int16 最大正值)
 #define  MAX_INT32   0x7FFFFFFF  // 2147483647 (int32 最大正值)
+#define  MAX_FLOAT   10000.0f    // 10000.0    (float 最大取值)
 
 
 
